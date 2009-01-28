@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>moon-media@mono-project.com</em:id>
+    <em:version>@VERSION@</em:version>
+    <em:type>2</em:type>
+
+    <em:name>Moonlight Media Player</em:name>
+    <em:description>A media player powered by Moonlight, largely compatible with the Windows Media Player ActiveX control.</em:description>
+    <em:creator>Aaron Bockover</em:creator>
+    <em:homepageURL>http://mono-project.com/</em:homepageURL>
+    <em:iconURL>chrome://moon-media/skin/icon.png</em:iconURL>
+
+    <!-- Firefox -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>@MIN_FIREFOX_VERSION@</em:minVersion>
+        <em:maxVersion>@MAX_FIREFOX_VERSION@</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+  </Description>
+
+</RDF>
+

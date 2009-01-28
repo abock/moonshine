@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="standalone-player-hidecontrols.css" type="text/css"?>
+<overlay id="moon-media-standalone-player-standalone"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+</overlay>

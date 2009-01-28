@@ -1,0 +1,12 @@
+[App]
+Vendor=Novell
+Name=Moonlight Media Player
+Version=@VERSION@
+BuildID=@BUILD_ID@
+Copyright=Copyright 2009 Novell, Inc.
+ID=moon-media@mono-project.com
+
+[Gecko]
+MinVersion=@MIN_GECKO_VERSION@
+MaxVersion=@MAX_GECKO_VERSION@
+

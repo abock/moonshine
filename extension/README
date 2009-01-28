@@ -1,0 +1,4 @@
+The Moonlight Media Player is an extension for Firefox that emulates the 
+Windows Media Player ActiveX control. When embedded Windows Media content 
+is found, this extension loads a generic Moonlight based player control 
+to support the content.

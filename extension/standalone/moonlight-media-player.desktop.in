@@ -1,0 +1,10 @@
+[Desktop Entry]
+GenericName=WMV Player
+Name=Moonlight WM
+Comment=Standalone player for Windows Media content
+Exec=moonlight-media-player %U
+Icon=moonlight-media-player
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;AudioVideo;Video;Player;X-Ximian-Main;X-Red-Hat-Base;
+StartupNotify=true

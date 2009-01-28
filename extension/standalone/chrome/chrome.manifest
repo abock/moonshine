@@ -1,0 +1,3 @@
+content	moon-media content/
+overlay chrome://browser/content/browser.xul chrome://moon-media/content/moon-media.xul
+skin moon-media default skin/
