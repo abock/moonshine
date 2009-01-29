@@ -14,6 +14,9 @@ __MoonEmbeddedMediaPlayer.prototype = {
     control: null,
     xaml: null,
     loaded: false,
+
+    // properties we wish to override for setting media location
+    media_source_properties: [ "src", "source", "filename", "url" ],
     
     percent_complete: 0,
     percent_buffered: 0,
@@ -177,15 +180,21 @@ __MoonEmbeddedMediaPlayer.prototype = {
                 continue;
             }
             
-            value = params[i].value;
-            switch (params[i].name.toLowerCase ()) {
+            var param = params[i].name.toLowerCase ();
+            var value = params[i].value;
+            switch (param) {
                 case "bgcolor":      this.xaml.background.Fill = value; break;
                 case "showcontrols": this.xaml.control_bar.Visibility = to_bool (value) ? "Visible" : "Collapsed"; break;
                 
                 case "autostart":    this.xaml.video_element.AutoPlay = to_bool (value); break;
-                case "loop":         this.loop_playback = to_bool (value); break;
-                
-                case "media-source": this.LoadSource (value); break;
+                case "loop":         this.loop_playback = to_bool (value); break;     
+            }
+
+            for (var j = 0; j < this.media_source_properties.length; j++) {
+                if (this.media_source_properties[j] == param) {
+                    this.LoadSource (value);
+                    break;
+                }
             }
         }
     },
@@ -581,16 +590,16 @@ __MoonEmbeddedMediaPlayer.prototype = {
     },
     
     _ImplementWmpApi: function () {
-        //this.control["MoonMediaPlayer"] = this;
-        //this.control["controls"] = new __MoonEmbeddedWmpControls (this);
+        this.control["MoonMediaPlayer"] = this;
+        this.control["controls"] = new __MoonEmbeddedWmpControls (this);
         
-        /*var properties = [ "src", "source", "filename", "url" ];
         var self = this;
+        var properties = this.media_source_properties;
         for (var p in properties) {
             delete this.control[properties[p]];
             this.control.__defineSetter__ (properties[p], function (s) { self.LoadSource (s); });
             this.control.__defineGetter__ (properties[p], function () { return self.xaml.video_element.Source; });
-        }*/
+        }
     },
     
     Log: function (x) {

@@ -160,30 +160,3 @@ mmp_binder_npp_destroy (NPP instance, NPSavedData **save)
 	return MMP_HANDLE ()->moon_npp_destroy (instance, save);
 }
 
-gboolean 
-mmp_binder_npn_setproperty (NPP npp, NPObject *obj, NPIdentifier propertyName, const NPVariant *value)
-{
-	if (NPN_IdentifierIsString (propertyName)) {
-		NPUTF8 *id = NPN_UTF8FromIdentifier (propertyName);
-
-		if (g_ascii_strcasecmp (id, "source") == 0 ||
-			g_ascii_strcasecmp (id, "src") == 0) {
-			if (NPVARIANT_IS_STRING (*value)) {
-				NPString string = NPVARIANT_TO_STRING (*value);
-				if (strncmp (string.utf8characters, "#" MLMP_XAML_DOM_ID, string.utf8length) != 0) {
-					mp_debug ("HANDLE MEDIA: %s", string.utf8characters);
-					NPN_MemFree (id);
-					return FALSE;
-				} else {
-					mp_debug ("Allowing XAML source set to proxy");
-				}
-			}
-		}
-
-		g_debug ("ID: %s", id);
-		NPN_MemFree (id);
-	}
-
-	return MMP_HANDLE ()->moon_npn_setproperty (npp, obj, propertyName, value);
-}
-

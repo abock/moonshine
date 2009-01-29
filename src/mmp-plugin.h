@@ -16,15 +16,14 @@ typedef struct {
 	GModule *module;
 	gchar *mime_description;
 
-	NPNetscapeFuncs *mozilla_funcs;
-
 	MoonEntry_NP_Initialize np_initialize;
 	MoonEntry_NP_Shutdown np_shutdown;
 	MoonEntry_NP_GetValue np_getvalue;
 
 	NPP_NewUPP moon_npp_new;
 	NPP_DestroyUPP moon_npp_destroy;
-	NPN_SetPropertyUPP moon_npn_setproperty;
+
+	NPNetscapeFuncs mozilla_funcs;
 } MoonlightPlugin;
 
 MoonlightPlugin *  MMP_HANDLE ();

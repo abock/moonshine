@@ -112,26 +112,32 @@ mmp_plugin_proxy_load_moonlight ()
 NPError
 NP_Initialize (NPNetscapeFuncs *mozilla_funcs, NPPluginFuncs *plugin_funcs)
 {
+	MoonlightPlugin *moon_host = MMP_HANDLE ();
+	gsize mozilla_funcs_size;
+
 	MOON_CHECK_LOAD_PLUGIN ();
+
 	mp_debug ("NP_Initialize (%p, %p)", mozilla_funcs, plugin_funcs);
 
-	if (MMP_HANDLE ()->np_initialize != NULL) {
-		NPError result = MMP_HANDLE ()->np_initialize (mozilla_funcs, plugin_funcs);
-		if (result == NPERR_NO_ERROR) {
-			MoonlightPlugin *moon_host = MMP_HANDLE ();
+	// Copy the Mozilla function table
+	mozilla_funcs_size = sizeof (NPNetscapeFuncs);
+	memset (&moon_host->mozilla_funcs, 0, mozilla_funcs_size);
+	mozilla_funcs_size = mozilla_funcs->size < mozilla_funcs_size
+		? mozilla_funcs->size
+		: mozilla_funcs_size;
+	memcpy (&moon_host->mozilla_funcs, mozilla_funcs, mozilla_funcs_size);
+	moon_host->mozilla_funcs.size = sizeof (moon_host->mozilla_funcs);
 
+	// Proxy NP_Initialize to Moonlight
+	if (MMP_HANDLE ()->np_initialize != NULL) {
+		NPError result = MMP_HANDLE ()->np_initialize (&moon_host->mozilla_funcs, plugin_funcs);
+		if (result == NPERR_NO_ERROR) {
 			// Override some Moonlight NPP functions
 			moon_host->moon_npp_new = plugin_funcs->newp;
 			plugin_funcs->newp = mmp_binder_npp_new;
 
 			moon_host->moon_npp_destroy = plugin_funcs->destroy;
 			plugin_funcs->destroy = mmp_binder_npp_destroy;
-
-			moon_host->moon_npn_setproperty = mozilla_funcs->setproperty;
-			mozilla_funcs->setproperty = mmp_binder_npn_setproperty;
-
-			// Store the funcs so we can call into the plugin
-			moon_host->mozilla_funcs = mozilla_funcs;
 		}
 
 		return result;
