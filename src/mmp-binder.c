@@ -107,35 +107,34 @@ NPError mmp_binder_npp_new (NPMIMEType pluginType, NPP instance, gushort mode,
 
 	mp_debug ("NPP_New");
 
+	// +1 to ensure space for onload
 	param_names = g_new0 (gchar *, argc + 1);
 	param_values = g_new0 (gchar *, argc + 1);
 
-	if (param_names == NULL || param_values == NULL) {
-		return NPERR_GENERIC_ERROR;
-	}
-	
+	// We only preserve and proxy id, width, and height
 	for (i = 0; i < argc; i++) {
-		if (g_ascii_strcasecmp (argn[i], "source") == 0 ||
-			g_ascii_strcasecmp (argn[i], "onload") == 0) {
-			continue;
+		if (g_ascii_strncasecmp (argn[i], "id", 2) == 0 ||
+			g_ascii_strncasecmp (argn[i], "width", 5) == 0 ||
+			g_ascii_strncasecmp (argn[i], "height", 6) == 0) {
+			param_names[param_count] = g_strdup (argn[i]);
+			param_values[param_count] = g_strdup (argv[i]);
+			param_count++;
 		}
-
-		param_count++;
-		param_names[i] = g_strdup (argn[i]);
-		param_values[i] = g_strdup (argv[i]);
 	}
 
 	param_names[param_count] = g_strdup ("onload");
 	param_values[param_count++] = g_strdup (MLMP_XAML_LOAD_FUNCTION);
-
+	
+	// Create an NPP wrapper and send the NPP_New to Moonlight
 	plugin = mmp_plugin_new (instance);
 	plugin->param_names = param_names;
 	plugin->param_values = param_values;
 
-	result = MMP_HANDLE ()->moon_npp_new (pluginType, instance, mode, 
-		param_count, param_names, param_values, saved);
-	
+	result = MMP_HANDLE ()->moon_npp_new ("application/x-silverlight", instance, mode, 
+		param_count, param_names, param_values, saved);	
+
 	if (result == NPERR_NO_ERROR) {
+		// Everything was okay, so bind XAML and JS to the plugin instance
 		mmp_binder_bind (plugin);
 		return NPERR_NO_ERROR;
 	}
