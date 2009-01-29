@@ -27,7 +27,8 @@ mpplugin_LTLIBRARIES = libmoonmp-plugin.la
 libmoonmp_plugin_la_SOURCES = \
 	mmp-plugin-proxy.c \
 	mmp-plugin.c \
-	mmp-binder.c
+	mmp-binder.c \
+	mmp-script.c
 
 libmoonmp_plugin_la_LDFLAGS = \
 	-avoid-version \

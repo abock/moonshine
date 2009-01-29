@@ -107,57 +107,6 @@ mmp_plugin_proxy_load_moonlight ()
 		: NPERR_NO_ERROR;
 }
 
-// Plugin Hooks
-
-NPError
-NPP_New (NPMIMEType pluginType, NPP instance, gushort mode, 
-	gshort argc, gchar **argn, gchar **argv, NPSavedData *saved)
-{
-	NPError result;
-	gchar **param_names;
-	gchar **param_values;
-	gint param_count = 0, i;
-
-	param_names = g_new0 (gchar *, argc + 1);
-	param_values = g_new0 (gchar *, argc + 1);
-
-	if (param_names == NULL || param_values == NULL) {
-		return NPERR_GENERIC_ERROR;
-	}
-	
-	for (i = 0; i < argc; i++) {
-		if (g_ascii_strcasecmp (argn[i], "source") == 0 ||
-			g_ascii_strcasecmp (argn[i], "onload") == 0) {
-			continue;
-		}
-
-		param_count++;
-		param_names[i] = g_strdup (argn[i]);
-		param_values[i] = g_strdup (argv[i]);
-	}
-
-	param_names[param_count] = g_strdup ("onload");
-	param_values[param_count++] = g_strdup ("myfunction");
-	
-	result = MMP_HANDLE ()->moon_npp_new (pluginType, instance, mode, 
-		param_count, param_names, param_values, saved);
-
-	if (result == NPERR_NO_ERROR) {
-		MoonlightPluginInstance *plugin_instance = mmp_plugin_new (instance);
-		if (plugin_instance != NULL) {
-			plugin_instance->param_names = param_names;
-			plugin_instance->param_values = param_values;
-
-			mmp_binder_bind (plugin_instance);
-		}
-	} else {
-		g_strfreev (param_names);
-		g_strfreev (param_values);
-	}
-
-	return result;
-}
-
 // Mozilla Plugin Entry Points
 
 NPError
@@ -171,7 +120,10 @@ NP_Initialize (NPNetscapeFuncs *mozilla_funcs, NPPluginFuncs *plugin_funcs)
 		if (result == NPERR_NO_ERROR) {
 			// Override some Moonlight NPP functions
 			MMP_HANDLE ()->moon_npp_new = plugin_funcs->newp;
-			plugin_funcs->newp = NPP_New;
+			plugin_funcs->newp = mmp_binder_npp_new;
+
+			MMP_HANDLE ()->moon_npp_destroy = plugin_funcs->destroy;
+			plugin_funcs->destroy = mmp_binder_npp_destroy;
 
 			// Store the funcs so we can call into the plugin
 			MMP_HANDLE ()->mozilla_funcs = mozilla_funcs;

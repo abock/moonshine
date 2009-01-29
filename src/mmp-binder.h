@@ -3,7 +3,10 @@
 
 #include "mmp-plugin.h"
 
-void mmp_binder_bind (MoonlightPluginInstance *plugin);
+NPError mmp_binder_npp_new (NPMIMEType pluginType, NPP instance, gushort mode,
+	gshort argc, gchar **argn, gchar **argv, NPSavedData *saved);
+
+NPError mmp_binder_npp_destroy (NPP instance, NPSavedData **save);
 
 #endif /* _MMP_BINDER_H */
 

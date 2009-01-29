@@ -1,39 +1,25 @@
 <html>
 <head>
 <title>MoonMP Load Test</title>
-
-<script type="text/javascript">
-function myfunction () {
-	alert ('yada yada yada');
-}
-</script>
-
 </head>
 
 <body>
 
-<script id="xaml" type="text/xaml">
-<Canvas xmlns="http://schemas.microsoft.com/client/2007">
-	<TextBlock>HELLO FROM MOONLIGHT</TextBlock>
-</Canvas>
-</script>
-
 <h1>OBJECT</h1>
 
-<object type="application/x-moon-media" id="media-object" 
+<object type="application/x-moon-media"
 	width="480" height="300">
 	<param name="background" value="purple"/>
 	<param name="source" value="1.wmv"/>
 </object>
 
-<!--
 <h1>EMBED</h1>
 
-<embed type="application/x-silverlight" id="media-embed"
+<embed type="application/x-moon-media"
 	width="480" height="300" 
 	background="green"
-	source="#xaml"
+	source="1.wmv"
 />
--->
+
 </body>
 </html>

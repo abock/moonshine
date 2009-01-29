@@ -1,88 +1,159 @@
 #include "mmp-binder.h"
+#include "mmp-script.h"
 #include "mmp-resources.h"
 
-void
-mmp_binder_bind (MoonlightPluginInstance *plugin)
-{
-	//mmp_plugin_set_property_string (plugin->moz_instance, "onload", "myfunction");
-	mmp_plugin_set_property_string (plugin, "source", "#xaml");
-}
+#define MLMP_XAML_LOAD_FUNCTION "__MoonMediaPlayerOnLoad"
+#define MLMP_XAML_DOM_ID        "__MoonMediaPlayerXaml"
 
-/*
-static char *
-mmp_loader_read_file (const char *path)
+typedef enum {
+	XAML_LOAD_ERROR = 0,
+	XAML_LOAD_SUCCESS = 1,
+	XAML_LOAD_ALREADY_LOADED = 2
+} XamlLoadStatus;
+
+static XamlLoadStatus
+mmp_binder_load_player_xaml (MoonlightPluginInstance *plugin)
 {
-	char *buffer = NULL;
-	if (g_file_get_contents (path, &buffer, NULL, NULL)) {
-		return buffer;
+	NPP npp = plugin->moz_instance;
+	NPObject *window = mmp_script_get_window (npp);
+	NPVariant document;
+	NPVariant script_element;
+	NPVariant xaml_node;
+	NPVariant body;
+	XamlLoadStatus xaml_loaded = XAML_LOAD_ERROR;
+
+	g_return_val_if_fail (npp != NULL, XAML_LOAD_ERROR);
+	g_return_val_if_fail (window != NULL, XAML_LOAD_ERROR);
+
+	// Load the document object
+	if (!mmp_script_get_document (npp, window, &document)) {
+		mp_error ("Unable to get document object via npruntime");
+		return XAML_LOAD_ERROR;
 	}
-	return NULL;
+
+	// Check to see if the XAML was already loaded into the DOM
+	if (mmp_script_document_get_element_by_id (npp, &document, MLMP_XAML_DOM_ID, &xaml_node)) {
+		NPN_ReleaseVariantValue (&xaml_node);
+		NPN_ReleaseVariantValue (&document);
+		return XAML_LOAD_ALREADY_LOADED;
+	}
+
+	// Create the XAML and add to the DOM (<script id='foo' type='text/xaml'>[xaml data]</script>)
+	if (mmp_script_document_create_element (npp, &document, "script", &script_element)) {
+		if (mmp_script_element_set_property_string (npp, &script_element, "id", MLMP_XAML_DOM_ID) &&
+			mmp_script_element_set_property_string (npp, &script_element, "type", "text/xaml") &&
+			mmp_script_document_create_text_node (npp, &document, MLMP_RESOURCE_PLAYER_XAML, &xaml_node)) {
+			
+			if (mmp_script_element_append_child (npp, &script_element, &xaml_node)) {
+				if (mmp_script_element_get_property_object (npp, &document, "body", &body)) {
+					if (mmp_script_element_append_child (npp, &body, &script_element)) {
+						xaml_loaded = XAML_LOAD_SUCCESS;
+					}
+
+					NPN_ReleaseVariantValue (&body);
+				}
+			} 
+
+			NPN_ReleaseVariantValue (&xaml_node);
+		}
+
+		NPN_ReleaseVariantValue (&script_element);
+	}
+
+	NPN_ReleaseVariantValue (&document);
+	return xaml_loaded;
 }
 
 static void
-mmp_loader_load_js_files ()
+mmp_binder_bind (MoonlightPluginInstance *plugin)
 {
-	char *env, **js_files, *js_data;
-	int i, n;
+	XamlLoadStatus status;
+	NPP npp;
+	NPObject *host;
+	NPVariant hostv;
 
-	// FIXME: Cache JS loaded from disk in a list?
-	if ((env = getenv ("MOONLIGHT_MEDIA_PLAYER_JS")) != NULL) {
-		js_files = g_strsplit (env, ",", 0);
-		for (i = 0, n = g_strv_length (js_files); i < n; i++) {
-			js_data = mmp_loader_read_file (js_files[i]);
-			if (js_data != NULL) {
-				plugin->Evaluate (js_data);
-				g_free (js_data);
-			}
-		}
-		g_strfreev (js_files);
+	status = mmp_binder_load_player_xaml (plugin);
+	npp = plugin->moz_instance;
+
+	if (status == XAML_LOAD_ERROR) {
+		mp_error ("Unable to load player XAML into the DOM");
 		return;
+	} else if (status == XAML_LOAD_SUCCESS) {
+		// Only load the JS once, when the XAML is actually added to the DOM
+		mmp_script_evaluate (npp, MLMP_RESOURCE_PLAYER_JS);
 	}
-
-	//plugin->Evaluate (_EMBEDDED_SILVER_RESOLVER_JS);
-	//plugin->Evaluate (_EMBEDDED_MEDIA_PLAYER_JS);
-}
-
-static char *
-mmp_loader_load_xaml ()
-{
-	char *env;
-	return (env = getenv ("MOONLIGHT_MEDIA_PLAYER_XAML")) != NULL
-		? mmp_loader_read_file (env)
-		: (char *)_EMBEDDED_MEDIA_PLAYER_XAML;
-}
-
-void *
-mmp_loader_stream_as_file_hook (void *_plugin, NPStream *stream, const char *source_location)
-{
-	static const char *js_vars = 
-		"var __moon_media_embed_id   = \"%s\";"
-		"var __moon_media_source_uri = \"%s\";";
 	
-	PluginInstance *plugin = (PluginInstance *)_plugin;
-	PluginXamlLoader *xaml_loader;
-	char *js_vars_instance, *xaml;
-
-	// FIXME: Hack to avoid the same source_location from being
-	// loaded more than once against the same plugin instance
-	if (c_plugin != NULL && c_plugin == plugin) {
-		return NULL;
+	// Always bind the plugin instance to the loaded XAML
+	if (NPN_GetValue (npp, NPNVPluginElementNPObject, &host) == NPERR_NO_ERROR) {
+		OBJECT_TO_NPVARIANT (host, hostv);
+		mmp_script_element_set_property_string (npp, &hostv,
+			"source", "#" MLMP_XAML_DOM_ID);
+		NPN_ReleaseVariantValue (&hostv);
+		NPN_ReleaseObject (host);
 	}
-	c_plugin = plugin;
-
-	// Define some dependency globals in JavaScript
-	js_vars_instance = g_strdup_printf (js_vars, plugin->GetId (), source_location);
-	plugin->Evaluate (js_vars_instance);
-	g_free (js_vars_instance);
-
-	mmp_loader_load_js_files (plugin);
-
-	xaml = mmp_loader_load_xaml ();
-	xaml_loader = PluginXamlLoader::FromStr (xaml, plugin, plugin->GetSurface ());
-	if (xaml != _EMBEDDED_MEDIA_PLAYER_XAML) {
-		g_free (xaml);
-	}
-
-	return xaml_loader;
 }
-*/
+
+NPError mmp_binder_npp_new (NPMIMEType pluginType, NPP instance, gushort mode,
+	gshort argc, gchar **argn, gchar **argv, NPSavedData *saved)
+{
+	NPError result;
+	gchar **param_names;
+	gchar **param_values;
+	gint param_count = 0, i;
+	MoonlightPluginInstance *plugin;
+
+	mp_debug ("NPP_New");
+
+	param_names = g_new0 (gchar *, argc + 1);
+	param_values = g_new0 (gchar *, argc + 1);
+
+	if (param_names == NULL || param_values == NULL) {
+		return NPERR_GENERIC_ERROR;
+	}
+	
+	for (i = 0; i < argc; i++) {
+		if (g_ascii_strcasecmp (argn[i], "source") == 0 ||
+			g_ascii_strcasecmp (argn[i], "onload") == 0) {
+			continue;
+		}
+
+		param_count++;
+		param_names[i] = g_strdup (argn[i]);
+		param_values[i] = g_strdup (argv[i]);
+	}
+
+	param_names[param_count] = g_strdup ("onload");
+	param_values[param_count++] = g_strdup (MLMP_XAML_LOAD_FUNCTION);
+
+	plugin = mmp_plugin_new (instance);
+	plugin->param_names = param_names;
+	plugin->param_values = param_values;
+
+	result = MMP_HANDLE ()->moon_npp_new (pluginType, instance, mode, 
+		param_count, param_names, param_values, saved);
+	
+	if (result == NPERR_NO_ERROR) {
+		mmp_binder_bind (plugin);
+		return NPERR_NO_ERROR;
+	}
+
+	mmp_plugin_free (plugin);
+
+	return result;
+}
+
+NPError
+mmp_binder_npp_destroy (NPP instance, NPSavedData **save)
+{
+	MoonlightPluginInstance *plugin;
+	
+	mp_debug ("NPP_Destroy");
+
+	plugin = mmp_plugin_find_instance (instance);
+	if (plugin != NULL) {
+		mmp_plugin_free (plugin);
+	}
+
+	return MMP_HANDLE ()->moon_npp_destroy (instance, save);
+}
+
