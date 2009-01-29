@@ -24,6 +24,7 @@ typedef struct {
 
 	NPP_NewUPP moon_npp_new;
 	NPP_DestroyUPP moon_npp_destroy;
+	NPN_SetPropertyUPP moon_npn_setproperty;
 } MoonlightPlugin;
 
 MoonlightPlugin *  MMP_HANDLE ();

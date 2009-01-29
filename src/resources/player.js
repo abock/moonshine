@@ -54,7 +54,7 @@ __MoonEmbeddedMediaPlayer.prototype = {
         this.control.Content.OnFullScreenChange = delegate (this, this._OnFullScreenChange);
         this.loaded = true;
     
-        if (XULMoonEmbeddedPlayerInit) {
+        if (typeof XULMoonEmbeddedPlayerInit != "undefined") {
             XULMoonEmbeddedPlayerInit (this);
         }
     },
@@ -581,16 +581,16 @@ __MoonEmbeddedMediaPlayer.prototype = {
     },
     
     _ImplementWmpApi: function () {
-        this.control["MoonMediaPlayer"] = this;
-        this.control["controls"] = new __MoonEmbeddedWmpControls (this);
+        //this.control["MoonMediaPlayer"] = this;
+        //this.control["controls"] = new __MoonEmbeddedWmpControls (this);
         
-        var properties = [ "src", "source", "filename", "url" ];
+        /*var properties = [ "src", "source", "filename", "url" ];
         var self = this;
         for (var p in properties) {
             delete this.control[properties[p]];
             this.control.__defineSetter__ (properties[p], function (s) { self.LoadSource (s); });
             this.control.__defineGetter__ (properties[p], function () { return self.xaml.video_element.Source; });
-        }
+        }*/
     },
     
     Log: function (x) {

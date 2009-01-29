@@ -1,3 +1,0 @@
-#!/bin/bash
-
-MOONLIGHT_MEDIA_PLAYER_XAML=media-player.xaml MOONLIGHT_MEDIA_PLAYER_JS=silver-resolver.js,media-player.js firefox file:///home/aaron/Desktop/Windows%20Media.wmv

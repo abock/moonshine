@@ -118,15 +118,20 @@ NP_Initialize (NPNetscapeFuncs *mozilla_funcs, NPPluginFuncs *plugin_funcs)
 	if (MMP_HANDLE ()->np_initialize != NULL) {
 		NPError result = MMP_HANDLE ()->np_initialize (mozilla_funcs, plugin_funcs);
 		if (result == NPERR_NO_ERROR) {
+			MoonlightPlugin *moon_host = MMP_HANDLE ();
+
 			// Override some Moonlight NPP functions
-			MMP_HANDLE ()->moon_npp_new = plugin_funcs->newp;
+			moon_host->moon_npp_new = plugin_funcs->newp;
 			plugin_funcs->newp = mmp_binder_npp_new;
 
-			MMP_HANDLE ()->moon_npp_destroy = plugin_funcs->destroy;
+			moon_host->moon_npp_destroy = plugin_funcs->destroy;
 			plugin_funcs->destroy = mmp_binder_npp_destroy;
 
+			moon_host->moon_npn_setproperty = mozilla_funcs->setproperty;
+			mozilla_funcs->setproperty = mmp_binder_npn_setproperty;
+
 			// Store the funcs so we can call into the plugin
-			MMP_HANDLE ()->mozilla_funcs = mozilla_funcs;
+			moon_host->mozilla_funcs = mozilla_funcs;
 		}
 
 		return result;
