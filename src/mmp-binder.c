@@ -70,29 +70,16 @@ static void
 mmp_binder_bind (MoonlightPluginInstance *plugin)
 {
 	XamlLoadStatus status;
-	NPP npp;
-	NPObject *host;
-	NPVariant hostv;
 
 	status = mmp_binder_load_player_xaml (plugin);
-	npp = plugin->moz_instance;
 
 	if (status == XAML_LOAD_ERROR) {
 		mp_error ("Unable to load player XAML into the DOM");
 		return;
 	} else if (status == XAML_LOAD_SUCCESS) {
 		// Only load the JS once, when the XAML is actually added to the DOM
-		mmp_script_evaluate (npp, MLMP_RESOURCE_PLAYER_JS);
-		mmp_script_evaluate (npp, MLMP_RESOURCE_WMP_CONTROLS_JS);
-	}
-	
-	// Always bind the plugin instance to the loaded XAML
-	if (NPN_GetValue (npp, NPNVPluginElementNPObject, &host) == NPERR_NO_ERROR) {
-		OBJECT_TO_NPVARIANT (host, hostv);
-		mmp_script_element_set_property_string (npp, &hostv,
-			"source", "#" MLMP_XAML_DOM_ID);
-		NPN_ReleaseVariantValue (&hostv);
-		NPN_ReleaseObject (host);
+		mmp_script_evaluate (plugin->moz_instance, MLMP_RESOURCE_PLAYER_JS);
+		mmp_script_evaluate (plugin->moz_instance, MLMP_RESOURCE_WMP_CONTROLS_JS);
 	}
 }
 
@@ -107,9 +94,9 @@ NPError mmp_binder_npp_new (NPMIMEType pluginType, NPP instance, gushort mode,
 
 	mp_debug ("NPP_New");
 
-	// +1 to ensure space for onload
-	param_names = g_new0 (gchar *, argc + 1);
-	param_values = g_new0 (gchar *, argc + 1);
+	// +2 to ensure space for onload and source
+	param_names = g_new0 (gchar *, argc + 2);
+	param_values = g_new0 (gchar *, argc + 2);
 
 	// We only preserve and proxy id, width, and height
 	for (i = 0; i < argc; i++) {
@@ -121,6 +108,9 @@ NPError mmp_binder_npp_new (NPMIMEType pluginType, NPP instance, gushort mode,
 			param_count++;
 		}
 	}
+
+	param_names[param_count] = g_strdup ("source");
+	param_values[param_count++] = g_strdup ( "#" MLMP_XAML_DOM_ID );
 
 	param_names[param_count] = g_strdup ("onload");
 	param_values[param_count++] = g_strdup (MLMP_XAML_LOAD_FUNCTION);
@@ -162,8 +152,14 @@ mmp_binder_npp_destroy (NPP instance, NPSavedData **save)
 void
 mmp_binder_npp_stream_as_file (NPP instance, NPStream *stream, const gchar *fname)
 {
-	mp_debug ("NPP_StreamAsFile (%s)", fname);
-
-//	MMP_HANDLE ()->moon_npp_stream_as_file (instance, stream, fname);
+	// Mozilla ends up calling this in some cases. It results in the file
+	// being loaded as XAML inside of Moonlight, which is very bad since
+	// it's going to be some kind of WM content.
+	//
+	// Observed cases where Mozilla does this:
+	//
+	//    <embed src="..." />
+	//    <object data="..." />
+	//
 }
 
