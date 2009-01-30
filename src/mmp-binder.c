@@ -159,3 +159,11 @@ mmp_binder_npp_destroy (NPP instance, NPSavedData **save)
 	return MMP_HANDLE ()->moon_npp_destroy (instance, save);
 }
 
+void
+mmp_binder_npp_stream_as_file (NPP instance, NPStream *stream, const gchar *fname)
+{
+	mp_debug ("NPP_StreamAsFile (%s)", fname);
+
+//	MMP_HANDLE ()->moon_npp_stream_as_file (instance, stream, fname);
+}
+

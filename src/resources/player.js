@@ -169,32 +169,39 @@ __MoonEmbeddedMediaPlayer.prototype = {
     
     _MapAttributes: function () {
         // WMP attributes mapped from <embed> 
+        for (var i = 0; i < this.control.attributes.length; i++) {
+            var attr = this.control.attributes[i];
+            this._MapAttribute (attr.name, attr.value);
+        }
+
+        var params = this.control.childNodes;
+        if (params) {
+            for (var i = 0, n = params.length; i < n; i++) {
+                if (params[i] instanceof HTMLParamElement) {
+                    this._MapAttribute (params[i].name, params[i].value);
+                }
+            }
+        }
+    },
+
+    _MapAttribute: function (name, value) {
         function to_bool (x) {
             return x.toLowerCase () == "true";
         }
-        
-        var params = this.control.childNodes;
-        
-        for (var i = 0, n = params.length; i < n; i++) {
-            if (!(params[i] instanceof HTMLParamElement)) {
-                continue;
-            }
-            
-            var param = params[i].name.toLowerCase ();
-            var value = params[i].value;
-            switch (param) {
-                case "bgcolor":      this.xaml.background.Fill = value; break;
-                case "showcontrols": this.xaml.control_bar.Visibility = to_bool (value) ? "Visible" : "Collapsed"; break;
-                
-                case "autostart":    this.xaml.video_element.AutoPlay = to_bool (value); break;
-                case "loop":         this.loop_playback = to_bool (value); break;     
-            }
 
-            for (var j = 0; j < this.media_source_properties.length; j++) {
-                if (this.media_source_properties[j] == param) {
-                    this.LoadSource (value);
-                    break;
-                }
+        var param = name.toLowerCase ();
+        switch (param) {
+            case "background":
+            case "bgcolor":      this.xaml.background.Fill = value; break;
+            case "showcontrols": this.xaml.control_bar.Visibility = to_bool (value) ? "Visible" : "Collapsed"; break;
+            case "autostart":    this.xaml.video_element.AutoPlay = to_bool (value); break;
+            case "loop":         this.loop_playback = to_bool (value); break;     
+        }
+
+        for (var j = 0; j < this.media_source_properties.length; j++) {
+            if (this.media_source_properties[j] == param) {
+                this.LoadSource (value);
+                break;
             }
         }
     },

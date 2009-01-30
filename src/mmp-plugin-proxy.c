@@ -138,6 +138,9 @@ NP_Initialize (NPNetscapeFuncs *mozilla_funcs, NPPluginFuncs *plugin_funcs)
 
 			moon_host->moon_npp_destroy = plugin_funcs->destroy;
 			plugin_funcs->destroy = mmp_binder_npp_destroy;
+
+			moon_host->moon_npp_stream_as_file = plugin_funcs->asfile;
+			plugin_funcs->asfile = mmp_binder_npp_stream_as_file;
 		}
 
 		return result;

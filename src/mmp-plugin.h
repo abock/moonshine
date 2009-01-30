@@ -22,6 +22,7 @@ typedef struct {
 
 	NPP_NewUPP moon_npp_new;
 	NPP_DestroyUPP moon_npp_destroy;
+	NPP_StreamAsFileUPP moon_npp_stream_as_file;
 
 	NPNetscapeFuncs mozilla_funcs;
 } MoonlightPlugin;
