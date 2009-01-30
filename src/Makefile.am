@@ -31,9 +31,9 @@ libmoonmp_plugin_la_SOURCES = \
 	mmp-script.c
 
 libmoonmp_plugin_la_LDFLAGS = \
-	-avoid-version \
-	-export-symbols $(srcdir)/export-symbols \
-	-module
+	-avoid-version -module
+#	-export-symbols $(srcdir)/export-symbols \
+#	-module
 
 libmoonmp_plugin_la_LIBADD = \
 	$(GLIB_LIBS) \
@@ -41,16 +41,18 @@ libmoonmp_plugin_la_LIBADD = \
 
 $(libmoonmp_plugin_la_SOURCES): $(RESOURCE_OUT_FILE)
 
+TEST_URI = http://www.c-span.org/Watch/C-SPAN_wm.aspx
+
 test-plugin: all 
 	mkdir -p ~/.mozilla/plugins
 	rm -f ~/.mozilla/plugins/libmoonmp-plugin.so
 	cp .libs/libmoonmp-plugin.so ~/.mozilla/plugins
 
 run: test-plugin
-	firefox -P dev -no-remote ../test/test.html
+	firefox -P dev -no-remote $(TEST_URI)
 
 gdb: test-plugin
-	gdb $(libdir)/firefox/firefox -ex "run -P dev -no-remote ../test/test.html"
+	gdb $(libdir)/firefox/firefox -ex "run -P dev -no-remote $(TEST_URI)"
 
 EXTRA_DIST = $(RESOURCES)
 CLEANFILES = $(RESOURCE_OUT_FILE)
