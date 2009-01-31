@@ -1,3 +1,22 @@
+RESOURCE_OUT_FILE = mmp-resources.h
+RESOURCE_VAR_PREFIX = MLMP_RESOURCE_
+RESOURCES = \
+	player/player.xaml \
+	player/player.js \
+	player/wmp-controls.js
+
+RESOURCES_BUILD = $(foreach res, $(RESOURCES), \
+	`echo $(RESOURCE_VAR_PREFIX)$(notdir $(res)) \
+		| tr '[:lower:]' '[:upper:]' \
+		| sed -r 's|[-.]|_|g;s|[^A-Z0-9_]||g'` \
+	$(srcdir)/$(res))
+
+$(RESOURCE_OUT_FILE): $(srcdir)/generate-resource $(RESOURCES)
+	$(SHELL) $< $@ $(RESOURCES_BUILD)
+
+mpplugindir=$(BROWSER_PLUGIN_DIR)
+mpplugin_LTLIBRARIES = libmoonmp-plugin.la
+
 INCLUDES = \
 	$(MOZILLA_CFLAGS) \
 	$(GLIB_CFLAGS) \
@@ -5,44 +24,19 @@ INCLUDES = \
 	-Wall \
 	-ggdb3
 
-RESOURCE_OUT_FILE = $(builddir)/mmp-resources.h
-RESOURCE_VAR_PREFIX = MLMP_RESOURCE_
-RESOURCES = \
-	resources/player.xaml \
-	resources/player.js \
-	resources/wmp-controls.js
-
-RESOURCES_BUILD = $(foreach res, $(RESOURCES), \
-	`echo $(RESOURCE_VAR_PREFIX)$(notdir $(res)) \
-		| tr '[:lower:]' '[:upper:]' \
-		| sed -r 's|[-.]|_|g;s|[^A-Z0-9_]||g'` \
-	$(res))
-
-$(RESOURCE_OUT_FILE): $(srcdir)/generate-resource $(RESOURCES)
-	$(SHELL) $< $@ $(RESOURCES_BUILD)
-
-mpplugindir=$(libdir)/browser-plugins
-mpplugin_LTLIBRARIES = libmoonmp-plugin.la
-
 libmoonmp_plugin_la_SOURCES = \
-	mmp-plugin-proxy.cpp \
-	mmp-plugin.c \
-	mmp-binder.c \
-	mmp-script.c
+	$(srcdir)/mmp-plugin-proxy.cpp \
+	$(srcdir)/mmp-plugin.c \
+	$(srcdir)/mmp-binder.c \
+	$(srcdir)/mmp-script.c
 
 libmoonmp_plugin_la_LDFLAGS = \
 	-avoid-version \
 	-module \
-	-export-symbols $(srcdir)/export-symbols
+    -export-symbols-regex \
+    'NP_Initialize|NP_Shutdown|NP_GetMIMEDescription|NP_GetValue'
 
-libmoonmp_plugin_la_LIBADD = \
-	$(GLIB_LIBS) \
-	$(MOZILLA_LIBS)
-
-noinst_HEADERS = \
-	mmp-binder.h \
-	mmp-plugin.h \
-	mmp-script.h
+libmoonmp_plugin_la_LIBADD = $(GLIB_LIBS)
 
 $(libmoonmp_plugin_la_SOURCES): $(RESOURCE_OUT_FILE)
 
@@ -59,12 +53,13 @@ run: test-plugin
 gdb: test-plugin
 	gdb $(libdir)/firefox/firefox -ex "run -P dev -no-remote $(TEST_URI)"
 
-EXTRA_DIST = 
+EXTRA_DIST = \
 	$(libmoonmp_plugin_la_SOURCES) \
-	$(noinst_HEADERS) \
-	$(RESOURCES) \
+    $(RESOURCES) \
 	generate-resource \
-	export-symbols
+    mmp-binder.h \
+	mmp-plugin.h \
+	mmp-script.h
 
 CLEANFILES = $(RESOURCE_OUT_FILE)
 MAINTAINERCLEANFILES = Makefile.in
