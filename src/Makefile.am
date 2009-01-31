@@ -5,7 +5,7 @@ INCLUDES = \
 	-Wall \
 	-ggdb3
 
-RESOURCE_OUT_FILE = mmp-resources.h
+RESOURCE_OUT_FILE = $(builddir)/mmp-resources.h
 RESOURCE_VAR_PREFIX = MLMP_RESOURCE_
 RESOURCES = \
 	resources/player.xaml \
@@ -18,7 +18,7 @@ RESOURCES_BUILD = $(foreach res, $(RESOURCES), \
 		| sed -r 's|[-.]|_|g;s|[^A-Z0-9_]||g'` \
 	$(res))
 
-$(RESOURCE_OUT_FILE): generate-resource $(RESOURCES)
+$(RESOURCE_OUT_FILE): $(srcdir)/generate-resource $(RESOURCES)
 	$(SHELL) $< $@ $(RESOURCES_BUILD)
 
 mpplugindir=$(libdir)/browser-plugins
@@ -39,12 +39,16 @@ libmoonmp_plugin_la_LIBADD = \
 	$(GLIB_LIBS) \
 	$(MOZILLA_LIBS)
 
+noinst_HEADERS = \
+	mmp-binder.h \
+	mmp-plugin.h \
+	mmp-script.h
+
 $(libmoonmp_plugin_la_SOURCES): $(RESOURCE_OUT_FILE)
 
 TEST_URI = http://www.c-span.org/Watch/C-SPAN_wm.aspx
 
 test-plugin: all 
-	echo $(MOZILLA_LIBS)
 	mkdir -p ~/.mozilla/plugins
 	rm -f ~/.mozilla/plugins/libmoonmp-plugin.so
 	cp .libs/libmoonmp-plugin.so ~/.mozilla/plugins
@@ -55,7 +59,13 @@ run: test-plugin
 gdb: test-plugin
 	gdb $(libdir)/firefox/firefox -ex "run -P dev -no-remote $(TEST_URI)"
 
-EXTRA_DIST = $(RESOURCES)
+EXTRA_DIST = 
+	$(libmoonmp_plugin_la_SOURCES) \
+	$(noinst_HEADERS) \
+	$(RESOURCES) \
+	generate-resource \
+	export-symbols
+
 CLEANFILES = $(RESOURCE_OUT_FILE)
 MAINTAINERCLEANFILES = Makefile.in
 

@@ -18,7 +18,6 @@ dnl Mozilla checks
 MOZILLA_MODULES="libxul-unstable mozilla-plugin mozilla-js"
 PKG_CHECK_MODULES(MOZILLA, [$MOZILLA_MODULES])
 dnl Strip out problem libraries (should already be in process space)
-#MOZILLA_LIBS="$(echo $FF3_LIBS | sed -e 's/-lmozjs\|-lplds4\|-lplc4\|-lnspr4//g')"
 MOZILLA_CFLAGS="${MOZILLA_CFLAGS} -DINSTALL_PREFIX=\\\"${prefix}\\\""
 AC_SUBST(MOZILLA_CFLAGS)
 AC_SUBST(MOZILLA_LIBS)
