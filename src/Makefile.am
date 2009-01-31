@@ -25,15 +25,15 @@ mpplugindir=$(libdir)/browser-plugins
 mpplugin_LTLIBRARIES = libmoonmp-plugin.la
 
 libmoonmp_plugin_la_SOURCES = \
-	mmp-plugin-proxy.c \
+	mmp-plugin-proxy.cpp \
 	mmp-plugin.c \
 	mmp-binder.c \
 	mmp-script.c
 
 libmoonmp_plugin_la_LDFLAGS = \
-	-avoid-version -module
-#	-export-symbols $(srcdir)/export-symbols \
-#	-module
+	-avoid-version \
+	-module \
+	-export-symbols $(srcdir)/export-symbols
 
 libmoonmp_plugin_la_LIBADD = \
 	$(GLIB_LIBS) \
@@ -44,6 +44,7 @@ $(libmoonmp_plugin_la_SOURCES): $(RESOURCE_OUT_FILE)
 TEST_URI = http://www.c-span.org/Watch/C-SPAN_wm.aspx
 
 test-plugin: all 
+	echo $(MOZILLA_LIBS)
 	mkdir -p ~/.mozilla/plugins
 	rm -f ~/.mozilla/plugins/libmoonmp-plugin.so
 	cp .libs/libmoonmp-plugin.so ~/.mozilla/plugins

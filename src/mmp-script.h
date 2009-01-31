@@ -4,6 +4,8 @@
 #include <glib.h>
 #include <npupp.h>
 
+G_BEGIN_DECLS
+
 NPObject * mmp_script_get_window                  (NPP npp);
 gboolean   mmp_script_get_document                (NPP npp, NPObject *window, NPVariant *document);
 gboolean   mmp_script_element_get_property_object (NPP npp, NPVariant *element, 
@@ -18,6 +20,8 @@ gboolean   mmp_script_document_get_element_by_id  (NPP npp, NPVariant *document,
                                                    const gchar *id, NPVariant *element);
 gboolean   mmp_script_element_append_child        (NPP npp, NPVariant *element, NPVariant *child);
 gboolean   mmp_script_evaluate                    (NPP npp, const gchar *code);
+
+G_END_DECLS
 
 #endif /* _MMP_SCRIPT_H */
 

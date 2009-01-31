@@ -12,14 +12,16 @@ AC_HEADER_STDC
 AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 PKG_PROG_PKG_CONFIG
+AC_PROG_CXX
 
 dnl Mozilla checks
 MOZILLA_MODULES="libxul-unstable mozilla-plugin mozilla-js"
 PKG_CHECK_MODULES(MOZILLA, [$MOZILLA_MODULES])
 dnl Strip out problem libraries (should already be in process space)
-MOZILLA_LIBS="$(echo $FF3_LIBS | sed -e 's/-lmozjs\|-lplds4\|-lplc4\|-lnspr4//g')"
+#MOZILLA_LIBS="$(echo $FF3_LIBS | sed -e 's/-lmozjs\|-lplds4\|-lplc4\|-lnspr4//g')"
 MOZILLA_CFLAGS="${MOZILLA_CFLAGS} -DINSTALL_PREFIX=\\\"${prefix}\\\""
 AC_SUBST(MOZILLA_CFLAGS)
+AC_SUBST(MOZILLA_LIBS)
 
 MIN_FIREFOX_VERSION="3.0.*"
 MAX_FIREFOX_VERSION="3.1.*"
@@ -30,6 +32,7 @@ dnl Other dependency checks
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.14 gmodule-2.0 >= 2.14)
 
 AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
 
 AC_OUTPUT([
 Makefile

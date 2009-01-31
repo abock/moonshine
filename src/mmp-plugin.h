@@ -8,6 +8,8 @@
 #define mp_debug(...) g_debug   ("libmoonmp-plugin: " __VA_ARGS__)
 #define mp_error(...) g_warning ("libmoonmp-plugin: " __VA_ARGS__)
 
+G_BEGIN_DECLS
+
 typedef NPError (* MoonEntry_NP_Initialize) (NPNetscapeFuncs *mozilla_funcs, NPPluginFuncs *plugin_funcs);
 typedef NPError (* MoonEntry_NP_Shutdown)   ();
 typedef NPError (* MoonEntry_NP_GetValue)   (gpointer future, NPPVariable variable, gpointer value);
@@ -38,6 +40,8 @@ typedef struct {
 MoonlightPluginInstance *  mmp_plugin_find_instance (NPP instance);
 MoonlightPluginInstance *  mmp_plugin_new (NPP instance);
 void                       mmp_plugin_free (MoonlightPluginInstance * plugin_instance);
+
+G_END_DECLS
 
 #endif /* _MMP_PLUGIN_H */
 
