@@ -15,12 +15,10 @@ PKG_PROG_PKG_CONFIG
 AC_PROG_CXX
 
 dnl Mozilla checks
-MOZILLA_MODULES="libxul-unstable mozilla-plugin mozilla-js"
+MOZILLA_MODULES="libxul-unstable mozilla-plugin"
 PKG_CHECK_MODULES(MOZILLA, [$MOZILLA_MODULES])
-dnl Strip out problem libraries (should already be in process space)
 MOZILLA_CFLAGS="${MOZILLA_CFLAGS} -DINSTALL_PREFIX=\\\"${prefix}\\\""
 AC_SUBST(MOZILLA_CFLAGS)
-AC_SUBST(MOZILLA_LIBS)
 
 MIN_FIREFOX_VERSION="3.0.*"
 MAX_FIREFOX_VERSION="3.1.*"
@@ -33,7 +31,26 @@ PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.14 gmodule-2.0 >= 2.14)
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
 
+expanded_libdir=`(case $prefix in NONE) prefix=$ac_default_prefix ;; *) ;; esac
+	case $exec_prefix in NONE) exec_prefix=$prefix ;; *) ;; esac
+    eval echo $libdir)`
+
+AC_ARG_WITH(browser_plugin_dir, 
+    AC_HELP_STRING([--with-browser-plugin-dir=<dir>],
+	[Directory where Mozilla plugins are installed, defaults to ${libdir}/browser-plugins]), 
+    [BROWSER_PLUGIN_DIR="${withval}"; 
+        BPD_EXPANDED="${withval}"], 
+	[BROWSER_PLUGIN_DIR="${libdir}/browser-plugins"; 
+        BPD_EXPANDED="${expanded_libdir}/browser-plugins"])
+AC_SUBST(BROWSER_PLUGIN_DIR)
+
 AC_OUTPUT([
 Makefile
 src/Makefile
 ])
+
+cat <<EOF
+${PACKAGE} ${VERSION}
+Browser Plugin Directory: $BPD_EXPANDED
+EOF
+
