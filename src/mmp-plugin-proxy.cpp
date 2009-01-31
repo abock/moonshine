@@ -2,8 +2,9 @@
 
 #include <nsCOMPtr.h>
 #include <nsStringAPI.h>
-#include <nsIToolkitProfileService.h>
+#include <nsILocalFile.h>
 #include <nsServiceManagerUtils.h>
+#include <nsIProperties.h>
 
 #include "mmp-plugin.h"
 #include "mmp-binder.h"
@@ -93,17 +94,32 @@ mmp_plugin_proxy_load_module (gchar *prefix)
 static void
 mmp_plugin_proxy_load_moonlight_from_xpi ()
 {
-	nsresult rv;
-	nsCOMPtr<nsIToolkitProfileService> ns_profile (do_GetService ("@mozilla.org/toolkit/profile-service;1", &rv));
-	
-	nsCOMPtr<nsIToolkitProfile> profile;
-	ns_profile->GetSelectedProfile (getter_AddRefs (profile));
-/*
-	nsCOMPtr<nsILocalFile> profileDir;
-	rv = profile->GetRootDir(getter_AddRefs(profileDir));*/
+	// If Moonlight is installed by the user into their Firefox profile (XPI),
+	// we have to query Mozilla to get the profile directory and search
+	// inside that. It's ugly.
 
-/*	nsCAutoString name;
-	profile->GetName (name);*/
+	nsresult result;
+	
+	nsCOMPtr<nsIProperties> dir_service (do_GetService ("@mozilla.org/file/directory_service;1", &result));
+	if (NS_FAILED (result)) {
+		return;
+	}
+
+	nsCOMPtr<nsIFile> dir;
+	result = dir_service->Get ("ProfD", NS_GET_IID (nsIFile), getter_AddRefs (dir));
+	if (NS_FAILED (result)) {
+		return;
+	}
+
+	nsAutoString path;
+	nsCAutoString cpath;
+	dir->GetPath (path);
+	CopyUTF16toUTF8 (path, cpath);
+
+	gchar *ex_plugins_path = g_build_filename (cpath.get (), 
+		"extensions", "moonlight@novell.com", "plugins", NULL);
+	mmp_plugin_proxy_load_module (ex_plugins_path);
+	g_free (ex_plugins_path);
 }
 
 static NPError
