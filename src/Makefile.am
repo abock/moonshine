@@ -25,16 +25,14 @@ INCLUDES = \
 	-ggdb3
 
 libmoonmp_plugin_la_SOURCES = \
-	$(srcdir)/mmp-plugin-proxy.cpp \
+	$(srcdir)/mmp-plugin-proxy.c \
 	$(srcdir)/mmp-plugin.c \
 	$(srcdir)/mmp-binder.c \
 	$(srcdir)/mmp-script.c
 
 libmoonmp_plugin_la_LDFLAGS = \
 	-avoid-version \
-	-module \
-    -export-symbols-regex \
-    'NP_Initialize|NP_Shutdown|NP_GetMIMEDescription|NP_GetValue'
+	-module
 
 libmoonmp_plugin_la_LIBADD = $(GLIB_LIBS)
 
