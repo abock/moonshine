@@ -225,10 +225,14 @@ NP_Initialize (NPNetscapeFuncs *mozilla_funcs, NPPluginFuncs *plugin_funcs)
 
 			moon_host->moon_npp_stream_as_file = plugin_funcs->asfile;
 			plugin_funcs->asfile = mmp_binder_npp_stream_as_file;
+		} else {
+			mp_error ("Unknown error in libmoonloader's NP_Initialize: %d", result);
 		}
 
 		return result;
 	}
+
+	mp_error ("Could not call NP_Initialize from libmoonloader (NULL)");
 
 	return NPERR_GENERIC_ERROR;
 }
@@ -250,6 +254,8 @@ NP_Shutdown ()
 
 	g_free (plugin_host->mime_description);
 	memset (plugin_host, 0, sizeof (MoonlightPlugin));
+
+	moon_module_load_attempted = FALSE;
 
 	return NPERR_NO_ERROR;
 }
