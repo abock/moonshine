@@ -7,8 +7,6 @@
 <script type="application/x-javascript" src="moon-console.js"/>
 <script type="application/x-javascript" src="moon-utilities.js"/>
 <script type="application/x-javascript" src="standalone-player.js"/>
-<script type="application/x-javascript" src="player/player.js"/>
-<script type="application/x-javascript" src="player/wmp-controls.js"/>
 <script type="application/x-javascript">
 <![CDATA[
     window.addEventListener ("load", function () { new StandaloneMoonPlayer; }, false);
@@ -23,7 +21,7 @@
         <menuitem label="Quit" onclick="window.close ()"/>
       </menupopup>
     </menu>
-    <!--<menu label="View">
+    <menu label="View">
       <menupopup>
         <menuitem label="Fullscreen" onclick="window.player.OnFullscreen ()"/>
         <menuitem label="Toggle Controls" onclick="window.player.OnToggleControls ()"/>
@@ -33,11 +31,9 @@
       <menupopup>
         <menuitem label="About" onclick="alert ('Moonlight Media Player')"/>
       </menupopup>
-    </menu>-->
+    </menu>
   </menubar>
-  <html:object id="moon-embedded-player" type="application/x-silverlight" flex="1">
-    <html:param name="source" value="chrome://moon-media/content/player/player.xaml"/>
-    <html:param name="onload" value="__MoonMediaPlayerOnLoad"/>
+  <html:object id="moon-embedded-player" type="application/x-moon-media" flex="1">
   </html:object>
 </vbox>
 </window>

@@ -1,4 +1,7 @@
-SUBDIRS = src
+SUBDIRS = \
+	player \
+	plugin \
+	xulrunner
 
 MAINTAINERCLEANFILES = \
 	compile \

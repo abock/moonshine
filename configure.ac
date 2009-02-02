@@ -21,8 +21,12 @@ AC_SUBST(MOZILLA_CFLAGS)
 
 MIN_FIREFOX_VERSION="3.0.*"
 MAX_FIREFOX_VERSION="3.1.*"
+MIN_GECKO_VERSION="1.9.0"
+MAX_GECKO_VERSION="1.9.*"
 AC_SUBST([MIN_FIREFOX_VERSION])
 AC_SUBST([MAX_FIREFOX_VERSION])
+AC_SUBST([MIN_GECKO_VERSION])
+AC_SUBST([MAX_GECKO_VERSION])
 
 dnl Other dependency checks
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.14 gmodule-2.0 >= 2.14)
@@ -44,7 +48,9 @@ AC_SUBST(BROWSER_PLUGIN_DIR)
 
 AC_OUTPUT([
 Makefile
-src/Makefile
+player/Makefile
+plugin/Makefile
+xulrunner/Makefile
 ])
 
 cat <<EOF
