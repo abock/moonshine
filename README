@@ -1,7 +1,7 @@
 Moonlight Media Player leverages the Windows Media capabilities from 
-Silverlight, provided by the Moonlight browser plugin, to provide a standalone
-media player for local files, and enables the playback of legacy embedded
-Windows Media content on the web.
+Silverlight, provided by the Moonlight browser plugin on Linux, and the 
+Firefox web browser framework to enable the playback of legacy embedded
+Windows Media content on the web and local files on a user's desktop.
 
 It consists of two components:
 
@@ -11,7 +11,7 @@ It consists of two components:
     c-span.com to work on Linux. Additionally, the Windows Media Player
     ActiveX/JavaScript API is implemented to enable the most compatibility.
 
-  - Standalone XUL Runner application for playing back local WM content
+  - Chromeless Firefox overlay for playing back local WM content
     from a user's desktop. A .desktop file and launcher is provided for
     easy integration with Linux distributions.
 
