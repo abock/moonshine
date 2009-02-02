@@ -12,7 +12,6 @@ AC_HEADER_STDC
 AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 PKG_PROG_PKG_CONFIG
-AC_PROG_CXX
 
 dnl Mozilla checks
 MOZILLA_MODULES="libxul-unstable mozilla-plugin"
@@ -29,7 +28,6 @@ dnl Other dependency checks
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.14 gmodule-2.0 >= 2.14)
 
 AC_SUBST(CFLAGS)
-AC_SUBST(CXXFLAGS)
 
 expanded_libdir=`(case $prefix in NONE) prefix=$ac_default_prefix ;; *) ;; esac
 	case $exec_prefix in NONE) exec_prefix=$prefix ;; *) ;; esac
