@@ -7,11 +7,11 @@ It consists of two components:
 
   - Firefox/NPAPI plugin that handles legacy embedded Windows Media mime
     types. This plugin loads the Moonlight plugin and creates a XAML/JS 
-	player to play the media. This enables web sites like hbo.com and
-	c-span.com to work on Linux. Additionally, the Windows Media Player
-	ActiveX/JavaScript API is implemented to enable the most compatibility.
+    player to play the media. This enables web sites like hbo.com and
+    c-span.com to work on Linux. Additionally, the Windows Media Player
+    ActiveX/JavaScript API is implemented to enable the most compatibility.
 
   - Standalone XUL Runner application for playing back local WM content
     from a user's desktop. A .desktop file and launcher is provided for
-	easy integration with Linux distributions.
+    easy integration with Linux distributions.
 
