@@ -1,10 +1,5 @@
 #include <string.h>
-
-#include <nsCOMPtr.h>
-#include <nsStringAPI.h>
-#include <nsILocalFile.h>
-#include <nsServiceManagerUtils.h>
-#include <nsIProperties.h>
+#include <unistd.h>
 
 #include "mmp-plugin.h"
 #include "mmp-binder.h"
@@ -91,41 +86,72 @@ mmp_plugin_proxy_load_module (gchar *prefix)
 	return FALSE;
 }
 
-static void
-mmp_plugin_proxy_load_moonlight_from_xpi ()
+static gchar *
+mmp_plugin_proxy_get_xpi_moonlight_path ()
 {
 	// If Moonlight is installed by the user into their Firefox profile (XPI),
-	// we have to query Mozilla to get the profile directory and search
-	// inside that. It's ugly.
+	// we need to find the directory. Originally I used XPCOM and the directory
+	// service provided by Mozilla, but I really wanted to avoid libstdc++
+	// and linking against libxpcom, etc. 
+	// 
+	// Instead I use an lsof inspired hack to look for the profile directory
+	// of the running process.
+	//
 
-	nsresult result;
-	
-	nsCOMPtr<nsIProperties> dir_service (do_GetService ("@mozilla.org/file/directory_service;1", &result));
-	if (NS_FAILED (result)) {
-		return;
+	gchar pid_path[32];
+	gchar fd_path[sizeof (pid_path) * 2];
+	const gchar *fd_name = NULL;
+	gchar *xpi_dir = NULL;
+	GDir *dir;
+
+	if ((gsize)g_snprintf (pid_path, sizeof (pid_path), 
+		"/proc/%d/fd", getpid ()) > sizeof (pid_path)) {
+		return NULL;
 	}
 
-	nsCOMPtr<nsIFile> dir;
-	result = dir_service->Get ("ProfD", NS_GET_IID (nsIFile), getter_AddRefs (dir));
-	if (NS_FAILED (result)) {
-		return;
+	if ((dir = g_dir_open (pid_path, 0, NULL)) == NULL) {
+		return NULL;
 	}
 
-	nsAutoString path;
-	nsCAutoString cpath;
-	dir->GetPath (path);
-	CopyUTF16toUTF8 (path, cpath);
+	while (xpi_dir == NULL && (fd_name = g_dir_read_name (dir)) != NULL) {
+		gchar *fd_resolved_path;
+		gchar *file_name;
+		gchar *dir_name;
+		gint ext_offset;
 
-	gchar *ex_plugins_path = g_build_filename (cpath.get (), 
-		"extensions", "moonlight@novell.com", "plugins", NULL);
-	mmp_plugin_proxy_load_module (ex_plugins_path);
-	g_free (ex_plugins_path);
+		if ((gsize)g_snprintf (fd_path, sizeof (fd_path), 
+			"%s/%s", pid_path, fd_name) > sizeof (fd_path) ||
+			(fd_resolved_path = g_file_read_link (fd_path, NULL)) == NULL) {
+			continue;
+		}
+
+		file_name = g_path_get_basename (fd_resolved_path);
+		ext_offset = strlen (file_name) - strlen (".sqlite");
+		if (strcmp (file_name, ".parentlock") == 0 
+			|| (ext_offset > 0 && strcmp (file_name + ext_offset, ".sqlite") == 0)) {
+			dir_name = g_path_get_dirname (fd_resolved_path);
+			xpi_dir = g_build_filename (dir_name, 
+				"extensions", 
+				"moonlight@novell.com", 
+				"plugins", 
+				NULL);
+			g_free (dir_name);
+		}
+
+		g_free (file_name);
+		g_free (fd_resolved_path);
+	}
+
+	g_dir_close (dir);
+
+	return xpi_dir;
 }
 
 static NPError
 mmp_plugin_proxy_load_moonlight ()
 {
 	static gchar *search_prefixes [] = {
+		NULL,
 		NULL,
 		NULL,
 		(gchar *)INSTALL_PREFIX "/lib/moon/plugin",
@@ -143,21 +169,23 @@ mmp_plugin_proxy_load_moonlight ()
 	}
 
 	search_prefixes[0] = (gchar *)g_getenv ("MOON_LOADER_PATH");
-	search_prefixes[1] = g_build_filename (g_get_home_dir (), ".mozilla", "plugins", NULL);
+	search_prefixes[1] = mmp_plugin_proxy_get_xpi_moonlight_path ();
+	search_prefixes[2] = g_build_filename (g_get_home_dir (), ".mozilla", "plugins", NULL);
 	
 	for (i = 0; i < G_N_ELEMENTS (search_prefixes) 
 		&& !mmp_plugin_proxy_load_module (search_prefixes[i]); i++);
 
-	g_free (search_prefixes[1]);
+	if (search_prefixes[1] != NULL) {
+		g_free (search_prefixes[1]);
+	}
+
+	g_free (search_prefixes[2]);
+
 	moon_module_load_attempted = TRUE;
 	
 	if (plugin_host->module == NULL) {
-		mmp_plugin_proxy_load_moonlight_from_xpi ();
-
-		if (plugin_host->module == NULL) {
-			mp_error ("Could not find Moonlight's libmoonloader plugin");
-			return NPERR_GENERIC_ERROR;
-		}
+		mp_error ("Could not find Moonlight's libmoonloader plugin");
+		return NPERR_GENERIC_ERROR;
 	}
 
 	return NPERR_NO_ERROR;
