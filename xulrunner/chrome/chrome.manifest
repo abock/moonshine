@@ -1,2 +1,3 @@
-content	moon-media content/
-skin moon-media default skin/
+content	moonshine content/
+skin moonshine default skin/
+locale moonshine en-US locale/en-US/

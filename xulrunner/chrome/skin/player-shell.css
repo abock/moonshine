@@ -1,0 +1,39 @@
+div#uninstalled {
+    background: url(dialog-error.png) no-repeat;
+    margin: 10px;
+    padding-left: 58px;
+    display: none;
+}
+
+div#uninstalled h1 {
+    margin: 0;
+    padding: 0;
+    color: #eee;
+    font-size: 1.3em;
+}
+
+div#uninstalled p {
+    color: #ccc;
+}
+
+#about-panel {
+    display: none;
+    margin: 15px;
+    padding: 10px;
+    -moz-border-radius: 4px;
+    background: #fff;
+    color: #333;
+}
+
+#about-panel h1 {
+    margin: 0;
+    font-size: 1.3em;
+}
+
+#about-panel p {
+    margin: 5px 0 0 0;
+}
+
+#about-panel button {
+    margin: 10px 0;
+}

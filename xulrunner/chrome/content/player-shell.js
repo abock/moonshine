@@ -18,6 +18,8 @@ StandaloneMoonPlayer.prototype = {
     content: null,
     player: null,
     command_line: null,
+    player_element: null,
+    about_element: null,
 
     Initialize: function () {
         if (window.player) {
@@ -28,9 +30,22 @@ StandaloneMoonPlayer.prototype = {
             .QueryInterface (Components.interfaces.nsICommandLine);
 
         window.player = this;
+        
         this.content = document.getElementById ("moon-media-standalone-player");
+        this.player_element = document.getElementById ("moon-embedded-player");
+        this.about_element = document.getElementById ("about-panel");
+
         this.ConfigureWindow ();
         this.ProcessArguments ();
+        this.CheckForMoonlight ();
+    },
+
+    CheckForMoonlight: function () {
+        var plugin = navigator.plugins["Silverlight Plug-In"];
+        if (!plugin) {
+            document.getElementById ("uninstalled").style.display = "block";
+            this.player_element.style.display = "none";
+        }
     },
 
     MoonlightInitialize: function () {
@@ -49,14 +64,10 @@ StandaloneMoonPlayer.prototype = {
             var keyval = pairs[i].split ("=");
             location.query_string[keyval[0]] = keyval[1];
         }
-
-        if (location.query_string["controls"] == "hide") {
-            document.loadOverlay ("chrome://moon-media/content/standalone-player-hidecontrols.xul", null);
-        }
     },
     
     ConfigureWindow: function () {
-        window.title = "Moonlight Media Player";
+        document.title = "Moonshine Player";
     },
 
     LoadSource: function (path) {
@@ -76,6 +87,14 @@ StandaloneMoonPlayer.prototype = {
 
     OnFullscreen: function () {
         this.player.Fullscreen ();
+    },
+
+    OnAbout: function () {
+        this.about_element.style.display = "block";
+    },
+
+    OnCloseAbout: function () {
+        this.about_element.style.display = "none";
     }
 }
 

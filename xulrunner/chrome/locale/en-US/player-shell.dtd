@@ -1,0 +1,14 @@
+<!ENTITY moonshine.fileMenuLabel "File">
+<!ENTITY moonshine.fileOpenLabel "Open File">
+<!ENTITY moonshine.fileQuitLabel "Quit">
+
+<!ENTITY moonshine.viewMenuLabel "View">
+<!ENTITY moonshine.viewFullscreenLabel "Fullscreen">
+
+<!ENTITY moonshine.helpMenuLabel "Help">
+<!ENTITY moonshine.helpAboutLabel "About">
+
+<!ENTITY moonshine.uninstalledTitle "Moonlight Not Installed">
+<!ENTITY moonshine.uninstalledMessage "The Moonlight plugin could not be found. Currently it must be installedin the system plugin location, and not as an XPI.">
+
+<!ENTITY moonshine.aboutMessage "Moonshine provides Windows Media capabilities through the Moonlight Firefox plugin, allowing local playback of files.">

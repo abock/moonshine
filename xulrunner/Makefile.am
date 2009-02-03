@@ -8,6 +8,7 @@ IN_FILES = \
 	moonshine.in
 
 OUT_FILES = $(IN_FILES:.in=)
+VERSION_DTD_OUT = chrome/locale/en-US/version.dtd
 
 desktopdir = $(datadir)/applications
 desktop_DATA = moonshine.desktop
@@ -15,23 +16,12 @@ desktop_DATA = moonshine.desktop
 launcherdir = $(bindir)
 launcher_SCRIPTS = moonshine
 
-appdir = $(pkgdatadir)
-app_DATA = application.ini
-app_chromedir = $(pkgdatadir)/chrome
-app_chrome_DATA = chrome/chrome.manifest
-app_chrome_contentdir = $(pkgdatadir)/chrome/content
-app_chrome_content_DATA = $(wildcard chrome/content/*)
-app_chrome_content_playerdir = $(pkgdatadir)/chrome/content/player
-app_chrome_content_player_DATA = $(wildcard chrome/content/player/*)
-app_defaults_preferencesdir = $(pkgdatadir)/defaults/preferences
-app_defaults_preferences_DATA = defaults/preferences/prefs.js
-
 PLAYER_TARGETS = $(foreach res, \
 	$(wildcard $(top_srcdir)/player/*.js) \
 	$(wildcard $(top_srcdir)/player/*.xaml), \
 		$(addprefix chrome/content/player/,$(notdir $(res))))
 	
-all: $(PLAYER_TARGETS) $(OUT_FILES)
+all: $(PLAYER_TARGETS) $(OUT_FILES) $(VERSION_DTD_OUT)
 
 moonshine: moonshine.in
 	sed -e "s|\@pkgdatadir\@|$(pkgdatadir)|g;" < $< > $@
@@ -58,9 +48,21 @@ moonshine.desktop: moonshine.desktop.in
 		} \
 	}' < $(top_srcdir)/plugin/mmp-plugin-proxy.c`") > $@
 
+$(VERSION_DTD_OUT): version.dtd.in
+	sed -e "s|\@VERSION\@|$(VERSION)|g" < $< > $@
+
 chrome/content/player/%: $(top_srcdir)/player/%
 	mkdir -p $(dir $@)
 	cp -a $< $@
+
+install-data-local:
+	for file in `find $(srcdir)/chrome $(srcdir)/defaults application.ini -type f`; do \
+		$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/`dirname "$$file"`; \
+		$(INSTALL_DATA) -m 0644 "$$file" $(DESTDIR)$(pkgdatadir)/$$file; \
+	done
+
+uninstall-hook:
+	rm -rf $(pkgdatadir)
 
 clean-local:
 	rm -rf chrome/content/player
@@ -68,10 +70,13 @@ clean-local:
 run: all
 	xulrunner application.ini
 
+debug: all
+	xulrunner application.ini -jsconsole
+
 EXTRA_DIST = $(IN_FILES) \
 	chrome \
 	defaults
 
-CLEANFILES = $(OUT_FILES)
+CLEANFILES = $(OUT_FILES) $(VERSION_DTD_OUT)
 MAINTAINERCLEANFILES = Makefile.in
 

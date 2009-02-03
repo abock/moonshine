@@ -1,1 +1,1 @@
-pref ("toolkit.defaultChromeURI", "chrome://moon-media/content/standalone-player.xul");
+pref ("toolkit.defaultChromeURI", "chrome://moonshine/content/player-shell.xul");

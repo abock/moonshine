@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://moonshine/skin/player-shell.css" type="text/css"?>
+<!DOCTYPE window [
+    <!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
+    %globalDTD;
+    <!ENTITY % shellDTD SYSTEM "chrome://moonshine/locale/player-shell.dtd">
+    %shellDTD;
+    <!ENTITY % versionDTD SYSTEM "chrome://moonshine/locale/version.dtd">
+    %versionDTD;
+]>
+<window id="moon-media-standalone-player"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script type="application/x-javascript" src="moon-console.js"/>
+<script type="application/x-javascript" src="moon-utilities.js"/>
+<script type="application/x-javascript" src="player-shell.js"/>
+<script type="application/x-javascript" src="player/player.js"/>
+<script type="application/x-javascript" src="player/wmp-controls.js"/>
+<script type="application/x-javascript">
+<![CDATA[
+    window.addEventListener ("load", function () { new StandaloneMoonPlayer; }, false);
+    window.addEventListener ("unload", function () { }, false);
+]]>
+</script>
+<vbox flex="1" width="300" height="250">
+  <menubar id="moon-media-menu-bar" class="standalone">
+    <menu label="&moonshine.fileMenuLabel;">
+      <menupopup>
+        <menuitem label="&moonshine.fileOpenLabel;" onclick="window.player.OnFileOpen ()"/>
+        <menuitem label="&moonshine.fileQuitLabel;" onclick="window.close ()"/>
+      </menupopup>
+    </menu>
+    <menu label="&moonshine.viewMenuLabel;">
+      <menupopup>
+        <menuitem label="&moonshine.viewFullscreenLabel;" onclick="window.player.OnFullscreen ()"/>
+      </menupopup>
+    </menu>
+    <menu label="&moonshine.helpMenuLabel;">
+      <menupopup>
+        <menuitem label="&moonshine.helpAboutLabel;" onclick="window.player.OnAbout ()"/>
+      </menupopup>
+    </menu>
+  </menubar>
+  <vbox style="background: black" flex="1">
+    <html:div id="about-panel">
+      <html:h1>Moonshine v&moonshine.version;</html:h1>
+      <html:p>&moonshine.aboutMessage;</html:p>
+      <button label="Close" oncommand="window.player.OnCloseAbout ()"/>
+    </html:div>
+    <html:div id="uninstalled">
+      <html:h1>&moonshine.uninstalledTitle;</html:h1>
+      <html:p>&moonshine.uninstalledMessage;</html:p>
+    </html:div>
+    <html:object id="moon-embedded-player" type="application/x-silverlight" flex="1">
+      <html:param name="source" value="chrome://moonshine/content/player/player.xaml"/>
+      <html:param name="onload" value="__MoonMediaPlayerOnLoad"/>
+    </html:object>
+  </vbox>
+</vbox>
+</window>
+
