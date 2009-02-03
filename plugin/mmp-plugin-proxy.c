@@ -15,7 +15,7 @@ static struct {
 	const gchar *extensions;
 } mmp_plugin_proxy_mime_types [] = {
 	// Special application type for this plugin
-	{ "application/x-moon-media", "*" },
+	{ "application/x-moonshine-player", "*" },
 	
 	// Generic/WMP types?
 	{ "application/x-mplayer2",   "*" },
@@ -265,7 +265,7 @@ NP_GetValue (gpointer future, NPPVariable variable, gpointer value)
 {
 	switch (variable) {
 		case NPPVpluginNameString:
-			*((gchar **)value) = (gchar *)"Windows Media Player Plug-in 10 (compatible; Moonlight Media Player)";
+			*((gchar **)value) = (gchar *)"Windows Media Player Plug-in 10 (compatible; Moonshine Media Player)";
 			return NPERR_NO_ERROR;
 		case NPPVpluginDescriptionString:
 			*((gchar **)value) = (gchar *)"A media player powered by <a href=\"http://go-mono.com/moonlight\">Moonlight</a>, largely "

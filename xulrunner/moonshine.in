@@ -1,0 +1,4 @@
+#!/bin/bash
+
+xulrunner @pkgdatadir@/application.ini "$@"
+
