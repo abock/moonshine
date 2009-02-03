@@ -8,7 +8,7 @@ IN_FILES = \
 	moonshine.in
 
 OUT_FILES = $(IN_FILES:.in=)
-VERSION_DTD_OUT = chrome/locale/en-US/version.dtd
+VERSION_DTD_OUT = $(builddir)/chrome/locale/en-US/version.dtd
 
 launcherdir = $(bindir)
 launcher_SCRIPTS = moonshine
@@ -61,13 +61,15 @@ install-data-local:
 	done;
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/applications
 	$(INSTALL_DATA) -c -m 644 moonshine.desktop $(DESTDIR)$(datadir)/applications/moonshine.desktop
-	[ -z "$(DESTDIR)" -a -x `which update-desktop-database` ] && \
-		update-desktop-database $(datadir)/applications;
+
+#	[ -z "$(DESTDIR)" -a -x `which update-desktop-database` ] && \
+#		update-desktop-database $(datadir)/applications;
 
 uninstall-hook:
 	for file in $(XULAPP_FILES); do \
 		rm $(DESTDIR)$(pkgdatadir)/$$file; \
 	done
+	rm $(DESTDIR)$(datadir)/applications/moonshine.desktop
 
 clean-local:
 	rm -rf chrome/content/player
