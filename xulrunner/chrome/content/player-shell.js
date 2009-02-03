@@ -36,7 +36,6 @@ StandaloneMoonPlayer.prototype = {
         this.about_element = document.getElementById ("about-panel");
 
         this.ConfigureWindow ();
-        this.ProcessArguments ();
         this.CheckForMoonlight ();
     },
 
@@ -52,22 +51,15 @@ StandaloneMoonPlayer.prototype = {
         file_arg = this.command_line.getArgument (0);
         if (file_arg && file_arg.length > 0) {
             this.LoadSource (file_arg);
-        } else if (location.query_string["uri"]) {
-            this.LoadSource (location.query_string["uri"]);
         }
-    },
 
-    ProcessArguments: function () {
-        location.query_string = [];
-        var pairs = location.search.substring (1).split ("&");
-        for (i in pairs) {
-            var keyval = pairs[i].split ("=");
-            location.query_string[keyval[0]] = keyval[1];
-        }
+        this.player.fullscreen_hook = delegate (this, this.OnFullscreen);
+        this.player.get_is_fullscreen_hook = function () window.fullScreen;
+        this.player.IsControlBarDocked = true;
     },
     
     ConfigureWindow: function () {
-        document.title = "Moonshine Player";
+        document.title = "Moonshine";
     },
 
     LoadSource: function (path) {
@@ -78,7 +70,9 @@ StandaloneMoonPlayer.prototype = {
         const nsIFilePicker = Components.interfaces.nsIFilePicker;
         var fp = Components.classes["@mozilla.org/filepicker;1"].createInstance (nsIFilePicker);
         fp.init (window, "Select a File", nsIFilePicker.modeOpen);
-        fp.appendFilter ("Media Files","*.mp3; *.wma; *.wmv; *.asf; *.asx");
+        fp.appendFilter ("Media Files", 
+            "*.mp3; *.MP3; *.wma; *.WMA; *.wmv; *.WMV; *.asf; *.ASF; " + 
+            "*.asx; *.ASX; *.wvx; *.WVX; *.wax; *.WAX; *.wm; *.WM");
         var res = fp.show ();
         if (res == nsIFilePicker.returnOK) {
             this.LoadSource (fp.file.path); 
@@ -86,7 +80,12 @@ StandaloneMoonPlayer.prototype = {
     },
 
     OnFullscreen: function () {
-        this.player.Fullscreen ();
+        setTimeout (delegate (this, function () {
+            window.fullScreen = !window.fullScreen;
+            document.getElementById ("moon-media-menu-bar").collapsed = window.fullScreen;
+            this.player.IsControlBarDocked = !window.fullScreen;
+            this.player._OnFullScreenChange ();
+        }), 1); 
     },
 
     OnAbout: function () {

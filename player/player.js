@@ -15,6 +15,9 @@ __MoonEmbeddedMediaPlayer.prototype = {
     xaml: null,
     loaded: false,
 
+    fullscreen_hook: null,
+    get_is_fullscreen_hook: null,
+
     // properties we wish to override for setting media location
     media_source_properties: [ "src", "source", "filename", "url" ],
     
@@ -49,8 +52,6 @@ __MoonEmbeddedMediaPlayer.prototype = {
         this._LoadElements (sender);
         this._ConstructInterface ();
         this._ConnectEvents ();
-        this._MapAttributes ();
-        this._ImplementWmpApi ();
         this.Idle ();
 
         this.control.Content.OnResize = delegate (this, this._OnResize);
@@ -59,6 +60,9 @@ __MoonEmbeddedMediaPlayer.prototype = {
     
         if (typeof XULMoonEmbeddedPlayerInit != "undefined") {
             XULMoonEmbeddedPlayerInit (this);
+        } else {
+            this._MapWmpAttributes ();
+            this._ImplementWmpApi ();
         }
     },
     
@@ -166,46 +170,7 @@ __MoonEmbeddedMediaPlayer.prototype = {
         this.xaml.video_element.AddEventListener ("downloadprogresschanged", delegate (this, this._OnDownloadProgressChanged));
         this.xaml.video_element.AddEventListener ("bufferingprogresschanged", delegate (this, this._OnBufferingProgressChanged));
     },
-    
-    _MapAttributes: function () {
-        // WMP attributes mapped from <embed> 
-        for (var i = 0; i < this.control.attributes.length; i++) {
-            var attr = this.control.attributes[i];
-            this._MapAttribute (attr.name, attr.value);
-        }
-
-        var params = this.control.childNodes;
-        if (params) {
-            for (var i = 0, n = params.length; i < n; i++) {
-                if (params[i] instanceof HTMLParamElement) {
-                    this._MapAttribute (params[i].name, params[i].value);
-                }
-            }
-        }
-    },
-
-    _MapAttribute: function (name, value) {
-        function to_bool (x) {
-            return x.toLowerCase () == "true";
-        }
-
-        var param = name.toLowerCase ();
-        switch (param) {
-            case "background":
-            case "bgcolor":      this.xaml.background.Fill = value; break;
-            case "showcontrols": this.xaml.control_bar.Visibility = to_bool (value) ? "Visible" : "Collapsed"; break;
-            case "autostart":    this.xaml.video_element.AutoPlay = to_bool (value); break;
-            case "loop":         this.loop_playback = to_bool (value); break;     
-        }
-
-        for (var j = 0; j < this.media_source_properties.length; j++) {
-            if (this.media_source_properties[j] == param) {
-                this.LoadSource (value);
-                break;
-            }
-        }
-    },
-
+     
     // Layout and Positioning Logic
 
     _OnResize: function () {
@@ -219,7 +184,9 @@ __MoonEmbeddedMediaPlayer.prototype = {
             this.xaml.control_bar.Left;
         this.control_bar_hidden_top = this.xaml.background.Height + this.xaml.control_bar.Height;
         this.xaml.control_bar.Width = this.xaml.background.Width - (2 * this.xaml.control_bar.Left);
-        this.xaml.control_bar.Top = this.control_bar_hidden_top;
+        this.xaml.control_bar.Top = this.IsControlBarDocked
+            ? this.control_bar_visible_top
+            : this.control_bar_hidden_top;
         
         this.xaml.control_bar_bg.Width = this.xaml.control_bar.Width;
         this.xaml.control_bar_bg.Height = this.xaml.control_bar.Height;
@@ -259,8 +226,8 @@ __MoonEmbeddedMediaPlayer.prototype = {
 
     _OnFullScreenChange: function () {
         this._OnResize ();
-        this.xaml.open_fs_icon.Opacity = this.control.Content.FullScreen ? 0 : 1;
-        this.xaml.close_fs_icon.Opacity = this.control.Content.FullScreen ? 1 : 0;
+        this.xaml.open_fs_icon.Opacity = this.IsFullscreen ? 0 : 1;
+        this.xaml.close_fs_icon.Opacity = this.IsFullscreen ? 1 : 0;
     },
 
     _PositionSlider: function (smoothUpdate) {
@@ -364,6 +331,11 @@ __MoonEmbeddedMediaPlayer.prototype = {
     },
 
     Fullscreen: function () {
+        if (this.fullscreen_hook) {
+            this.fullscreen_hook ();
+            return;
+        }
+
         this.control.Content.FullScreen = true;
     },
     
@@ -458,7 +430,12 @@ __MoonEmbeddedMediaPlayer.prototype = {
     },
     
     _OnOptionsClicked: function (o, args) {
-        this.control.Content.FullScreen = !this.control.Content.FullScreen;    
+        if (this.fullscreen_hook) {
+            this.fullscreen_hook ();
+            return;
+        }
+
+        this.control.Content.FullScreen = !this.control.Content.FullScreen;
     },
     
     _OnVolumeMouseDown: function (o, args) {
@@ -496,8 +473,11 @@ __MoonEmbeddedMediaPlayer.prototype = {
     
     HideControls: function () {
         this.volume_dragging = false;
-        this.xaml.control_bar_animation.To = this.control_bar_hidden_top;
-        this.xaml.control_bar_storyboard.Begin ();
+
+        if (!this.IsControlBarDocked) {
+            this.xaml.control_bar_animation.To = this.control_bar_hidden_top;
+            this.xaml.control_bar_storyboard.Begin ();
+        }
     },
     
     _FormatSeconds: function (seconds) {
@@ -511,7 +491,21 @@ __MoonEmbeddedMediaPlayer.prototype = {
         this.xaml.video_element.Volume = Math.max (0, Math.min (x, 1));
         this._UpdateVolume ();
     },
-    
+
+    get IsControlBarDocked () { return this.control_bar_docked; },
+    set IsControlBarDocked (x) {
+        this.control_bar_docked = x;
+        this._OnResize ();
+    },
+   
+    get IsFullscreen () {
+        if (this.get_is_fullscreen_hook) {
+            return this.get_is_fullscreen_hook ();
+        } else {
+            return this.control.Content.FullScreen;
+        }
+    },
+
     TogglePlaying: function () {
         if (this.xaml.video_element.CurrentState == "Playing") {
             this.xaml.video_element.Pause ();
@@ -596,6 +590,44 @@ __MoonEmbeddedMediaPlayer.prototype = {
         }
     },
     
+    _MapWmpAttributes: function () {
+        for (var i = 0; i < this.control.attributes.length; i++) {
+            var attr = this.control.attributes[i];
+            this._MapAttribute (attr.name, attr.value);
+        }
+
+        var params = this.control.childNodes;
+        if (params) {
+            for (var i = 0, n = params.length; i < n; i++) {
+                if (params[i] instanceof HTMLParamElement) {
+                    this._MapAttribute (params[i].name, params[i].value);
+                }
+            }
+        }
+    },
+
+    _MapWmpAttribute: function (name, value) {
+        function to_bool (x) {
+            return x.toLowerCase () == "true";
+        }
+
+        var param = name.toLowerCase ();
+        switch (param) {
+            case "background":
+            case "bgcolor":      this.xaml.background.Fill = value; break;
+            case "showcontrols": this.xaml.control_bar.Visibility = to_bool (value) ? "Visible" : "Collapsed"; break;
+            case "autostart":    this.xaml.video_element.AutoPlay = to_bool (value); break;
+            case "loop":         this.loop_playback = to_bool (value); break;     
+        }
+
+        for (var j = 0; j < this.media_source_properties.length; j++) {
+            if (this.media_source_properties[j] == param) {
+                this.LoadSource (value);
+                break;
+            }
+        }
+    },
+
     _ImplementWmpApi: function () {
         this.control["MoonMediaPlayer"] = this;
         this.control["controls"] = new __MoonEmbeddedWmpControls (this);

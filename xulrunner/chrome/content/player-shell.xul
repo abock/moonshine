@@ -23,8 +23,8 @@
     window.addEventListener ("unload", function () { }, false);
 ]]>
 </script>
-<vbox flex="1" width="300" height="250">
-  <menubar id="moon-media-menu-bar" class="standalone">
+<vbox flex="1" width="550" height="450">
+  <menubar id="moon-media-menu-bar">
     <menu label="&moonshine.fileMenuLabel;">
       <menupopup>
         <menuitem label="&moonshine.fileOpenLabel;" onclick="window.player.OnFileOpen ()"/>
@@ -33,7 +33,7 @@
     </menu>
     <menu label="&moonshine.viewMenuLabel;">
       <menupopup>
-        <menuitem label="&moonshine.viewFullscreenLabel;" onclick="window.player.OnFullscreen ()"/>
+        <menuitem label="&moonshine.viewFullscreenLabel;" onclick="window.player.player.Fullscreen ()"/>
       </menupopup>
     </menu>
     <menu label="&moonshine.helpMenuLabel;">
