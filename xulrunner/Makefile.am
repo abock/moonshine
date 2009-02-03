@@ -10,9 +10,6 @@ IN_FILES = \
 OUT_FILES = $(IN_FILES:.in=)
 VERSION_DTD_OUT = chrome/locale/en-US/version.dtd
 
-desktopdir = $(datadir)/applications
-desktop_DATA = moonshine.desktop
-
 launcherdir = $(bindir)
 launcher_SCRIPTS = moonshine
 
@@ -60,8 +57,12 @@ XULAPP_FILES = `find $(srcdir)/chrome $(srcdir)/defaults application.ini -type f
 install-data-local:
 	for file in $(XULAPP_FILES); do \
 		$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/`dirname "$$file"`; \
-		$(INSTALL_DATA) -m 0644 "$$file" $(DESTDIR)$(pkgdatadir)/$$file; \
-	done
+		$(INSTALL_DATA) -c -m 644 "$$file" $(DESTDIR)$(pkgdatadir)/$$file; \
+	done;
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/applications
+	$(INSTALL_DATA) -c -m 644 moonshine.desktop $(DESTDIR)$(datadir)/applications/moonshine.desktop
+	[ -z "$(DESTDIR)" -a -x `which update-desktop-database` ] && \
+		update-desktop-database $(datadir)/applications;
 
 uninstall-hook:
 	for file in $(XULAPP_FILES); do \
