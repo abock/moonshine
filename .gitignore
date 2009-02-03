@@ -19,9 +19,19 @@ ltmain.sh
 missing
 stamp-h1
 
+# Plugin
+plugin/mmp-resources.h
+
+# XUL App
+xulrunner/application.ini
+xulrunner/moonshine.desktop
+xulrunner/moonshine
+xulrunner/chrome/content/player/
+xulrunner/extensions
+xulrunner/updates
+
 # Extra
 *.swp
-src/mmp-resources.h
 *.wmv
 
 # Dist
