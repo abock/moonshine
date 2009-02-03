@@ -1,4 +1,27 @@
 #!/bin/bash
 
-xulrunner @pkgdatadir@/application.ini "$@"
+XULRUNNER=$(readlink -e $(which xulrunner))
+BROWSER_PLUGIN_DIR=@BROWSER_PLUGIN_DIR@
+LIBDIR=${XULRUNNER%%/xulrunner*}
+
+if [ ! -d $BROWSER_PLUGIN_DIR ]; then
+	BROWSER_PLUGIN_DIR=$LIBDIR/browser-plugins
+fi
+
+if [ -z "$MOZ_PLUGIN_PATH" ]; then
+	export MOZ_PLUGIN_PATH=$BROWSER_PLUGIN_DIR
+else
+	# make sure that BROWSER_PLUGIN_DIR is in MOZ_PLUGIN_PATH
+	echo "$MOZ_PLUGIN_PATH" | grep "$BROWSER_PLUGIN_DIR" 2>&1 >/dev/null
+	_retval=$?
+	if [ ${_retval} -ne 0 ]; then
+		export MOZ_PLUGIN_PATH=$MOZ_PLUGIN_PATH:$BROWSER_PLUGIN_DIR
+	fi
+fi
+
+echo "xulrunner: $XULRUNNER"
+echo "libdir:    $LIBDIR"
+echo "plugins:   $MOZ_PLUGIN_PATH"
+
+$XULRUNNER @pkgdatadir@/application.ini "$@"
 

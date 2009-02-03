@@ -21,7 +21,9 @@ PLAYER_TARGETS = $(foreach res, \
 all: $(PLAYER_TARGETS) $(OUT_FILES) $(VERSION_DTD_OUT)
 
 moonshine: moonshine.in
-	sed -e "s|\@pkgdatadir\@|$(pkgdatadir)|g;" < $< > $@
+	sed -e " \
+		s|\@BROWSER_PLUGIN_DIR\@|$(BROWSER_PLUGIN_DIR_EXPANDED)|g; \
+		s|\@pkgdatadir\@|$(pkgdatadir)|g;" < $< > $@
 
 application.ini: application.ini.in
 	sed -e " \

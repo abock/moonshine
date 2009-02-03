@@ -41,10 +41,11 @@ AC_ARG_WITH(browser_plugin_dir,
     AC_HELP_STRING([--with-browser-plugin-dir=<dir>],
 	[Directory where Mozilla plugins are installed, defaults to ${libdir}/browser-plugins]), 
     [BROWSER_PLUGIN_DIR="${withval}"; 
-        BPD_EXPANDED="${withval}"], 
+        BROWSER_PLUGIN_DIR_EXPANDED="${withval}"], 
 	[BROWSER_PLUGIN_DIR="${libdir}/browser-plugins"; 
-        BPD_EXPANDED="${expanded_libdir}/browser-plugins"])
+        BROWSER_PLUGIN_DIR_EXPANDED="${expanded_libdir}/browser-plugins"])
 AC_SUBST(BROWSER_PLUGIN_DIR)
+AC_SUBST(BROWSER_PLUGIN_DIR_EXPANDED)
 
 AC_OUTPUT([
 Makefile
@@ -56,6 +57,6 @@ xulrunner/icon-theme-hicolor/Makefile
 
 cat <<EOF
 ${PACKAGE} ${VERSION}
-Browser Plugin Directory: $BPD_EXPANDED
+Browser Plugin Directory: $BROWSER_PLUGIN_DIR_EXPANDED
 EOF
 
