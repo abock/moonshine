@@ -27,8 +27,9 @@ xulrunner/application.ini
 xulrunner/moonshine.desktop
 xulrunner/moonshine
 xulrunner/chrome/content/player/
-xulrunner/extensions
-xulrunner/updates
+xulrunner/chrome/locale/en-US/version.dtd
+xulrunner/extensions/
+xulrunner/updates/
 
 # Extra
 *.swp

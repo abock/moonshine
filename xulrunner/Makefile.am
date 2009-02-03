@@ -55,14 +55,18 @@ chrome/content/player/%: $(top_srcdir)/player/%
 	mkdir -p $(dir $@)
 	cp -a $< $@
 
+XULAPP_FILES = `find $(srcdir)/chrome $(srcdir)/defaults application.ini -type f`
+
 install-data-local:
-	for file in `find $(srcdir)/chrome $(srcdir)/defaults application.ini -type f`; do \
+	for file in $(XULAPP_FILES); do \
 		$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/`dirname "$$file"`; \
 		$(INSTALL_DATA) -m 0644 "$$file" $(DESTDIR)$(pkgdatadir)/$$file; \
 	done
 
 uninstall-hook:
-	rm -rf $(pkgdatadir)
+	for file in $(XULAPP_FILES); do \
+		rm $(DESTDIR)$(pkgdatadir)/$$file; \
+	done
 
 clean-local:
 	rm -rf chrome/content/player
@@ -75,7 +79,8 @@ debug: all
 
 EXTRA_DIST = $(IN_FILES) \
 	chrome \
-	defaults
+	defaults \
+	version.dtd.in
 
 CLEANFILES = $(OUT_FILES) $(VERSION_DTD_OUT)
 MAINTAINERCLEANFILES = Makefile.in
