@@ -55,7 +55,6 @@ StandaloneMoonPlayer.prototype = {
 
         this.player.fullscreen_hook = delegate (this, this.OnFullscreen);
         this.player.get_is_fullscreen_hook = function () window.fullScreen;
-        this.player.IsControlBarDocked = true;
     },
     
     ConfigureWindow: function () {

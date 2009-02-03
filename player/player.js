@@ -150,6 +150,10 @@ __MoonEmbeddedMediaPlayer.prototype = {
 
         container.Width = max_width;
         container.Height = max_height;
+
+        if (container.Visibility == "Collapsed") {
+            container.Width = 0;
+        }
     },
 
     _ConnectEvents: function () {
@@ -192,6 +196,14 @@ __MoonEmbeddedMediaPlayer.prototype = {
         this.xaml.control_bar_bg.Height = this.xaml.control_bar.Height;
         this.xaml.control_bar_bg.RadiusX = this.control_bar_docked ? 0 : this.control_bar_radius;
         this.xaml.control_bar_bg.RadiusY = this.xaml.control_bar_bg.RadiusX;
+
+        this.xaml.left_controls.Visibility = this.xaml.video_element.CanPlay
+            ? "Visible"
+            : "Collapsed";
+
+        this.xaml.center_controls.Visibility = this.xaml.video_element.CanSeek
+            ? "Visible"
+            : "Collapsed";
 
         // position the left control group
         this._ContainerAutosize (this.xaml.left_controls);
@@ -368,8 +380,11 @@ __MoonEmbeddedMediaPlayer.prototype = {
         switch (o.CurrentState) {
             case "Opening":
             case "Buffering":
+                this._OnResize ();
                 break;
             case "Playing":
+                this._OnResize ();
+
                 this.xaml.play_icon_animation.To = 0;
                 this.xaml.pause_icon_animation.To = 1;
                 this.xaml.play_icon_storyboard.Begin ();
@@ -593,14 +608,14 @@ __MoonEmbeddedMediaPlayer.prototype = {
     _MapWmpAttributes: function () {
         for (var i = 0; i < this.control.attributes.length; i++) {
             var attr = this.control.attributes[i];
-            this._MapAttribute (attr.name, attr.value);
+            this._MapWmpAttribute (attr.name, attr.value);
         }
 
         var params = this.control.childNodes;
         if (params) {
             for (var i = 0, n = params.length; i < n; i++) {
                 if (params[i] instanceof HTMLParamElement) {
-                    this._MapAttribute (params[i].name, params[i].value);
+                    this._MapWmpAttribute (params[i].name, params[i].value);
                 }
             }
         }
