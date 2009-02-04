@@ -9,9 +9,9 @@ function Bind (control) {
 
     container.PackStart (new MtkCanvas, true);
 
-    controls.PackStart (new MtkButton);
-    controls.PackStart (new MtkButton);
-    controls.PackStart (new MtkButton);
+    controls.PackStart (new MtkCanvas);
+    controls.PackStart (new MtkCanvas);
+    controls.PackStart (new MtkCanvas);
     container.PackStart (controls);
 
     container.PackStart (new MtkCanvas, true);
@@ -41,20 +41,6 @@ function MtkWidget (control) {
     this.Parent = null;
 
     this._events = {};
-
-    this.__defineGetter__ ("Width", function () {
-        if (this.WidthRequest instanceof Function) {
-            return this.WidthRequest ();
-        }
-        return this.Xaml ? this.Xaml.Width : 0;
-    });
-
-    this.__defineGetter__ ("Height", function () {
-        if (this.HeightRequest instanceof Function) {
-            return this.HeightRequset ();
-        }
-        return this.Xaml ? this.Xaml.Height : 0;
-    });
 
     this.Name = (this.constructor && this.constructor.name) 
         ? this.constructor.name.toString ()
@@ -126,9 +112,21 @@ function MtkWidget (control) {
     };
 
     this.Layout = function () { };
+
+    this.SizeRequest = { Width: -1, Height: -1 };
+
+    var self = this;
+    this.Allocation = { 
+        get Width ()   { return self.Xaml ? self.Xaml.Width : 0 },
+        set Width (x)  { if (self.Xaml) self.Xaml.Width = x; },
+        get Height ()  { return self.Xaml ? self.Xaml.Height : 0 },
+        set Height (x) { if (self.Xaml) self.Xaml.Height = x; }
+    };
 };
 
 MtkWidget.Instances = 0;
+
+
 
 function MtkCanvas (control) {
     MtkWidget.call (this, control);
@@ -137,7 +135,9 @@ function MtkCanvas (control) {
         Math.random ().toString () + "," +
         Math.random ().toString () + "," +
         Math.random ().toString ();
-    this.Xaml["Background"] = color; 
+    this.Xaml["Background"] = color;
+
+    this.SizeRequest = { Width: 30, Height: 30 };
 }
 
 
@@ -174,9 +174,8 @@ function MtkContainer (control) {
         this.Children.forEach (function (child) {
             child.Xaml["Canvas.Left"] = this.Xaml["Canvas.Left"];
             child.Xaml["Canvas.Top"] = this.Xaml["Canvas.Top"];
-            child.Xaml.Width = this.Width;
-            child.Xaml.Height = this.Height;
-
+            child.Allocation.Width = this.Allocation.Width;
+            child.Allocation.Height = this.Allocation.Height;
             child.Layout ();
         }, this);
     }
@@ -190,9 +189,22 @@ function MtkWindow (control) {
     MtkContainer.call (this, control);
 
     this.Xaml = this.Control.Content.Root;
-    
-    this.__defineGetter__ ("Width", function () this.Control.Content.ActualWidth);
-    this.__defineGetter__ ("Height", function () this.Control.Content.ActualHeight);
+    this.Xaml["Background"] = "green";
+
+    var self = this;
+    this.Allocation = { 
+        get Width ()   { return self.Control.Content.ActualWidth; },
+        set Width (x)  { },
+        get Height ()  { return self.Control.Content.ActualHeight;},
+        set Height (x) { }
+    };
+
+    this.BaseLayout = this.Layout; 
+    this.Layout = function () {
+        this.Xaml.Width = this.Allocation.Width;
+        this.Xaml.Height = this.Allocation.Height;
+        this.BaseLayout ();
+    };
 
     this.Control.Content.OnResize = delegate (this, function () {
         this.Layout ();
@@ -204,6 +216,11 @@ function MtkWindow (control) {
 function MtkBox (control) {
     MtkContainer.call (this, control);
     this.CreateXaml ("<Canvas/>");
+    var color = "sc#" +
+        Math.random ().toString () + "," +
+        Math.random ().toString () + "," +
+        Math.random ().toString ();
+    this.Xaml["Background"] = color;
 
     this.Padding = 5;
     this.Spacing = 10;
@@ -213,25 +230,34 @@ function MtkBox (control) {
         this.AddChild (widget);
     };
 
-    this.Layout = function ()  {
+    this.__defineGetter__ ("SizeRequest", function () {
+        var request = {};
+        request[this.VariableDimension] = this.Padding + this.ChildCount * this.Spacing;
+        request[this.StaticDimension] = 0;
+        this.Children.forEach (function (child) {
+            if (child.SizeRequest[this.StaticDimension] > request[this.StaticDimension]) {
+                request[this.StaticDimension] = child.SizeRequest[this.StaticDimension];
+            }
+        }, this);
+        request[this.StaticDimension] += this.Padding;
+        return request;
+    });
+
+    this.Layout = function () {
+        var variable_offset = this.Padding;
+        var static_offset = this.Padding;
+
         var static_space = 0;
         var flex_space = 0;
         var flex_count = 0;
 
-        if (this[this.VariableDimension] <= 0) {
-            return;
-        }
-        
         this.Children.forEach (function (child) {
-            static_space += child.Settings.MtkBoxExpand ? 0 : child[this.VariableDimension];
+            static_space += child.Settings.MtkBoxExpand ? 0 : child.SizeRequest[this.VariableDimension];
             flex_count += child.Settings.MtkBoxExpand ? 1 : 0;
         }, this);
- 
-        flex_space = this[this.VariableDimension] - static_space - 
-            (this.ChildCount - 1) * this.Spacing - 2 * this.Padding;
 
-        var variable_offset = this.Padding;
-        var static_offset = this.Padding;
+        flex_space = this.Allocation[this.VariableDimension] - static_space - 
+            (this.ChildCount - 1) * this.Spacing - 2 * this.Padding;
 
         this.Children.forEach (function (child) {
             child.Layout ();
@@ -245,13 +271,15 @@ function MtkBox (control) {
                 if (flex_count == 0) {
                     size += flex_space;
                 }
-
-                child.Xaml[this.VariableDimension] = size;
+                
+                child.Allocation[this.VariableDimension] = size;
+            } else {
+                child.Allocation[this.VariableDimension] = child.SizeRequest[this.VariableDimension];
             }
 
-            child.Xaml[this.StaticDimension] = this[this.StaticDimension] - 2 * this.Padding;
+            child.Allocation[this.StaticDimension] = this.Allocation[this.StaticDimension] - 2 * this.Padding;
 
-            variable_offset += child[this.VariableDimension] + this.Spacing;
+            variable_offset += child.Allocation[this.VariableDimension] + this.Spacing;
         }, this);
     };
 } 
