@@ -7,19 +7,41 @@ function Bind (control) {
     var container = new MtkVBox;
     var controls = new MtkHBox;
 
+    var label = new MtkLabel ({ Text: "Holy crap, a crappy toolkit" });
+
     container.PackStart (new MtkCanvas, true);
 
+
     controls.PackStart (new MtkCanvas);
+    controls.PackStart (new MtkCanvas, true);
     controls.PackStart (new MtkCanvas);
+    controls.PackStart (label);
+    controls.PackStart (new MtkButton);
+    controls.PackStart (new MtkCanvas, true);
     controls.PackStart (new MtkCanvas);
     container.PackStart (controls);
 
     container.PackStart (new MtkCanvas, true);
 
     win.AddChild (container);
+
+    setInterval (delegate (this, function () {
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ";
+        var len = 5 + Math.floor (Math.random () * 50);
+        var str = "";
+        for (var i = 0; i < len; i++) {
+            var idx = Math.floor (Math.random () * (chars.length - 1));
+            str += chars[idx];
+        }
+        label.Text = str;
+    }), 1000);
+
+    var size = 5;
+    label.FontSize = 5;
+    setInterval (delegate (this, function () {
+        label.FontSize = size++;
+    }), 1500);       
 }
-
-
 
 var MtkContext = {
     
@@ -32,10 +54,12 @@ var MtkContext = {
 
 
 
-function MtkWidget (control) {
+function MtkWidget (settings) {
+
+    var xaml_host = settings ? settings.XamlHost : null;
 
     // Properties
-    this.Control = control || MtkContext.XamlHost;
+    this.Control = xaml_host || MtkContext.XamlHost;
     this.Xaml = null;
     this.Settings = {};
     this.Parent = null;
@@ -111,16 +135,65 @@ function MtkWidget (control) {
         this.Xaml = this.Control.Content.createFromXaml (xaml);
     };
 
+    this.QueueResize = function () {
+        var parent = this.Parent;
+        while (parent && parent.Parent) {
+            parent = parent.Parent;
+        }
+        if (parent) {
+            parent.Layout ();
+        }
+    };
+
+    this.MapProperties = function (properties) {
+        properties.forEach (function (property) {
+            var name = property;
+            var calls = [];
+            if (property instanceof Array) {
+                name = property.shift ();
+                calls = property;
+            }
+            this.__defineGetter__ (name, function () this.Xaml[name]);
+            this.__defineSetter__ (name, function (value) {
+                this.Xaml[name] = value;
+                MoonConsole.Log ("SET [" + name + "] = " + value.toString ());
+                if (calls instanceof Array) {
+                    calls.forEach (function (call) {
+                        MoonConsole.Log ("  CALLING: " + this.constructor.name + "." + call);
+                        this[call] ();
+                    }, this);
+                }
+            });
+        }, this);
+    };
+
+    this.MapProperties ([ 
+        [ "Height", "QueueResize" ], 
+        [ "Width", "QueueResize" ],
+        [ "RenderTransform", "QueueResize" ]
+        [ "RenderTransformOrigin", "QueueResize" ],
+        [ "Visibility", "QueueResize" ],
+        "IsHitTestVisible", "Opacity", "OpacityMask", 
+        "Resources", "Tag", "Triggers"
+    ]);
+
     this.Layout = function () { };
 
-    this.SizeRequest = { Width: -1, Height: -1 };
-
+    this.__defineGetter__ ("SizeRequest", function () {
+        var self = this;
+        return { Width: self.Width, Height: self.Height };
+    });
+    
     var self = this;
     this.Allocation = { 
         get Width ()   { return self.Xaml ? self.Xaml.Width : 0 },
         set Width (x)  { if (self.Xaml) self.Xaml.Width = x; },
         get Height ()  { return self.Xaml ? self.Xaml.Height : 0 },
-        set Height (x) { if (self.Xaml) self.Xaml.Height = x; }
+        set Height (x) { if (self.Xaml) self.Xaml.Height = x; },
+        get Top ()  { return self.Xaml ? self.Xaml["Canvas.Top"] : 0 },
+        set Top (x) { if (self.Xaml) self.Xaml["Canvas.Top"] = x; },
+        get Left ()   { return self.Xaml ? self.Xaml["Canvas.Left"] : 0 },
+        set Left (x)  { if (self.Xaml) self.Xaml["Canvas.Left"] = x; },
     };
 };
 
@@ -128,8 +201,8 @@ MtkWidget.Instances = 0;
 
 
 
-function MtkCanvas (control) {
-    MtkWidget.call (this, control);
+function MtkCanvas (settings) {
+    MtkWidget.call (this, settings);
     this.CreateXaml ("<Canvas/>");
     var color = "sc#" +
         Math.random ().toString () + "," +
@@ -137,13 +210,13 @@ function MtkCanvas (control) {
         Math.random ().toString ();
     this.Xaml["Background"] = color;
 
-    this.SizeRequest = { Width: 30, Height: 30 };
+    this.__defineGetter__ ("SizeRequest", function () { return { Width: 30, Height: 30 } });
 }
 
 
 
-function MtkContainer (control) {
-    MtkWidget.call (this, control);
+function MtkContainer (settings) {
+    MtkWidget.call (this, settings);
 
     // Properties
     this.Children = [];
@@ -172,8 +245,8 @@ function MtkContainer (control) {
 
     this.Layout = function () {
         this.Children.forEach (function (child) {
-            child.Xaml["Canvas.Left"] = this.Xaml["Canvas.Left"];
-            child.Xaml["Canvas.Top"] = this.Xaml["Canvas.Top"];
+            child.Allocation.Left = this.Allocation.Left;
+            child.Allocation.Top = this.Allocation.Top;
             child.Allocation.Width = this.Allocation.Width;
             child.Allocation.Height = this.Allocation.Height;
             child.Layout ();
@@ -185,8 +258,8 @@ function MtkContainer (control) {
 
 
 
-function MtkWindow (control) {
-    MtkContainer.call (this, control);
+function MtkWindow (settings) {
+    MtkContainer.call (this, settings);
 
     this.Xaml = this.Control.Content.Root;
     this.Xaml["Background"] = "green";
@@ -196,7 +269,11 @@ function MtkWindow (control) {
         get Width ()   { return self.Control.Content.ActualWidth; },
         set Width (x)  { },
         get Height ()  { return self.Control.Content.ActualHeight;},
-        set Height (x) { }
+        set Height (x) { },
+        get Top ()     { return 0; },
+        set Top (x)    { },
+        get Left ()    { return 0; },
+        set Left (x)   { }
     };
 
     this.BaseLayout = this.Layout; 
@@ -213,8 +290,8 @@ function MtkWindow (control) {
 
 
 
-function MtkBox (control) {
-    MtkContainer.call (this, control);
+function MtkBox (settings) {
+    MtkContainer.call (this, settings);
     this.CreateXaml ("<Canvas/>");
     var color = "sc#" +
         Math.random ().toString () + "," +
@@ -262,8 +339,8 @@ function MtkBox (control) {
         this.Children.forEach (function (child) {
             child.Layout ();
 
-            child.Xaml[this.VariableOffset] = variable_offset;
-            child.Xaml[this.StaticOffset] = static_offset;
+            child.Allocation[this.VariableOffset] = variable_offset;
+            child.Allocation[this.StaticOffset] = static_offset;
 
             if (child.Settings.MtkBoxExpand && flex_count > 0) {
                 var size = flex_space / flex_count--;
@@ -286,35 +363,60 @@ function MtkBox (control) {
 
 
 
-function MtkHBox (control) {
-    MtkBox.call (this, control);
+function MtkHBox (settings) {
+    MtkBox.call (this, settings);
     this.StaticDimension = "Height";
     this.VariableDimension = "Width";
-    this.StaticOffset = "Canvas.Top";
-    this.VariableOffset = "Canvas.Left";
+    this.StaticOffset = "Top";
+    this.VariableOffset = "Left";
 }
 
 
 
-function MtkVBox (control) {
-    MtkBox.call (this, control);
+function MtkVBox (settings) {
+    MtkBox.call (this, settings);
     this.StaticDimension = "Width";
     this.VariableDimension = "Height";
-    this.StaticOffset = "Canvas.Left";
-    this.VariableOffset = "Canvas.Top";
+    this.StaticOffset = "Left";
+    this.VariableOffset = "Top";
+}
+
+function MtkLabel (settings) {
+    MtkWidget.call (this, settings);
+    this.CreateXaml ("<TextBlock/>");
+
+    this.MapProperties ([ 
+        [ "Text", "QueueResize" ], 
+        [ "FontFamily", "QueueResize" ],
+        [ "FontSize", "QueueResize" ], 
+        [ "FontStretch", "QueueResize" ],
+        [ "FontStyle", "QueueResize" ],
+        [ "FontWeight", "QueueResize" ],
+        [ "TextWrapping", "QueueResize" ],
+        [ "TextDecorations", "QueueResize" ]
+    ]);
+    
+    this.__defineGetter__ ("SizeRequest", function () {
+        var self = this;
+        return { Width : self.Xaml.ActualWidth, Height: self.Xaml.ActualHeight };
+    });
+
+    if (settings && settings.Text) {
+        this.Text = settings.Text;
+    }
 }
 
 
-function MtkButton (control) {
-    MtkWidget.call (this, control);
+function MtkButton (settings) {
+    MtkWidget.call (this, settings);
 
     this.xaml = null;
    
     this.Initialize = function () {
         var name = this.Name;
         this.CreateXaml ('\
-            <Canvas Name="' + name + '" Width="27" Height="22" Background="green"> \
-              <Rectangle Width="27" Height="22" RadiusX="2" RadiusY="2"> \
+            <Canvas Name="' + name + '" Background="green"> \
+              <Rectangle RadiusX="2" RadiusY="2"> \
                 <Rectangle.Fill> \
                   <LinearGradientBrush Name="' + name + 'Fill" StartPoint="0,0" EndPoint="0,1" Opacity="0"> \
                     <GradientStop Offset="0.0" Color="#7fff"/> \
@@ -323,7 +425,7 @@ function MtkButton (control) {
                   </LinearGradientBrush> \
                 </Rectangle.Fill> \
               </Rectangle> \
-              <Rectangle Width="27" Height="22" RadiusX="2" RadiusY="2"> \
+              <Rectangle RadiusX="2" RadiusY="2"> \
                 <Rectangle.Stroke> \
                   <LinearGradientBrush Name="' + name + 'Border" StartPoint="0,0" EndPoint="0,1" Opacity="0"> \
                     <GradientStop Offset="0.0" Color="#afff"/> \
@@ -354,5 +456,14 @@ function MtkButton (control) {
     };
 
     this.Initialize ();
+
+    this.Layout = function () {
+        for (var i = 0; i < 2; i++) {
+            this.Xaml.Children.GetItem (i).Width = this.Allocation.Width;
+            this.Xaml.Children.GetItem (i).Height = this.Allocation.Height;
+        }
+    };
+
+    this.__defineGetter__ ("SizeRequest", function () { return { Width: 50, Height: 40 } });
 }
 
