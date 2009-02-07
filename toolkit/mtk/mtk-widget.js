@@ -29,6 +29,23 @@ function MtkWidget (settings) {
 
     this.InitFromXaml = function (xaml) this.Xaml = this.Control.Content.createFromXaml (xaml);
     this.CreateXaml = function (xaml) this.Control.Content.createFromXaml (xaml);
+    this.XamlFind = function (name) this.Xaml.FindName (this.Name + name);
+
+    this.ForeachXamlChild = function (element, includeParent, func) {
+        var elem = typeof element == "string" ? this.XamlFind (element) : element;
+        if (includeParent) {
+            func.call (this, elem, -1);
+        }
+
+        var children = elem.Children;
+        if (!children) {
+            return;
+        }
+
+        for (var i = 0, n = children.Count; i < n; i++) {
+            func.call (this, children.GetItem (i), i);
+        }
+    };
 
     //
     // XAML Property Mapping
@@ -70,8 +87,16 @@ function MtkWidget (settings) {
     // Widget Sizing/Allocation
     //
 
+    this.Virtual ("OnRealize", function () this.IsRealized = true);
+
+    this.Realize = function () {
+        if (!this.IsRealized) {
+            this.OnRealize ();
+        }
+    };
+
     this.QueueResize = function () {
-        var parent = this.Parent;
+        var parent = this.Parent || this;
         while (parent && parent.Parent) {
             parent = parent.Parent;
         }
