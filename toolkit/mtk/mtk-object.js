@@ -25,6 +25,8 @@ function MtkObject () {
     this._vt_install = function (method_name, class_name, method, is_virtual) {
         if (is_virtual && this._vtable[method_name]) {
             throw "Virtual method '" + method_name + "' already defined";
+        } else if (!is_virtual && !this._vtable[method_name]) {
+            throw "Virtual method '" + method_name + "' not defined";
         }
 
         var override_name = class_name + "_" + method_name;
