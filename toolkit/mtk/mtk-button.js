@@ -32,37 +32,42 @@ function MtkButton (settings) {
     // Button UI and Interaction
     //
 
-    this.Initialize = function () {
-        this.InitFromXaml ('\
-            <Canvas Name="' + this.Name + '"> \
-              <Canvas Name="' + this.Name + 'Style"> \
-              <Rectangle RadiusX="3" RadiusY="3" Stroke="#888"> \
-                <Rectangle.Fill> \
-                  <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" Name="' + this.Name + 'Fill"/> \
-                </Rectangle.Fill> \
-              </Rectangle> \
-              <Rectangle RadiusX="2" RadiusY="2" Canvas.Left="1" Canvas.Top="1" Stroke="#7fff"/> \
-              </Canvas> \
-              <Canvas.Resources> \
-                <Storyboard Name="' + this.Name + 'Storyboard" Storyboard.TargetProperty="Opacity"> \
-                  <DoubleAnimation Name="' + this.Name + 'StyleAnimation" \
-                    Storyboard.TargetName="' + this.Name + 'Style" Duration="0:0:0.2"/> \
-                </Storyboard> \
-              </Canvas.Resources> \
+    this.InitFromXaml ('\
+        <Canvas Name="' + this.Name + '"> \
+            <Canvas Name="' + this.Name + 'Style"> \
+                <Rectangle RadiusX="3" RadiusY="3" Stroke="#888"> \
+                    <Rectangle.Fill> \
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" Name="' + this.Name + 'Fill"/> \
+                    </Rectangle.Fill> \
+                </Rectangle> \
+                <Rectangle RadiusX="2" RadiusY="2" Canvas.Left="1" Canvas.Top="1" Stroke="#7fff"/> \
             </Canvas> \
-        ');
+            <Canvas.Resources> \
+                <Storyboard Name="' + this.Name + 'Storyboard" Storyboard.TargetProperty="Opacity"> \
+                    <DoubleAnimation Name="' + this.Name + 'StyleAnimation" \
+                        Storyboard.TargetName="' + this.Name + 'Style" Duration="0:0:0.2"/> \
+                    </Storyboard> \
+            </Canvas.Resources> \
+        </Canvas> \
+    ');
+
+    this.Override ("OnRealize", function () {
+        this.$OnRealize$ ();
+        if (!this.IsRealized) {
+            return;
+        }
         
         this.Xaml.AddEventListener ("mouseenter", delegate (this, function (o, args) {
-            this.Animate ([o.FindName (o.Name + "StyleAnimation")], this.FocusOpacity);
-            var storyboard = o.FindName (o.Name + "Storyboard");
+            this.Animate ([this.XamlFind ("StyleAnimation")], this.FocusOpacity);
+            var storyboard = this.XamlFind ("Storyboard");
             if (storyboard) {
                 storyboard.Begin ();
             }
         }));
         
         this.Xaml.AddEventListener ("mouseleave", delegate (this, function (o, args) {
-            this.Animate ([o.FindName (o.Name + "StyleAnimation")], this.RestOpacity);
-            var storyboard = o.FindName (o.Name + "Storyboard");
+            this.Animate ([this.XamlFind ("StyleAnimation")], this.RestOpacity);
+            var storyboard = this.XamlFind ("Storyboard");
             if (storyboard) {
                 storyboard.Begin ();
             }
@@ -81,10 +86,10 @@ function MtkButton (settings) {
         this.Xaml.AddEventListener ("mouseleftbuttonup", delegate (this, function (o, args) {
             this.IsPressed = false;
             this.FillButton (o, this.FillColors);
-            this.RaiseEvent ("click");
+            this.OnActivated ();
         }));
 
-        var fill = this.Xaml.FindName (this.Name + "Fill").GradientStops;
+        var fill = this.XamlFind ("Fill").GradientStops;
         for (var i = 0, n = Math.min (this.FillColors.length, this.FillOffsets.length); i < n; i++) {
             var stop = this.CreateXaml ("<GradientStop/>");
             stop.Color = this.FillColors[i];
@@ -92,16 +97,26 @@ function MtkButton (settings) {
             fill.Add (stop);
         }
 
-        this.Xaml.FindName (this.Name + "Style").Opacity = this.RestOpacity;
+        this.XamlFind ("Style").Opacity = this.RestOpacity;
         this.Xaml.Cursor = "Hand";
-    };
+
+        if (init_child) {
+            this.Add (init_child);
+        }
+    });
 
     this.FillButton = function (o, colors) {
-        var stops = o.FindName (this.Name + "Fill").GradientStops;
+        var stops = this.XamlFind ("Fill").GradientStops;
         for (var i = 0, n = Math.min (colors.length, stops.Count); i < n; i++) {
             stops.GetItem (i).Color = colors[i];
         }
     };
+
+    //
+    // Virtual Methods/Events
+    //
+
+    this.Virtual ("OnActivated", function () this.RaiseEvent ("activated"));
 
     //
     // Allocation/Layout
@@ -114,7 +129,7 @@ function MtkButton (settings) {
 
         this.$OnSizeAllocate$ ();
 
-        var style = this.Xaml.FindName (this.Name + "Style");
+        var style = this.XamlFind ("Style");
         var fill = style.Children.GetItem (0);
         var inner_stroke = style.Children.GetItem (1);
 
@@ -125,14 +140,6 @@ function MtkButton (settings) {
         inner_stroke.Width = width - 2; inner_stroke.Height = height - 2;
     });
 
-    //
-    // Construct the widget
-    //
-
-    this.Initialize ();
-    if (init_child) {
-        this.Add (init_child);
-    }
     this.AfterConstructed ();
 }
 
