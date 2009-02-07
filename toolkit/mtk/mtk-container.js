@@ -65,7 +65,7 @@ function MtkContainer (settings) {
             child.Allocation.Top = this.TotalPadding;
             child.Allocation.Width = this.Allocation.Width - 2 * this.TotalPadding;
             child.Allocation.Height = this.Allocation.Height - 2 * this.TotalPadding;
-            child.IsRealized = true;
+            child.Realize ();
             child.OnSizeAllocate ();
         }, this);
     });
