@@ -29,14 +29,14 @@ function MtkBox (settings) {
     //
 
     this.Override ("OnSizeRequest", function () {
-        var request = {};
-        request[this.VariableDimension] = 2 * this.TotalPadding + this.ChildCount * this.Spacing;
-        request[this.StaticDimension] = 0;
+        var request = { Width: 0, Height: 0 };
         this.Children.forEach (function (child) {
-            var sr = child.SizeRequest[this.StaticDimension];
-            request[this.StaticDimension] = Math.max (sr, request[this.StaticDimension]);
+            var sr = child.SizeRequest;
+            request[this.StaticDimension] = Math.max (request[this.StaticDimension], sr[this.StaticDimension]);
+            request[this.VariableDimension] += sr[this.VariableDimension];
         }, this);
         request[this.StaticDimension] += 2 * this.TotalPadding;
+        request[this.VariableDimension] += 2 * this.TotalPadding + this.ChildCount * this.Spacing;
         return request;
     });
 
@@ -88,7 +88,7 @@ function MtkBox (settings) {
 
             variable_offset += child.Allocation[this.VariableDimension] + this.Spacing;
 
-            child.IsRealized = true;
+            child.Realize ();
             child.OnSizeAllocate ();
         }, this);
     });
