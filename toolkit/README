@@ -1,0 +1,136 @@
+Virtual methods:
+
+    OnSizeRequest
+    OnSizeAllocate
+    OnSizeAllocationRequest
+
+    MtkObject implements a vtable solution for virtual methods:
+
+        Define a virtual method: 
+            this.Virtual ("MethodName", function () ...)
+
+        Override a virtual method:
+            this.Override ("MethodName", function () ...)
+
+        Invoke the base override/virtual method (inside an override def):
+            this.$MethodName$ (...)
+
+        Invoke an override at any point in an object derivation chain:
+            this.ClassName_MethodName (...)
+
+        Consume a virtual method:
+            object.MethodName (...)
+
+    Example:
+
+        function MtkObject () { ... } // defined
+
+        function A () {
+            MtkObject.call (this);
+            this.Virtual ("Hello", function () MoonConsole.WriteLine ("Hi from A"));
+        }
+
+        function B () {
+            A.call (this);
+            this.Override ("Hello", function () {
+                MoonConsole.WriteLine ("Hi from B");
+                this.$Hello$ ();
+            });
+        }
+
+        function C () {
+            B.call (this);
+            this.Override ("Hello", function () {
+                MoonConsole.WriteLine ("Hi from C");
+                this.A_Hello ();
+                this.$Hello$ ();
+            });
+        }
+
+        function D () {
+            C.call (this);
+            this.Hello ();
+        }
+
+        new D;
+
+        Prints:
+            Hello from C
+            Hello from A
+            Hello from B
+            Hello from A
+
+Size Requests/Allocations:
+
+    MTK uses a model based on that of GTK+ where widgets are asked for their
+    desired size (OnSizeRequest) and are allocated size/positioning by
+    their containing widget (OnSizeAllocate).
+
+    If a Widget overrides OnSizeAllocate, it is responsible for assigning
+    its width and height from its allocation to the underlying XAML. The
+    positioning (Canvas.Left, Canvas.Top) will still be set by the containing
+    widget. The Base MtkWidget class provides an implementation of this,
+    so it may be appropriate to simply chain to the base OnSizeAllocate method.
+
+    All OnSizeAllocate implementations should first check the IsRealized property
+    and return having performed no allocation if the check returns false.
+
+    A Widget implementing OnSizeAllocate is additionally responsible for 
+    positioning and allocating size for any child widgets by computing the
+    allocation and setting it on the child, and ensuring the child is 
+    realized, and then calling OnSizeAllocate on the child.
+
+    /ONLY/ in an OnSizeAllocate implementation is it appropriate to set the
+    actual width/height/position of a widget. This is done directly against
+    the .Xaml property on a widget (.Xaml.Width, .Xaml.Height, .Xaml["Canvas.Left"],
+    .Xaml["Canvas.Top"]).
+
+    The OnSizeRequest virtual method can be overridden to compute the desired
+    size of a widget. For containers it is appropriate to query any children's
+    size by calling OnSizeRequest on the child and taking its results into
+    consideration.
+
+    It is important to note that a widget's Allocation property may not reflect
+    (and usually does not reflect) the actual size or position of the underlying
+    XAML. To read the actual size of the underlying widget XAML use the 
+    AcutalWidth/ActualHeight properties.
+
+XAML Property Maps:
+
+    MTK provides a base method called MapProperties which takes an array of
+    arrays. The top level array provides child arrays which map properties
+    from the widget object to the underlying XAML object. 
+    
+    If more than one element in a property array is provided, it must be a 
+    function available on the widget object. This function will be invoked 
+    after setting the property on the XAML.
+
+    This allows for property change notification, which Silverlight does not
+    provide natively. Most commonly this is used to notify the widget tree that
+    it may need to adjust its layout (i.e. font size changes, text is added
+    to a label, etc, which is expected to adjust the containing widgets size).
+
+    The following is taken from MtkLabel:
+
+        this.MapProperties ([
+            [ "Text", "QueueResize" ],
+            [ "FontSize", "QueueResize" ],
+            ...
+        );
+
+    This installs Text and FontSize properties on the widget. Whenever label.Text 
+    is set, the value is proxied to label.Xaml.Text, and label.QueueResize is
+    then invoked.
+
+Events:
+
+    A basic event system is supported. All a widget needs to do to raise a
+    particular event is call:
+
+        this.RaiseEvent ("event-name", argument1, argument2, ...);
+
+    The raising object instance will automaticaly be passed as the first argument
+    to any registered event listener functions and any passed arguments to
+    the RaiseEvent invocation will follow.
+
+

@@ -1,4 +1,4 @@
-var MoonConsole = {
+var MtkConsole = {
 
     truncate_function_source: true,
 
@@ -13,21 +13,21 @@ var MoonConsole = {
 
         for (var prop in parent) {
             if (parent[prop] == func) {
-                var parent_name = parent.className || MoonConsole._GetFunctionName (parent.constructor);
+                var parent_name = parent.className || MtkConsole._GetFunctionName (parent.constructor);
                 return parent_name == "Object" ? prop : parent_name + "." + prop;
             }
         }
     },
 
     Log: function (str) {
-        MoonConsole.WriteLine (str);
+        MtkConsole.WriteLine (str);
     },
 
     Logf: function (parent, str) {
         str = str || parent;
-        var caller_name = MoonConsole._GetFunctionName (MoonConsole.Logf.caller, 
+        var caller_name = MtkConsole._GetFunctionName (MtkConsole.Logf.caller, 
             arguments.length > 1 ? parent : null);
-        MoonConsole.WriteLine (caller_name + ": " + str);
+        MtkConsole.WriteLine (caller_name + ": " + str);
     },
 
     Logfa: function (parent, args) {
@@ -40,8 +40,8 @@ var MoonConsole = {
             }
         }
 
-        MoonConsole.Write (MoonConsole._GetFunctionName (MoonConsole.Logfa.caller, this) + ": ");
-        MoonConsole.ObjDump (args_dump);
+        MtkConsole.Write (MtkConsole._GetFunctionName (MtkConsole.Logfa.caller, this) + ": ");
+        MtkConsole.ObjDump (args_dump);
     },
 
     Indent: function (indent, mult) {
@@ -58,24 +58,24 @@ var MoonConsole = {
     },
 
     Write: function (str) {
-        MoonConsole.console_driver (str);
+        MtkConsole.console_driver (str);
     },
 
     WriteLine: function (str) {
         if (!str) {
-            MoonConsole.console_driver ("\n");
+            MtkConsole.console_driver ("\n");
         } else {
-            MoonConsole.console_driver (str + "\n");
+            MtkConsole.console_driver (str + "\n");
         }
     },
 
     WriteIndentLine: function (str, indent) {
-        var indent_str = MoonConsole.Indent (indent);
-        MoonConsole.WriteLine (indent_str + str.toString ());
+        var indent_str = MtkConsole.Indent (indent);
+        MtkConsole.WriteLine (indent_str + str.toString ());
     },
 
     WriteIndent: function (str, indent) {
-        MoonConsole.Write (MoonConsole.Indent (indent) + str.toString ());
+        MtkConsole.Write (MtkConsole.Indent (indent) + str.toString ());
     },
 
     ObjectVisibleChildCount: function (o) {
@@ -101,7 +101,7 @@ var MoonConsole = {
                 eval_prop = o[prop];
             } catch (e) {
                 eval_prop = { 
-                    MoonConsole_ObjDump_Error: "Exception when dumping property '" + prop + "'", 
+                    MtkConsole_ObjDump_Error: "Exception when dumping property '" + prop + "'", 
                     Details: e 
                 };
             }
@@ -110,26 +110,26 @@ var MoonConsole = {
         var prefix = o instanceof Array ? "" : prop + ": ";
         
         if (eval_prop != null && typeof eval_prop == "object" && 
-            MoonConsole.ObjectVisibleChildCount (eval_prop) > 0) {
-            MoonConsole.WriteIndent (prefix, level + 1);
+            MtkConsole.ObjectVisibleChildCount (eval_prop) > 0) {
+            MtkConsole.WriteIndent (prefix, level + 1);
         } else {
-            MoonConsole.WriteIndent (prefix + MoonConsole.Indent (max_prop_len - 
+            MtkConsole.WriteIndent (prefix + MtkConsole.Indent (max_prop_len - 
                 prop.length, 1), level + 1);
         }
 
         if (is_getter) {
-            MoonConsole.Write ("get ()");
+            MtkConsole.Write ("get ()");
         } else if (is_setter) {
-            MoonConsole.Write ("set (x)");
+            MtkConsole.Write ("set (x)");
         } else {
-            MoonConsole.ObjDump (eval_prop, invoke_getters, level + 1, stack);
+            MtkConsole.ObjDump (eval_prop, invoke_getters, level + 1, stack);
         }
 
         if (i < count - 1) {
-            MoonConsole.Write (",");
+            MtkConsole.Write (",");
         }
 
-        MoonConsole.WriteLine ();
+        MtkConsole.WriteLine ();
     },
 
     ObjDump: function (o, invoke_getters, level, stack) {
@@ -157,7 +157,7 @@ var MoonConsole = {
         switch (type) {
             case "undefined":
             case "null":
-                MoonConsole.Write (type);
+                MtkConsole.Write (type);
                 break;
             case "object":
                 var max_prop_len = 0;
@@ -169,7 +169,7 @@ var MoonConsole = {
                 // Keep a stack of references to avoid recursively dumping; e.g.:
                 // var x = {}; x.self = x;
                 if (stack.indexOf (o) >= 0) {
-                    MoonConsole.Write ("<object already dumped>");
+                    MtkConsole.Write ("<object already dumped>");
                     break;
                 }
                 stack.push (o); 
@@ -189,57 +189,57 @@ var MoonConsole = {
 
                 var o_name = o ? o.toString () : null;
                 if (o_name == null) {
-                    MoonConsole.Write ("null");;
+                    MtkConsole.Write ("null");;
                 } else if (o instanceof Array || o_name == "[object Object]") {
-                    MoonConsole.Write (obj_open_char);
+                    MtkConsole.Write (obj_open_char);
                 } else {
                     var instanceof_str = !o.constructor || o.constructor.name == "Object" 
                         ? "" : "[object " + o.constructor.name + "] ";
-                    MoonConsole.Write (instanceof_str + "(" + o + ") {");
+                    MtkConsole.Write (instanceof_str + "(" + o + ") {");
                 }
 
                 if (count == 0 && o_name != null) {
-                    MoonConsole.Write (obj_close_char);
+                    MtkConsole.Write (obj_close_char);
                     break;
                 }
 
-                MoonConsole.WriteLine ();
+                MtkConsole.WriteLine ();
 
                 if (o instanceof Array) {
                     for (var i = 0; i < count; i++) {
-                        MoonConsole._ObjDumpProperty (o, i, invoke_getters, level, i, count, 0, stack);
+                        MtkConsole._ObjDumpProperty (o, i, invoke_getters, level, i, count, 0, stack);
                     }
                 } else {
                     for (prop in o) {
-                        MoonConsole._ObjDumpProperty (o, prop, invoke_getters, level, i++, count, max_prop_len, stack);
+                        MtkConsole._ObjDumpProperty (o, prop, invoke_getters, level, i++, count, max_prop_len, stack);
                     }
                 }
 
-                MoonConsole.WriteIndent (obj_close_char, level);
+                MtkConsole.WriteIndent (obj_close_char, level);
                 break;
             case "function":
                 var source = o.toSource ();
-                if (MoonConsole.truncate_function_source && source.length > 80) {
+                if (MtkConsole.truncate_function_source && source.length > 80) {
                     source = source.substring (0, 80) + "... }";
                 }
 
                 if (level == 0) {
-                    MoonConsole.Write (source);
+                    MtkConsole.Write (source);
                 } else {
-                    MoonConsole.Write (source.replace (/^function [A-Za-z0-9_]+/, 
+                    MtkConsole.Write (source.replace (/^function [A-Za-z0-9_]+/, 
                         "function ").replace (/^\(|\)$/g, ""));
                 }
                 break;
             case "string":
-                MoonConsole.Write ('"' + o.toString ().replace (/"/g, "\\\"") + '"');
+                MtkConsole.Write ('"' + o.toString ().replace (/"/g, "\\\"") + '"');
                 break;
             default:
-                MoonConsole.Write (o);
+                MtkConsole.Write (o);
                 break;
         }
 
         if (level == 0) {
-            MoonConsole.WriteLine ();
+            MtkConsole.WriteLine ();
         }
     }
 }

@@ -1,7 +1,7 @@
 <html>
 <head>
-<script type="text/javascript" src="moon-console.js"></script>
-<script type="text/javascript" src="toolkit.js"></script>
+<script type="text/javascript" src="mtk/mtk.js"></script>
+<script type="text/javascript" src="moonshine-player.js"></script>
 <style type="text/css">
 html, body, #canvas {
 	margin: 0;
@@ -13,12 +13,10 @@ html, body, #canvas {
 </head>
 <body>
 <script type="text/xaml" id="xaml">
-<Canvas xmlns="http://schemas.microsoft.com/client/2007">
-
-</Canvas>
+<Canvas xmlns="http://schemas.microsoft.com/client/2007"/>
 </script>
 <object type="application/x-silverlight" id="canvas">
-	<param name="onload" value="Bind" />
+	<param name="onload" value="__MoonshineBindInstance" />
 	<param name="source" value="#xaml" />
 	<param name="background" value="black" />
 </object>
