@@ -10,7 +10,7 @@ var MtkContext = {
                 "mtk-console.js",   "mtk-style.js", "mtk-object.js", "mtk-widget.js",
                 "mtk-container.js", "mtk-box.js",   "mtk-window.js", "mtk-xaml.js",
                 "mtk-button.js",    "mtk-label.js", "mtk-slider.js", "mtk-media-element.js",
-                "mtk-toolbar.js"
+                "mtk-toolbar.js",   "mtk-color.js"
             );
         }*/
     },
