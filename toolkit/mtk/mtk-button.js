@@ -30,11 +30,12 @@ function MtkButton (settings) {
 
     this.normal_fill_brush = null;
     this.pressed_fill_brush = null;
+    this.stroke_brush = null;
 
     this.InitFromXaml ('\
         <Canvas Name="' + this.Name + '"> \
             <Canvas Name="' + this.Name + 'Style"> \
-                <Rectangle RadiusX="3" RadiusY="3" Stroke="#888" Name="' + this.Name + 'Fill"/> \
+                <Rectangle RadiusX="3" RadiusY="3" Name="' + this.Name + 'Fill"/> \
                 <Rectangle RadiusX="2" RadiusY="2" Canvas.Left="1" Canvas.Top="1" Stroke="#7fff"/> \
             </Canvas> \
             <Canvas.Resources> \
@@ -92,8 +93,8 @@ function MtkButton (settings) {
             this.Add (init_child);
         }
     });
-
-    this.StyleButton = function () {
+    
+    this.Override ("OnStyleSet", function () {
         if (!this.normal_fill_brush) {
             this.normal_fill_brush = MtkStyle.CreateGradient (this, "button_bg");
         }
@@ -101,10 +102,18 @@ function MtkButton (settings) {
         if (!this.pressed_fill_brush) {
             this.pressed_fill_brush = MtkStyle.CreateGradient (this, "highlight_bg");
         }
+        
+        if (!this.stroke_brush) {
+            this.stroke_brush = MtkStyle.CreateGradient (this, "button_shadow");
+        }
+    });
 
-        this.XamlFind ("Fill").Fill = this.IsPressed 
+    this.StyleButton = function () {
+        var fill = this.XamlFind ("Fill");
+        fill.Fill = this.IsPressed 
             ? this.pressed_fill_brush 
             : this.normal_fill_brush;
+        fill.Stroke = this.stroke_brush;
     };
 
     //

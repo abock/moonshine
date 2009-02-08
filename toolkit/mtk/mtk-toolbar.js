@@ -5,12 +5,7 @@ function MtkToolBar (settings) {
     this.Spacing = 3;
     this.Padding = 3;
 
-    this.Override ("OnRealize", function () {
-        this.$OnRealize$ ();
-        if (!this.IsRealized) {
-            return;
-        }
-
+    this.Override ("OnStyleSet", function () {
         this.Xaml.Background = MtkStyle.CreateGradient (this, "window_bg");
     });
 
