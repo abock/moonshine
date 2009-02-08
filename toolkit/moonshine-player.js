@@ -38,13 +38,6 @@ function MoonshineControlBar () {
     this.FullScreenButton = new MtkButton (new MtkLabel ("Full Screen"));
 
     this.PackStart (this.PlayPauseButton);
-    /*this.PackStart (new MtkHBox ({
-        Spacing: 0,
-        With: function () {
-            this.PackStart (self.SeekBar, true);
-            this.PackStart (self.VolumeBar);
-        }
-    }), true);*/
     this.PackStart (this.SeekBar, true);
     this.PackStart (this.VolumeBar);
     this.PackStart (this.FullScreenButton);
