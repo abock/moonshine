@@ -14,13 +14,14 @@ function MtkWindow (settings) {
             Top: 0,
             Left: 0
         };
-    }); 
+    });
 
-    this.Virtual ("OnFullScreenChange", function () this.QueueResize);
-
+    this.Virtual ("SetFullScreen", function (fs) this.Control.Content.FullScreen = fs);
+    this.Virtual ("GetFullScreen", function () this.Control.Content.FullScreen);
+    this.Virtual ("OnFullScreenChange", function () this.QueueResize ());
     this.Virtual ("OnToggleFullScreen", function () {
-        this.Control.Content.FullScreen = !this.Control.Content.FullScreen;
-        this.QueueResize ();
+        this.SetFullScreen (!this.GetFullScreen ());
+        this.RaiseEvent ("ToggleFullScreen", this.GetFullScreen ());
     });
 
     this.ToggleFullScreen = function () this.OnToggleFullScreen ();
