@@ -156,17 +156,88 @@ var MtkColor = {
     //
     // Shading/Value Adjustment
     //
-
+    
     Clamp: function (x, lo, hi) (x > hi) ? hi : (x < lo ? lo : x),
 
-    Shade: function (color, d) { return {
-        r: MtkColor.Clamp (Math.round (color.r * d), 0, 0xff),
-        g: MtkColor.Clamp (Math.round (color.g * d), 0, 0xff),
-        b: MtkColor.Clamp (Math.round (color.b * d), 0, 0xff),
-        a: color.a || 0xff
-    }},
+    Mix: function (ca, cb, k) {
+        var alpha_a = typeof ca.alpha == "number" ? ca.a : 0xff;
+        var alpha_b = typeof cb.alpha == "number" ? cb.a : 0xff;
+        return {
+            r: MtkColor.Clamp (k * ca.r + (1.0 - k) * cb.r, 0, 0xff),
+            g: MtkColor.Clamp (k * ca.g + (1.0 - k) * cb.g, 0, 0xff),
+            b: MtkColor.Clamp (k * ca.b + (1.0 - k) * cb.b, 0, 0xff),
+            a: MtkColor.Clamp (k * ca.a + (1.0 - k) * cb.a, 0, 0xff),
+        };
+    },
 
-    Lighter: function (color) MtkColor.Shade (color, 1.3),
-    Darker: function (color) MtkColor.Shade (color, 0.7)
+    Shade: function (color, k) {
+        var alpha = (typeof color.a == "number") ? color.a : 0xff;
+        var hls = MtkColor.RgbToHls (color.r, color.g, color.b);
+        var rgb = MtkColor.HlsToRgb (hls[0], hls[1] * k, hls[2] * k);
+        return { r: rgb[0], g: rgb[1], b: rgb[2], a: alpha };
+    },
+
+    Lighter: function (color) MtkColor.Shade (color, 1 + 0.15),
+    Darker: function (color) MtkColor.Shade (color, 1 - 0.15),
+    
+    RgbToHls: function (r, g, b) {
+        var min, max, delta;
+        var h = 0, l, s = 0;
+  
+        if (r > g) {
+            max = r > b ? r : b;
+            min = g < b ? g : b;
+        } else {
+            max = g > b ? g : b;
+            min = r < b ? r : b;
+        }
+
+        l = (max + min) / 2;
+        if (max == min) {
+            return [h, l, s];
+        }
+        
+        s = l <= 0.5 
+            ? (max - min) / (max + min)
+            : (max - min) / (2 - max - min);
+  
+        delta = max - min;
+        if      (r == max) h = (g - b) / delta;
+        else if (g == max) h = 2 + (b - r) / delta;
+        else if (b == max) h = 4 + (r - g) / delta;
+  
+        if ((h *= 60) < 0.0) {
+            h += 360;
+        }
+  
+        return [h, l, s];
+    },
+
+    HlsToRgb: function (h, l, s) {
+        var h_angle = [h + 120, h, h - 120];
+        var rgb = [l, l, l];
+        
+        var m2 = l <= 0.5
+            ? l * (1 + s)
+            : l + s - l * s;
+        var m1 = 2 * l - m2;
+        
+        for (var i = 0; s != 0 && i < 3; i++) {
+            h = h_angle[i];
+            while (h > 360) h -= 360;
+            while (h < 0)   h += 360;
+            
+            if      (h < 60)  rgb[i] = m1 + (m2 - m1) * h / 60;
+            else if (h < 180) rgb[i] = m2;
+            else if (h < 240) rgb[i] = m1 + (m2 - m1) * (240 - h) / 60;
+            else              rgb[i] = m1;
+        }
+        
+        for (var i = 0; i < 3; i++) {
+            rgb[i] = MtkColor.Clamp (Math.round (rgb[i]), 0, 0xff);
+        }
+        
+        return rgb;
+    }
 };
 
