@@ -86,8 +86,22 @@ function MtkWidget (settings) {
     //
     // Widget Sizing/Allocation
     //
+    
+    this.Virtual ("OnStyleSet", function () { });
 
-    this.Virtual ("OnRealize", function () this.IsRealized = true);
+    this.Virtual ("OnRealize", function () {
+        if (this.IsRealized) {
+            return;
+        }
+        
+        this.IsRealized = true;
+        
+        if (MtkStyle && MtkStyle.Notify) {
+            MtkStyle.Notify.AddEventListener ("reload", delegate (this, this.OnStyleSet));
+        }
+        
+        this.OnStyleSet ();
+    });
 
     this.Realize = function () {
         if (!this.IsRealized) {
