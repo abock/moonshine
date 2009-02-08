@@ -10,8 +10,8 @@ function MtkSlider (settings) {
     this.PillWidth = 4;
     this.TroughHeight = 6;
     this.TroughRadius = 3;
-    this.SliderWidth = 20;
-    this.SliderHeight = 10;
+    this.SliderWidth = 24;
+    this.SliderHeight = 12;
     this.SliderRadius = 4;
     this.MinWidth = 100;
 
@@ -22,9 +22,15 @@ function MtkSlider (settings) {
             MtkConsole.Log ("Invalid MtkSlider.Value: " + x);
             x = x < 0 ? 0 : 1;
         }
-        this.value = x;
-        this.PositionSlider ();
+        
+        if (this.value != x) {
+            this.value = x;
+            this.PositionSlider ();
+            this.OnValueChanged ();
+        }
     });
+    
+    this.Virtual ("OnValueChanged", function () this.RaiseEvent ("valuechanged", this.Value));
 
     this.InitFromXaml ('<Canvas> \
         <Canvas Name="' + this.Name + 'Trough"> \
@@ -41,39 +47,78 @@ function MtkSlider (settings) {
         </Canvas> \
     </Canvas>');
     
-    this.IsPrelit = false;
-    this.IsPressed = false;
+    //
+    // Control
+    //
+    
+    this.is_slider_prelit = false;
+    this.is_slider_pressed = false;
+    this.slider_press_x = 0;
     
     this.Override ("OnRealize", function () {
         this.$OnRealize$ ();
         if (!this.IsRealized) {
             return;
-        }
-        
+        }        
+
         var slider = this.XamlFind ("Slider");
         
         slider.AddEventListener ("mouseleave", delegate (this, function (o, args) {
-            this.IsPrelit = false;
-            this.IsPressed = false;
+            this.is_slider_prelit = false;
+            this.is_slider_pressed = false;
             this.StyleSlider ();
         }));
         
         slider.AddEventListener ("mouseenter", delegate (this, function (o, args) {
-            this.IsPrelit = true;
+            this.is_slider_prelit = true;
             this.StyleSlider ();
         }));
         
+        slider.AddEventListener ("mousemove", delegate (this, function (o, args) {
+            if (!this.is_slider_pressed) {
+                return;
+            }
+            
+            var trough = this.XamlFind ("Trough");
+            var tr_l = trough["Canvas.Left"];
+            var tr_w = trough.Width;
+            var sl_l = o["Canvas.Left"];
+            var sl_w = o.Width;
+            
+            var nx = args.GetPosition (o).X - this.slider_press_x;
+            var dx = sl_l + nx;
+            
+            if (dx < tr_l) {
+                sl_l = tr_l;
+            } else if (dx > tr_l + tr_w - sl_w) {
+                sl_l = tr_l + tr_w - sl_w;
+            } else {
+                sl_l += nx;
+            }
+            
+            this.Value = (sl_l - tr_l) / (tr_w - sl_w);
+        }));
+        
         slider.AddEventListener ("mouseleftbuttondown", delegate (this, function (o, args) {
-            this.IsPrelit = true;
-            this.IsPressed = true;
+            this.is_slider_prelit = true;
+            this.is_slider_pressed = true;
+            this.slider_press_x = args.GetPosition (o).X;
+            slider.CaptureMouse ();
             this.StyleSlider ();
         }));
 
         slider.AddEventListener ("mouseleftbuttonup", delegate (this, function (o, args) {
-            this.IsPressed = false;
+            var pos = args.GetPosition (o);
+            this.is_slider_pressed = false;
+            this.is_slider_prelit = pos.X >= 0 && pos.Y >= 0 && pos.X <= o.Width && pos.Y <= o.Height;
+            slider.ReleaseMouseCapture ();
             this.StyleSlider ();
         }));
     });
+    
+    //
+    // Style
+    //
 
     this.Override ("OnStyleSet", function () {
         this.normal_slider_fill_brush = MtkStyle.CreateGradient (this, "button_bg");
@@ -103,10 +148,10 @@ function MtkSlider (settings) {
     this.StyleSlider = function () {
         var slider = this.XamlFind ("Slider");
         
-        if (this.IsPressed) {
+        if (this.is_slider_pressed) {
             slider.Children.GetItem (0).Fill = this.pressed_slider_fill_brush;
             slider.Children.GetItem (1).Fill = this.pressed_pill_fill_brush;
-        } else if (this.IsPrelit) {
+        } else if (this.is_slider_prelit) {
             slider.Children.GetItem (0).Fill = this.prelit_slider_fill_brush;
             slider.Children.GetItem (1).Fill = this.prelit_pill_fill_brush;
         } else {
@@ -115,7 +160,7 @@ function MtkSlider (settings) {
             slider.Children.GetItem (2).Stroke = this.normal_slider_stroke_brush;
         }
         
-        if (this.IsPressed || this.IsPrelit) {
+        if (this.is_slider_pressed || this.is_slider_prelit) {
             slider.Children.GetItem (2).Stroke = this.prelit_slider_stroke_brush;
         }
     };
@@ -199,13 +244,13 @@ function MtkSlider (settings) {
     this.PositionSlider = function () {
         var slider = this.XamlFind ("Slider");
         var trough = this.XamlFind ("Trough");
-    
-        var t_clip = this.XPad + (trough.Width - slider.Width) * this.Value
-    
-        slider["Canvas.Top"] = this._slider_top;
-        slider["Canvas.Left"] = t_clip;
         
-        t_clip += Math.round (slider.Width / 2);
+        slider["Canvas.Top"] = this._slider_top;
+        slider["Canvas.Left"] = trough["Canvas.Left"] 
+            + (trough.Width - slider.Width) * this.Value;
+        
+        var t_clip = slider["Canvas.Left"] - trough["Canvas.Left"] 
+            + Math.round (slider.Width / 2);
         
         for (var i = 0; i < trough.Children.Count; i++) {
             var elem = trough.Children.GetItem (i);
@@ -215,12 +260,6 @@ function MtkSlider (settings) {
             elem.Clip.Rect = clip + "," + trough.Height;
         }
     };
-
-    // 
-    // Interaction
-    //
-
-    this.Virtual ("OnValueChanged", function () this.RaiseEvent ("valuechanged", this.Value));
 
     this.AfterConstructed ();
 }
