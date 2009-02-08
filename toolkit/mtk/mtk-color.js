@@ -126,7 +126,20 @@ var MtkColor = {
         }
 
         return color;
-    }
+    },
+
+    //
+    // Shading/Value Adjustment
+    //
+
+    Clamp: function (x, lo, hi) (x > hi) ? hi : (x < lo ? lo : x),
+
+    Shade: function (color, d) { return {
+        r: MtkColor.Clamp (Math.round (color.r * d), 0, 0xff),
+        g: MtkColor.Clamp (Math.round (color.g * d), 0, 0xff),
+        b: MtkColor.Clamp (Math.round (color.b * d), 0, 0xff),
+        a: color.a || 0xff
+    }}
 };
 
 
