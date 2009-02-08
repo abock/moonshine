@@ -1,6 +1,8 @@
 function MtkWindow (settings) {
     MtkContainer.call (this, settings);
 
+    MtkStyle.Reload ();
+
     this.Xaml = this.Control.Content.Root;
     this.Realize ();
 
