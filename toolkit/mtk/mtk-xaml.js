@@ -18,6 +18,14 @@ function MtkXaml (xaml, settings) {
 
     this.Override ("OnSizeAllocate", function () {
         if (this.IsRealized) {
+            if (this.ActualWidth == 0) {
+                this.Xaml.Width = this.Allocation.Width - 2 * this.XPad;
+            }
+
+            if (this.ActualHeight == 0) {
+                this.Xaml.Height = this.Allocation.Height - 2 * this.YPad;
+            }
+
             this.Xaml["Canvas.Left"] = this.Allocation.Left + this.XPad +
                 Math.round ((this.Allocation.Width - this.ActualWidth) * this.XAlign);
             this.Xaml["Canvas.Top"] = this.Allocation.Top + this.YPad + 
