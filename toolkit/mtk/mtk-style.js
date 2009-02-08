@@ -90,7 +90,7 @@ var MtkStyle = {
     ScreenDpi: 96, // FIXME: try to compute this
     
     LoadFont: function () {
-        var elem = window;
+        var elem = document.body;
         
         MtkStyle.system_font = null;
         
@@ -125,9 +125,16 @@ var MtkStyle = {
     // Drawing Utilities
     //
     
-    CreateGradient: function (widget, style) {
-        var offsets = [ 0, 0.5, 0.5, 1 ];
-        var colors = [ "lighter", "light", "normal", "dark" ];   
+    GetColor: function (style, shade)
+        MtkColor.ToString (MtkStyle.Colors[style][shade || "normal"]),
+    
+    CreateGradient: function (widget, style, inset, c, o) {
+        var offsets = o || [ 0, 0.5, 0.5, 1 ];
+        var colors = c || [ "lighter", "light", "normal", "dark" ];
+        
+        if (inset) {
+            colors.reverse ();
+        }
 
         var brush = widget.CreateXaml ("<LinearGradientBrush/>");
         brush.StartPoint = "0,0";
@@ -135,7 +142,7 @@ var MtkStyle = {
 
         for (var i = 0, n = Math.min (offsets.length, colors.length); i < n; i++) {
             var stop = widget.CreateXaml ("<GradientStop/>");
-            stop.Color = MtkColor.ToString (MtkStyle.Colors[style][colors[i]]);
+            stop.Color = MtkStyle.GetColor (style, colors[i]);
             stop.Offset = offsets[i];
             brush.GradientStops.Add (stop);
         }
