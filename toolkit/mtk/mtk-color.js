@@ -44,45 +44,70 @@ var MtkColor = {
 
     FromString: function (str, is_argb) {
         var err_color = { r: 0, g: 0, b: 0, a: 0xff };
-        if (typeof str != "string" || str.charAt (0) != '#') {
+        if (typeof str != "string") {
             return err_color;
         }
 
-        switch (str.length) {
-            case 4: // #rgb
-                color = [ 
-                    MtkColor.ReadChannel (str.charAt (1)),
-                    MtkColor.ReadChannel (str.charAt (2)),
-                    MtkColor.ReadChannel (str.charAt (3)),
-                    0xff
-                ];
-                break;
-            case 5: // #rgba
-                color = [ 
-                    MtkColor.ReadChannel (str.charAt (1)),
-                    MtkColor.ReadChannel (str.charAt (2)),
-                    MtkColor.ReadChannel (str.charAt (3)),
-                    MtkColor.ReadChannel (str.charAt (4))
-                ];
-                break;
-            case 7: // #rrggbb
-                color = [ 
-                    MtkColor.ReadChannel (str.charAt (1), str.charAt (2)),
-                    MtkColor.ReadChannel (str.charAt (3), str.charAt (4)),
-                    MtkColor.ReadChannel (str.charAt (5), str.charAt (6)),
-                    0xff
-                ];
-                break;
-            case 9: // #rrggbbaa
-                color = [ 
-                    MtkColor.ReadChannel (str.charAt (1), str.charAt (2)),
-                    MtkColor.ReadChannel (str.charAt (3), str.charAt (4)),
-                    MtkColor.ReadChannel (str.charAt (5), str.charAt (6)),
-                    MtkColor.ReadChannel (str.charAt (7), str.charAt (8))
-                ];
-                break;
-            default:
-                return err_color;
+        if (str.charAt (0) == '#') {
+            switch (str.length) {
+                case 4: // #rgb
+                    color = [ 
+                        MtkColor.ReadChannel (str.charAt (1)),
+                        MtkColor.ReadChannel (str.charAt (2)),
+                        MtkColor.ReadChannel (str.charAt (3)),
+                        0xff
+                    ];
+                    break;
+                case 5: // #rgba
+                    color = [ 
+                        MtkColor.ReadChannel (str.charAt (1)),
+                        MtkColor.ReadChannel (str.charAt (2)),
+                        MtkColor.ReadChannel (str.charAt (3)),
+                        MtkColor.ReadChannel (str.charAt (4))
+                    ];
+                    break;
+                case 7: // #rrggbb
+                    color = [ 
+                        MtkColor.ReadChannel (str.charAt (1), str.charAt (2)),
+                        MtkColor.ReadChannel (str.charAt (3), str.charAt (4)),
+                        MtkColor.ReadChannel (str.charAt (5), str.charAt (6)),
+                        0xff
+                    ];
+                    break;
+                case 9: // #rrggbbaa
+                    color = [ 
+                        MtkColor.ReadChannel (str.charAt (1), str.charAt (2)),
+                        MtkColor.ReadChannel (str.charAt (3), str.charAt (4)),
+                        MtkColor.ReadChannel (str.charAt (5), str.charAt (6)),
+                        MtkColor.ReadChannel (str.charAt (7), str.charAt (8))
+                    ];
+                    break;
+                default:
+                    return err_color;
+            }
+        } else if (str.length >= 10 && str.charAt (0) == 'r' && 
+            str.charAt (1) == 'g' && str.charAt (2) == 'b') {
+            var color = null;
+            var tok = "";
+            var channel = 0;
+            for (var i = 3; i < str.length; i++) {
+                var c = str.charAt (i);
+                if (!color) {
+                    if (c == '(') {
+                        color = [];
+                    }
+                } else if (c == ',' || c == ')') {
+                    color[channel++] = parseInt (tok);
+                    tok = "";
+                    if (c == ')') {
+                        break;
+                    }
+                } else if (c != ' ' && c != '\t') {
+                    tok += c;
+                }
+            }
+            color.push (0xff);
+            is_argb = false;
         }
         
         for (var i = 0; i < 4; i++) {
@@ -139,7 +164,9 @@ var MtkColor = {
         g: MtkColor.Clamp (Math.round (color.g * d), 0, 0xff),
         b: MtkColor.Clamp (Math.round (color.b * d), 0, 0xff),
         a: color.a || 0xff
-    }}
-};
+    }},
 
+    Lighter: function (color) MtkColor.Shade (color, 1.3),
+    Darker: function (color) MtkColor.Shade (color, 0.7)
+};
 
