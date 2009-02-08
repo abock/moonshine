@@ -109,6 +109,10 @@ function MtkButton (settings) {
 
     this.StyleButton = function () {
         var fill = this.XamlFind ("Fill");
+        if (!fill) {
+            return;
+        }
+        
         fill.Fill = this.IsPressed 
             ? this.pressed_fill_brush 
             : this.normal_fill_brush;
