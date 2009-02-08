@@ -1,5 +1,59 @@
 var MtkStyle = {
 
+    //
+    // Style Loading
+    //
+    
+    Notify: new MtkObject,
+
+    Reload: function () {
+        MtkStyle.ShadeColorsFromNormal (MtkStyle.DefaultColors);
+        MtkStyle.system_colors = null;
+        
+        // Load the color scheme from the CSS named system colors
+        
+        try {
+            var css_color_map = {
+                "Window"          : "window_bg",
+                "WindowText"      : "window_fg",
+                "ButtonFace"      : "button_bg",
+                "ButtonText"      : "button_fg",
+                "ButtonShadow"    : "button_shadow",
+                "ButtonHighlight" : "button_highlight",
+                "Highlight"       : "highlight_bg",
+                "HighlightText"   : "highlight_fg",
+                "Scrollbar"       : "trough_bg"
+            };
+    
+            var colors = {};
+            var elem = document.createElement ("div");
+          
+            for (var css in css_color_map) {
+                elem.style.color = css;
+                var style = document.defaultView.getComputedStyle (elem, null);
+                var color = style.getPropertyValue ("color");
+                colors[css_color_map[css]] = { normal: MtkColor.FromString (color) };
+            }
+    
+            MtkStyle.ShadeColorsFromNormal (colors);
+            MtkStyle.system_colors = colors;
+        } catch (e) {
+            MtkConsole.Log ("Could not load system color scheme from CSS/DOM: " + e);
+        }
+        
+        try {
+            MtkStyle.LoadFont ();
+        } catch (e) {
+            MtkConsole.Log ("Could not load font data from CSS/DOM: " + e);
+        }   
+        
+        MtkStyle.Notify.RaiseEvent ("reload");
+    },
+    
+    //
+    // Colors
+    //
+    
     DefaultColors: {
         /*bg:    { normal: MtkColor.FromInt (0xd8d8d8) },
         fg:    { normal: MtkColor.FromInt (0x444444) },
@@ -7,7 +61,6 @@ var MtkStyle = {
     },
 
     system_colors: null,
-
     get Colors () { return MtkStyle.system_colors || MtkStyle.DefaultColors; }, 
 
     ShadeColorsFromNormal: function (colors) {
@@ -15,70 +68,39 @@ var MtkStyle = {
             var set = colors[set_name];
             set.light = MtkColor.Lighter (set.normal);
             set.dark = MtkColor.Darker (set.normal);
+            set.lighter = MtkColor.Lighter (set.light);
+            set.darker = MtkColor.Darker (set.dark);
+            set.lightest = MtkColor.Lighter (set.lighter);
+            set.darkest = MtkColor.Darker (set.darker);
         }
-    },
-
-    Reload: function () {
-        MtkStyle.ShadeColorsFromNormal (MtkStyle.DefaultColors);
-        
-        MtkStyle.system_colors = null;
-
-        var css_color_map = {
-            "Window"        : "window_bg",
-            "WindowText"    : "window_fg",
-            "ButtonFace"    : "button_bg",
-            "ButtonText"    : "button_fg",
-            "Highlight"     : "highlight_bg",
-            "HighlightText" : "hightlight_fg",
-            "Scrollbar"     : "trough_bg"
-        };
-
-        var colors = {};
-        var elem = document.createElement ("div");
-      
-        for (var css in css_color_map) {
-            elem.style.color = css;
-            var style = document.defaultView.getComputedStyle (elem, null);
-            var color = style.getPropertyValue ("color");
-            colors[css_color_map[css]] = { normal: MtkColor.FromString (color) };
-        }
-
-        MtkStyle.ShadeColorsFromNormal (colors);
-        MtkStyle.system_colors = colors;
-    },
-
-    CreateGradient: function (widget, style) {
-        var offsets = [ 0, 0.4, 1 ];
-        var colors =  [ "light", "normal", "dark"];
-
-        var brush = widget.CreateXaml ("<LinearGradientBrush/>");
-        brush.StartPoint = "0,0";
-        brush.EndPoint = "0,1";
-
-        for (var i = 0, n = Math.min (offsets.length, colors.length); i < n; i++) {
-            var stop = widget.CreateXaml ("<GradientStop/>");
-            stop.Color = MtkColor.ToString (MtkStyle.Colors[style][colors[i]]);
-            stop.Offset = offsets[i];
-            brush.GradientStops.Add (stop);
-        }
-        
-        return brush;
     },
 
     //
     // Font/Text
     //
 
-    ScreenDpi: 96,
-
-    GetFontForHtmlDomElement: function (elem) {
+    DefaultFont: {
+        Family: "DejaVu Sans, sans-serif",
+        Size: 11
+    },
+    
+    system_font: null,
+    get Font () { return MtkStyle.system_font || MtkStyle.DefaultFont; },
+    
+    ScreenDpi: 96, // FIXME: try to compute this
+    
+    LoadFont: function () {
+        var elem = window;
+        
+        MtkStyle.system_font = null;
+        
         if (!elem || !document.defaultView || !document.defaultView.getComputedStyle) {
-            return {};
+            return;
         }
 
         var style = document.defaultView.getComputedStyle (elem, null);
         if (!style || !style.getPropertyValue) {
-            return {};
+            return;
         }
         
         var family = style.getPropertyValue ("font-family");
@@ -96,22 +118,29 @@ var MtkStyle = {
             }
         }
 
-        return { FontFamily: "DejaVu Sans", FontSize: computed_size };
+        MtkStyle.system_font = { Family: family, Size: computed_size };
     },
+    
+    //
+    // Drawing Utilities
+    //
+    
+    CreateGradient: function (widget, style) {
+        var offsets = [ 0, 0.5, 0.5, 1 ];
+        var colors = [ "lighter", "light", "normal", "dark" ];   
 
-    GetDefaultFont: function () {
-        return MtkStyle.GetFontForHtmlDomElement (document.body);
-    },
+        var brush = widget.CreateXaml ("<LinearGradientBrush/>");
+        brush.StartPoint = "0,0";
+        brush.EndPoint = "0,1";
 
-    GetDefaultXamlFontAttributes: function () {
-        var str = "";
-        var font = MtkStyle.GetDefaultFont ();
-        for (var attr in font) {
-            str += attr.toString () + "=\"" + font[attr].toString () + "\" ";
+        for (var i = 0, n = Math.min (offsets.length, colors.length); i < n; i++) {
+            var stop = widget.CreateXaml ("<GradientStop/>");
+            stop.Color = MtkColor.ToString (MtkStyle.Colors[style][colors[i]]);
+            stop.Offset = offsets[i];
+            brush.GradientStops.Add (stop);
         }
-        return str;
-    },
 
-    GetDefaultTextBlockXaml: function () "<TextBlock " + MtkStyle.GetDefaultXamlFontAttributes () + " />"
+        return brush;
+    }
 };
 
