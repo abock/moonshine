@@ -177,8 +177,10 @@ var MtkColor = {
         return { r: rgb[0], g: rgb[1], b: rgb[2], a: alpha };
     },
 
-    Lighter: function (color) MtkColor.Shade (color, 1 + 0.15),
-    Darker: function (color) MtkColor.Shade (color, 1 - 0.15),
+    ShadeDelta: 0.05,
+
+    Lighter: function (color) MtkColor.Shade (color, 1 + MtkColor.ShadeDelta),
+    Darker: function (color) MtkColor.Shade (color, 1 - MtkColor.ShadeDelta),
     
     RgbToHls: function (r, g, b) {
         var min, max, delta;
