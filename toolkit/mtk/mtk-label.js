@@ -20,7 +20,7 @@ function MtkLabel (settings) {
     this.Override ("OnStyleSet", function () {
         this.FontFamily = MtkStyle.Font.Family;
         this.FontSize = MtkStyle.Font.Size;
-        this.Foreground = MtkColor.ToString (MtkStyle.Colors.window_fg.normal);
+        this.Foreground = MtkStyle.GetColor ("window_fg"); 
     });
 
     // Override default XAlign = 0.5
