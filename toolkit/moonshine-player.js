@@ -26,22 +26,27 @@ function MoonshineControlBar () {
     MtkToolBar.call (this);
     var self = this;
 
-    this.Spacing = 8;
+    this.Spacing = 12;
     this.Padding = 2;
 
     this.PlayPauseButton = new MoonshinePlayPauseButton;
     this.SeekBar = new MoonshineSeekBar;
+    this.SeekBar.AddEventListener ("valuechanged", delegate (this, function (o, value) {
+        this.VolumeBar.Slider.Value = value;
+    }));
     this.VolumeBar = new MoonshineVolumeBar;
     this.FullScreenButton = new MtkButton (new MtkLabel ("Full Screen"));
 
     this.PackStart (this.PlayPauseButton);
-    this.PackStart (new MtkHBox ({
-        Spacing: 16,
+    /*this.PackStart (new MtkHBox ({
+        Spacing: 0,
         With: function () {
             this.PackStart (self.SeekBar, true);
             this.PackStart (self.VolumeBar);
         }
-    }), true);
+    }), true);*/
+    this.PackStart (this.SeekBar, true);
+    this.PackStart (this.VolumeBar);
     this.PackStart (this.FullScreenButton);
 
     this.AfterConstructed ();
@@ -54,7 +59,7 @@ function MoonshineSeekBar () {
 function MoonshineVolumeBar () {
     MtkHBox.call (this);
 
-    this.Spacing = 4;
+    this.Spacing = 2;
 
     var speaker_path = '\
         M 6,0 L 3,2.84 L 0,3.5 L 0,7.5 L 3,8.15 L 6,11 L 7,11 L 7,7.93 L  \
@@ -87,6 +92,7 @@ function MoonshineVolumeBar () {
             <Path Canvas.Left="1" Data="' + sound_wave_path + '" Fill="#666"/> \
         </Canvas> \
     ');
+    this.Icon.YPad = 1;
 
     this.Slider = new MtkSlider;
     this.Slider.MinWidth = 60;
