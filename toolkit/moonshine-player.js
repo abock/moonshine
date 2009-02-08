@@ -90,11 +90,12 @@ function MoonshineVolumeBar () {
 
     this.Slider = new MtkSlider;
     this.Slider.MinWidth = 60;
-    this.Slider.TroughHeight = 2;
-    this.Slider.TroughRadius = 1;
-    this.Slider.SliderWidth = 10;
-    this.Slider.SliderHeight = 6;
-    this.Slider.SliderRadius = 2;
+    this.Slider.PillWidth = 3;
+    this.Slider.TroughHeight = 3;
+    this.Slider.TroughRadius = 2;
+    this.Slider.SliderWidth = 14;
+    this.Slider.SliderHeight = 7;
+    this.Slider.SliderRadius = 3;
 
     this.PackStart (this.Icon);
     this.PackStart (this.Slider);
