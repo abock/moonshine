@@ -72,15 +72,8 @@ function MtkWidget (settings) {
     this.MapProperties ([ 
         [ "Height", "QueueResize" ], 
         [ "Width", "QueueResize" ],
-        [ "RenderTransform", "QueueResize" ]
-        [ "RenderTransformOrigin", "QueueResize" ],
         [ "Visibility", "QueueResize" ],
-        "IsHitTestVisible", 
-        "Opacity", 
-        "OpacityMask", 
-        "Resources", 
-        "Tag", 
-        "Triggers"
+        "Opacity"
     ]);
 
     //
@@ -110,14 +103,19 @@ function MtkWidget (settings) {
     };
 
     this.QueueResize = function () {
-        var parent = this.Parent || this;
-        while (parent && parent.Parent) {
-            parent = parent.Parent;
-        }
+        var parent = this.TopLevel;
         if (parent) {
             parent.OnSizeAllocate ();
         }
     };
+    
+    this.__defineGetter__ ("TopLevel", function () {
+        var parent = this.Parent || this;
+        while (parent && parent.Parent) {
+            parent = parent.Parent;
+        }
+        return parent;
+    });
 
     this.Virtual ("OnSizeAllocate", function () {
         if (this.Xaml && this.IsRealized) {
