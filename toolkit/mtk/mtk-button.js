@@ -86,7 +86,6 @@ function MtkButton (settings) {
         }));
 
         this.XamlFind ("Style").Opacity = this.RestOpacity;
-        this.Xaml.Cursor = "Hand";
         this.StyleButton ();
 
         if (init_child) {
@@ -100,7 +99,7 @@ function MtkButton (settings) {
         }
 
         if (!this.pressed_fill_brush) {
-            this.pressed_fill_brush = MtkStyle.CreateGradient (this, "highlight_bg");
+            this.pressed_fill_brush = MtkStyle.CreateGradient (this, "button_bg", true);
         }
         
         if (!this.stroke_brush) {
