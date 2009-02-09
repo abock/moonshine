@@ -1,8 +1,11 @@
-function XULMoonEmbeddedPlayerInit (player) {
-    // Install the Silverlight Player on the XUL Player
-    window.player.player = player;
-    window.player.MoonlightInitialize ();
-}
+//
+// This file is licensed under the MIT X11 open source license.
+// http://www.opensource.org/licenses/mit-license.php
+//
+// Authors: Aaron Bockover <abockover@novell.com>
+//
+// Copyright 2009 Novell, Inc.
+// 
 
 function StandaloneMoonPlayer () {
     this.className = "StandaloneMoonPlayer";

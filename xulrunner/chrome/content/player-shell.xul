@@ -1,4 +1,14 @@
 <?xml version="1.0"?>
+<!--
+
+   This file is licensed under the MIT X11 open source license.
+   http://www.opensource.org/licenses/mit-license.php
+
+   Authors: Aaron Bockover <abockover@novell.com>
+
+   Copyright 2009 Novell, Inc.
+
+-->
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://moonshine/skin/player-shell.css" type="text/css"?>
 <!DOCTYPE window [

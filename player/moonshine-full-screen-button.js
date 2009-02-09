@@ -1,3 +1,12 @@
+//
+// This file is licensed under the MIT X11 open source license.
+// http://www.opensource.org/licenses/mit-license.php
+//
+// Authors: Aaron Bockover <abockover@novell.com>
+//
+// Copyright 2009 Novell, Inc.
+// 
+
 function MoonshineFullScreenButton () {
     MtkButton.call (this);
     
