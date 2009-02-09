@@ -30,13 +30,18 @@ function MtkBox (settings) {
 
     this.Override ("OnSizeRequest", function () {
         var request = { Width: 0, Height: 0 };
+        var visible_child_count = 0;
         this.Children.forEach (function (child) {
+            if (!child.Visible) {
+                return;
+            }
+            visible_child_count++;
             var sr = child.SizeRequest;
             request[this.StaticDimension] = Math.max (request[this.StaticDimension], sr[this.StaticDimension]);
             request[this.VariableDimension] += sr[this.VariableDimension];
         }, this);
-        request[this.StaticDimension] += 2 * this.TotalPadding;
-        request[this.VariableDimension] += 2 * this.TotalPadding + this.ChildCount * this.Spacing;
+        request[this.StaticDimension] += 2 * this[this.StaticPadding];
+        request[this.VariableDimension] += 2 * this[this.VariablePadding] + visible_child_count * this.Spacing;
         return request;
     });
 
@@ -50,25 +55,35 @@ function MtkBox (settings) {
         // need this call to have ourself allocated first.
         this.MtkWidget_OnSizeAllocate ();
 
-        var variable_offset = this.TotalPadding;
-        var static_offset = this.TotalPadding;
+        var variable_offset = this[this.VariablePadding];
+        var static_offset = this[this.StaticPadding];
 
         var static_space = 0;
         var flex_space = 0;
         var flex_count = 0;
 
+        var visible_child_count = 0;
+
         this.Children.forEach (function (child) {
+            if (!child.Visible) {
+                return;
+            }
+            visible_child_count++;
             static_space += child.Settings.MtkBoxExpand ? 0 : child.SizeRequest[this.VariableDimension];
             flex_count += child.Settings.MtkBoxExpand ? 1 : 0;
         }, this);
 
         flex_space = this.Allocation[this.VariableDimension] - static_space - 
-            (this.ChildCount - 1) * this.Spacing - 2 * this.TotalPadding;
+            (visible_child_count - 1) * this.Spacing - 2 * this[this.VariablePadding];
         if (flex_space < 0) {
             flex_space = 0;
         }
         
         this.Children.forEach (function (child) {
+            if (!child.Visible) {
+                return;
+            }
+            
             child.Allocation[this.VariableOffset] = variable_offset;
             child.Allocation[this.StaticOffset] = static_offset;
 
@@ -84,7 +99,7 @@ function MtkBox (settings) {
                 child.Allocation[this.VariableDimension] = child.SizeRequest[this.VariableDimension];
             }
 
-            child.Allocation[this.StaticDimension] = this.Allocation[this.StaticDimension] - 2 * this.TotalPadding;
+            child.Allocation[this.StaticDimension] = this.Allocation[this.StaticDimension] - 2 * this[this.StaticPadding];
 
             variable_offset += child.Allocation[this.VariableDimension] + this.Spacing;
 
@@ -102,6 +117,8 @@ function MtkHBox (settings) {
     this.VariableDimension = "Width";
     this.StaticOffset = "Top";
     this.VariableOffset = "Left";
+    this.StaticPadding = "TotalYPadding";
+    this.VariablePadding = "TotalXPadding";
     this.AfterConstructed ();
 }
 
@@ -111,6 +128,8 @@ function MtkVBox (settings) {
     this.VariableDimension = "Height";
     this.StaticOffset = "Left";
     this.VariableOffset = "Top";
+    this.StaticPadding = "TotalXPadding";
+    this.VariablePadding = "TotalYPadding";
     this.AfterConstructed ();
 }
 
