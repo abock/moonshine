@@ -147,9 +147,25 @@ function MtkWidget (settings) {
     this.__defineGetter__ ("ActualHeight", function () Math.round (this.Xaml.ActualHeight || this.Xaml.Height));
     
     this.__defineGetter__ ("Visible", function () this.Xaml.Visibility == "Visible");
+    this.__defineSetter__ ("Visible", function (x) x ? this.Show () : this.Hide ());
     
-    this.Virtual ("Show", function () this.Xaml.Visibility = "Visible");
-    this.Virtual ("Hide", function () this.Xaml.Visibility = "Collapsed");
+    this.Virtual ("Show", function () {
+        if (this.Visible) {
+            return;
+        }
+        
+        this.Xaml.Visibility = "Visible";
+        this.QueueResize ();
+    });
+    
+    this.Virtual ("Hide", function () {
+        if (!this.Visible) {
+            return;
+        }
+        
+        this.Xaml.Visibility = "Collapsed";
+        this.QueueResize ();
+    });
    
     //
     // Post Object Construction Invocation/Property Setting
