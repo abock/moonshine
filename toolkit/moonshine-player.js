@@ -1,25 +1,19 @@
 function __MoonshineBindInstance (control) {
-    MtkContext.SilverlightOnLoad (control);
+    MtkContext.BindScreen (control);
     var player = new MoonshinePlayer;
     player.Source = "T-90S_3.wmv";
 }
 
 function MoonshinePlayer () {
     MtkWindow.call (this);
-    
-    this.Background = "black";
 
-    this.MediaElement = new MtkMediaElement;
-    this.Container = new MtkVBox;
-    this.Controls = new MoonshineControlBar (this.MediaElement);
-
-    this.Container.PackStart (this.MediaElement, true);
-    this.Container.PackStart (this.Controls);
-    this.Add (this.Container);
+    //
+    // Window
+    //
     
     this.Xaml.AddEventListener ("keydown", delegate (this, function (o, args) {
         switch (args.Key) {
-            /* F, F11 */ case 35: case 66: this.SetFullScreen (true); break;
+            /* F, F11 */ case 35: case 66: this.Screen.SetFullScreen (true); break;
             /* Up     */ case 15: this.Volume += 0.05; break;
             /* Down   */ case 17: this.Volume -= 0.05; break;
             /* Space  */ case 9:  this.TogglePlaying (); break;
@@ -28,45 +22,66 @@ function MoonshinePlayer () {
         this.ShowControls ();
     }));
     
+    this.BuildWindow = function () {
+        this.Background = "black";
+    
+        this.MediaElement = new MtkMediaElement;
+        this.Container = new MtkVBox;
+        
+        this.Controls = new MoonshineControlBar (this.MediaElement);
+        this.ControlsPopup = new MtkPopup;
+        this.ControlsDocked = true;
+    
+        this.Container.PackStart (this.MediaElement, true);
+        this.Add (this.Container);
+        
+        this.UpdateControlBarDock ();
+            
+        this.MediaElement.AddEventListener ("CurrentStateChanged", delegate (this, function (o, state) {
+            if (state != "Playing") {
+                this.ShowControls ();
+                this.RemoveHideControlsTimeout (); // keep the controls alive until the user moves
+            }
+        }));
+    };
+    
     //
     // Control Bar
     //
     
-    this.MediaElement.AddEventListener ("CurrentStateChanged", delegate (this, function (o, state) {
-        if (state != "Playing") {
-            this.ShowControls ();
-        }
-    }));
-    
-    this.Override ("OnFullScreenChange", function () {
-        var fs = this.GetFullScreen ();
-        this.$OnFullScreenChange$ ();
-        
-        if (fs) {
+    this.UpdateControlBarDock = function () {
+        if (this.Screen.GetFullScreen ()) {
             this.Container.Remove (this.Controls);
-            this.Xaml.Children.Add (this.Controls.Xaml);
-            this.Controls.Parent = this;
+            this.ControlsPopup.Add (this.Controls);
+            this.ControlsPopup.WidthRequest = this.Allocation.Width;
+            this.ControlsPopup.Position (0, this.Allocation.Height - this.Controls.Allocation.Height);
+            this.ControlsDocked = false;
+            this.ControlsPopup.Show ();
+            this.ShowControls ();
             
-            this.Controls.Allocation.Left = 0;
-            this.Controls.Allocation.Top = this.Height - this.Controls.Allocation.Height;
-            this.Controls.Allocation.Width = this.Width;
-            this.Controls.OnSizeAllocate ();
             this.fs_query_mouse = true;
-            
-            this.ShowControls ();
+            this.CenteredOffset = 0;
         } else {
-            this.Xaml.Children.Remove (this.Controls.Xaml);
+            this.ControlsPopup.Remove (this.Controls);
+            this.ControlsPopup.Hide ();
             this.Container.PackStart (this.Controls);
+            this.ControlsDocked = true;
             this.ShowControls ();
+            
+            this.CenteredOffset = this.Controls.Allocation.Height;
         }
-    });
+    };
+    
+    this.Screen.AddEventListener ("FullScreenChanged", delegate (this, function () {
+        this.UpdateControlBarDock ();
+    }));
     
     this.last_move_x = 0;
     this.last_move_y = 0;
     this.fs_query_mouse = false;
     
     this.Xaml.AddEventListener ("mousemove", delegate (this, function (o, args) {
-        if (this.Controls.Parent != this) {
+        if (this.ControlsDocked) {
             return;
         }
         
@@ -92,19 +107,15 @@ function MoonshinePlayer () {
     
     this.ShowControls = function () {
         this.RemoveHideControlsTimeout ();
-        if (this.Controls.Parent != this) {
-            this.Controls.Opacity = 1;
-        } else {
-            this.Controls.VisibilityAnimation.To = 1;
-            this.Controls.VisibilityStoryboard.Begin ();
+        if (!this.ControlsDocked) {
+            this.ControlsPopup.FadeIn ();
             this.controls_hide_timeout = setTimeout (delegate (this, this.HideControls), 4500);
         }
     };
     
     this.HideControls = function () {
         this.RemoveHideControlsTimeout ();
-        this.Controls.VisibilityAnimation.To = 0;
-        this.Controls.VisibilityStoryboard.Begin ();
+        this.ControlsPopup.FadeOut ();
     };
     
     this.RemoveHideControlsTimeout = function () {
@@ -130,12 +141,16 @@ function MoonshinePlayer () {
     this.Stop = function () this.MediaElement.Stop ();
     this.TogglePlaying = function () this.MediaElement.TogglePlaying ();
     
+    //
+    // Show->Road
+    //
+    
+    this.BuildWindow ();
     this.AfterConstructed ();
 }
 
 function MoonshineControlBar (media_element) {
     MtkToolBar.call (this);
-    var self = this;
 
     this.Spacing = 12;
     this.Padding = 2;
@@ -150,13 +165,6 @@ function MoonshineControlBar (media_element) {
     this.PackStart (this.VolumeBar);
     this.PackStart (this.FullScreenButton);
     
-    this.Xaml.Name = this.Name;
-    this.VisibilityStoryboard = this.CreateXaml ('<Storyboard Storyboard.TargetProperty="(Opacity)"/>');
-    this.VisibilityAnimation = this.CreateXaml ('<DoubleAnimation Duration="0:0:0.4"/>');
-    this.VisibilityAnimation["Storyboard.TargetName"] = this.Name;
-    this.Xaml.Resources.Add (this.VisibilityStoryboard);
-    this.VisibilityStoryboard.Children.Add (this.VisibilityAnimation);
-
     this.AfterConstructed ();
 }
 
@@ -171,6 +179,7 @@ function MoonshineSeekBar (media_element) {
     this.allowed_to_seek = false;
     this.live_seek_timeout = null;
     this.last_live_seek_value = -100;
+    this.mouse_down = false;
     
     this.SliderEnabled = false;
     
@@ -215,6 +224,19 @@ function MoonshineSeekBar (media_element) {
         this.allowed_to_seek = false;
     });
     
+    this.Override ("OnMouseDown", function () {
+        this.mouse_down = true;
+        this.$OnMouseDown$ ();
+    });
+    
+    this.Override ("OnMouseUp", function () {
+        this.$OnMouseUp$ ();
+        this.allowed_to_seek = true;
+        this.OnValueChanged (this.Value);
+        this.allowed_to_seek = false;
+        this.mouse_down = false;
+    });
+    
     this.OnLiveSeekTimeout = function () {
         var jitter_threshold = this.LiveSeekJitterThreshold / this.TroughWidth;
         if (Math.abs (this.Value - this.last_live_seek_value) < jitter_threshold) {
@@ -228,7 +250,7 @@ function MoonshineSeekBar (media_element) {
     };
     
     this.OnPlayTick = function (o, position, duration, percent, is_live) {
-        if (!this.IsDragging) {
+        if (!this.IsDragging && !this.mouse_down) {
             this.is_tick_updating = true;
             this.Value = percent;
             this.is_tick_updating = false;
@@ -254,32 +276,52 @@ function MoonshineVolumeBar (media_element) {
     ';
 
     this.Icon = new MtkXaml ('\
-        <Canvas Width="13" Height="12"> \
+        <Canvas Width="13" Height="12" Cursor="Hand"> \
             <Path Canvas.Top=".5" Canvas.Left=".5" Stroke="#afff" \
                 StrokeThickness="1" Data="' + speaker_path + '"/> \
-            <Path Data="' + speaker_path + '"> \
-                <Path.Fill> \
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1"> \
-                        <GradientStop Offset="0.0" Color="#999"/> \
-                        <GradientStop Offset="0.45" Color="#777"/> \
-                        <GradientStop Offset="0.45" Color="#666"/> \
-                        <GradientStop Offset="1.0" Color="#333"/> \
-                    </LinearGradientBrush> \
-                </Path.Fill> \
-            </Path> \
-            <Path Canvas.Left="1" Data="' + sound_wave_path + '" Fill="#666"/> \
+            <Path Data="' + speaker_path + '"/> \
+            <Path Canvas.Left="1" Data="' + sound_wave_path + '"/> \
+            <Canvas Opacity="0" Canvas.Left="4" Canvas.Top="2"> \
+                <Rectangle Width="8" Height="8" Fill="#c00" Stroke="#a00" RadiusX="1" RadiusY="1"/> \
+                <Rectangle Width="6" Height="6" Canvas.Left="1" Canvas.Top="1" Stroke="#5fff" /> \
+                <Line X1="2" Y1="2" X2="6" Y2="6" Stroke="#fff" StrokeThickness="1.5"/> \
+                <Line X1="6" Y1="2" X2="2" Y2="6" Stroke="#fff" StrokeThickness="1.5"/> \
+            </Canvas> \
         </Canvas> \
     ');
+    
+    var fill = MtkStyle.CreateLinearGradient (this, [ 0, 0.45, 0.45, 1], [
+        MtkColor.SetOpacity (MtkStyle.Colors.button_fg.normal, 0xaa),
+        MtkColor.SetOpacity (MtkStyle.Colors.button_fg.normal, 0xcc),
+        MtkColor.SetOpacity (MtkStyle.Colors.button_fg.normal, 0xdd),
+        MtkColor.SetOpacity (MtkStyle.Colors.button_fg.normal, 0xf0)
+    ]);
+    
+    for (i = 1; i < 3; i++) {
+        this.Icon.Xaml.Children.GetItem (i).Fill = fill;
+    }
+    
+    this.MuteIcon = this.Icon.Xaml.Children.GetItem (3);
+    
+    this.MuteIcon.AddEventListener ("mouseleftbuttonup", delegate (this, function () {
+        media_element.Volume = media_element.Volume > 0 ? 0 : this.Slider.Value;
+        this.OnMuteChanged ();
+    }));
+    
+    this.Virtual ("OnMuteChanged", function () {
+        this.MuteIcon.Opacity = media_element.Volume <= 0 ? 1 : 0;
+        this.RaiseEvent ("MuteChanged");
+    });
     
     this.Icon.YPad = 1;
 
     this.Slider = new MtkSlider;
-    this.Slider.MinWidth = 60;
+    this.Slider.MinWidth = 55;
     this.Slider.PillWidth = 3;
-    this.Slider.TroughHeight = 3;
+    this.Slider.TroughHeight = 4;
     this.Slider.TroughRadius = 2;
     this.Slider.SliderWidth = 14;
-    this.Slider.SliderHeight = 7;
+    this.Slider.SliderHeight = 8;
     this.Slider.SliderRadius = 3;
 
     this.Spacing = 2;
@@ -287,7 +329,10 @@ function MoonshineVolumeBar (media_element) {
     this.PackStart (this.Slider);
     
     this.Slider.Value = media_element.Volume;
-    this.Slider.AddEventListener ("ValueChanged", function (o, value) media_element.Volume = value);
+    this.Slider.AddEventListener ("ValueChanged", delegate (this, function (o, value) {
+        media_element.Volume = value;
+        this.OnMuteChanged ();
+    }));
 }
 
 function MoonshineFullScreenButton () {
@@ -301,26 +346,34 @@ function MoonshineFullScreenButton () {
         
         this.Icon = new MtkXaml ('\
             <Canvas Width="16" Height="16"> \
-                <Canvas Width="14" Height="14" Canvas.Left="1" Canvas.Top="1" Opacity="1"> \
-                    <Path Fill="#8000" Data=" \
-                        M6,0 L0,0 L0,6 Z \
-                        M0,8 L0,14 L6,14 Z \
-                        M8,14 L14,14 L14,8 Z \
-                        M14,6 L14,0 L8,0 Z \
-                    "/> \
-                </Canvas> \
-                <Canvas Width="14" Height="14" Canvas.Left="1" Canvas.Top="1" Opacity="0"> \
-                    <Path Fill="#8000" Data=" \
-                        M6,6 L6,0 L0,6 Z \
-                        M6,8 L6,14 L0,8 Z \
-                        M8,8 L8,14 L14,8 Z \
-                        M8,0 L8,6 L14,6 Z \
-                    "/> \
-                </Canvas> \
+                <Path Width="14" Height="14" Canvas.Left="1" Canvas.Top="1" Opacity="1" Data=" \
+                    M6,0 L0,0 L0,6 Z \
+                    M0,8 L0,14 L6,14 Z \
+                    M8,14 L14,14 L14,8 Z \
+                    M14,6 L14,0 L8,0 Z \
+                "/> \
+                <Path Width="14" Height="14" Canvas.Left="1" Canvas.Top="1" Opacity="0" Data=" \
+                    M6,6 L6,0 L0,6 Z \
+                    M6,8 L6,14 L0,8 Z \
+                    M8,8 L8,14 L14,8 Z \
+                    M8,0 L8,6 L14,6 Z \
+                "/> \
             </Canvas> \
         ');
         
-        this.TopLevel.AddEventListener ("ToggleFullScreen", delegate (this, function (o, fs) {
+    
+        var fill = MtkStyle.CreateLinearGradient (this, [ 0, 0.5, 0.5, 1], [
+            MtkColor.SetOpacity (MtkStyle.Colors.button_fg.normal, 0xaa),
+            MtkColor.SetOpacity (MtkStyle.Colors.button_fg.normal, 0xcc),
+            MtkColor.SetOpacity (MtkStyle.Colors.button_fg.normal, 0xdd),
+            MtkColor.SetOpacity (MtkStyle.Colors.button_fg.normal, 0xf0)
+        ]);
+        
+        for (i = 0; i < 2; i++) {
+            this.Icon.Xaml.Children.GetItem (i).Fill = fill;
+        }
+        
+        this.Screen.AddEventListener ("ToggleFullScreen", delegate (this, function (o, fs) {
             this.Icon.Xaml.Children.GetItem (0).Opacity = fs ? 0 : 1;
             this.Icon.Xaml.Children.GetItem (1).Opacity = fs ? 1 : 0;
         }));
@@ -328,7 +381,7 @@ function MoonshineFullScreenButton () {
         this.Add (this.Icon);
     });
     
-    this.Override ("OnActivated", function () this.TopLevel.ToggleFullScreen ());
+    this.Override ("OnActivated", function () this.Screen.ToggleFullScreen ());
     
     this.AfterConstructed ();
 }
