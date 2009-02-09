@@ -9,7 +9,7 @@ function StandaloneMoonPlayer () {
     try {
         this.Initialize ();
     } catch (e) {
-        MoonConsole.ObjDump (e, true);
+        MtkConsole.ObjDump (e, true);
     }
 }
 
@@ -48,13 +48,24 @@ StandaloneMoonPlayer.prototype = {
     },
 
     MoonlightInitialize: function () {
-        file_arg = this.command_line.getArgument (0);
+        this.player = new MoonshinePlayer;
+    
+        var file_arg = this.command_line.getArgument (0);
         if (file_arg && file_arg.length > 0) {
             this.LoadSource (file_arg);
         }
-
-        this.player.fullscreen_hook = delegate (this, this.OnFullscreen);
-        this.player.get_is_fullscreen_hook = function () window.fullScreen;
+        
+        this.player.Screen.Override ("GetFullScreen", function () window.fullScreen);        
+        
+        this.player.Screen.Override ("SetFullScreen", function (fs) {
+            window.fullScreen = fs;
+            document.getElementById ("moon-media-menu-bar").collapsed = window.fullScreen;
+            
+            // Necessary to overcome a race with the window resizing; Mozilla does not 
+            // actually touch the window until the next idle, so its size will be incorrect
+            // without pushing a callback into the idle queue
+            setTimeout (delegate (this, function () this.RaiseEvent ("FullScreenChanged")), 1);
+        });
     },
     
     ConfigureWindow: function () {
@@ -62,7 +73,7 @@ StandaloneMoonPlayer.prototype = {
     },
 
     LoadSource: function (path) {
-        this.player.LoadSource (decodeURI (this.command_line.resolveURI (path).spec));
+        this.player.Source = decodeURI (this.command_line.resolveURI (path).spec);
     },
 
     OnFileOpen: function () {
@@ -76,15 +87,6 @@ StandaloneMoonPlayer.prototype = {
         if (res == nsIFilePicker.returnOK) {
             this.LoadSource (fp.file.path); 
         }
-    },
-
-    OnFullscreen: function () {
-        setTimeout (delegate (this, function () {
-            window.fullScreen = !window.fullScreen;
-            document.getElementById ("moon-media-menu-bar").collapsed = window.fullScreen;
-            this.player.IsControlBarDocked = !window.fullScreen;
-            this.player._OnFullScreenChange ();
-        }), 1); 
     },
 
     OnAbout: function () {

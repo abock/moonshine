@@ -12,15 +12,46 @@
 <window id="moon-media-standalone-player"
   xmlns:html="http://www.w3.org/1999/xhtml"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-<script type="application/x-javascript" src="moon-console.js"/>
+<!-- // -->
+<script type="application/x-javascript" src="player/mtk/mtk-object.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-screen.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-widget.js"/>
+
+<script type="application/x-javascript" src="player/mtk/mtk-container.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-window.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-popup.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-box.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-toolbar.js"/>
+
+<script type="application/x-javascript" src="player/mtk/mtk-media-element.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-slider.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-label.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-button.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-xaml.js"/>
+
+<script type="application/x-javascript" src="player/mtk/mtk-console.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-style.js"/>
+<script type="application/x-javascript" src="player/mtk/mtk-color.js"/>
+
+<script type="application/x-javascript" src="player/moonshine-wmp-controls.js"/>
+<script type="application/x-javascript" src="player/moonshine-volume-bar.js"/>
+<script type="application/x-javascript" src="player/moonshine-seek-bar.js"/>
+<script type="application/x-javascript" src="player/moonshine-plugin-player.js"/>
+<script type="application/x-javascript" src="player/moonshine-play-pause-button.js"/>
+<script type="application/x-javascript" src="player/moonshine-player.js"/>
+<script type="application/x-javascript" src="player/moonshine-full-screen-button.js"/>
+<!-- // -->
 <script type="application/x-javascript" src="moon-utilities.js"/>
 <script type="application/x-javascript" src="player-shell.js"/>
-<script type="application/x-javascript" src="player/player.js"/>
-<script type="application/x-javascript" src="player/wmp-controls.js"/>
 <script type="application/x-javascript">
 <![CDATA[
-    window.addEventListener ("load", function () { new StandaloneMoonPlayer; }, false);
+    var standalone_player = null;
+    window.addEventListener ("load", function () { standalone_player = new StandaloneMoonPlayer; }, false);
     window.addEventListener ("unload", function () { }, false);
+    function MoonshineBindInstance (control) { 
+        MtkScreenBinder.BindScreen (control);
+        standalone_player.MoonlightInitialize ();
+    }
 ]]>
 </script>
 <vbox flex="1" width="550" height="450">
@@ -33,7 +64,7 @@
     </menu>
     <menu label="&moonshine.viewMenuLabel;">
       <menupopup>
-        <menuitem label="&moonshine.viewFullscreenLabel;" onclick="window.player.player.Fullscreen ()"/>
+        <menuitem label="&moonshine.viewFullscreenLabel;" onclick="window.player.player.Screen.ToggleFullScreen ()"/>
       </menupopup>
     </menu>
     <menu label="&moonshine.helpMenuLabel;">
@@ -52,9 +83,15 @@
       <html:h1>&moonshine.uninstalledTitle;</html:h1>
       <html:p>&moonshine.uninstalledMessage;</html:p>
     </html:div>
+    <html:script type="text/xaml" id="fakexaml">
+        <![CDATA[
+        <Canvas xmlns="http://schemas.microsoft.com/client/2007">
+        </Canvas>
+        ]]>
+    </html:script>
     <html:object id="moon-embedded-player" type="application/x-silverlight" flex="1">
-      <html:param name="source" value="chrome://moonshine/content/player/player.xaml"/>
-      <html:param name="onload" value="__MoonMediaPlayerOnLoad"/>
+      <html:param name="source" value="#fakexaml"/>
+      <html:param name="onload" value="MoonshineBindInstance"/>
     </html:object>
   </vbox>
 </vbox>
