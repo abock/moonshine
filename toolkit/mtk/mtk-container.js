@@ -59,7 +59,10 @@ function MtkContainer (settings) {
         }
         
         this.$OnSizeAllocate$ ();
-        
+        this.SizeAllocateChildren ();
+    });
+    
+    this.Virtual ("SizeAllocateChildren", function () {
         this.Children.forEach (function (child) {
             child.Allocation.Left = this.TotalPadding;
             child.Allocation.Top = this.TotalPadding;
