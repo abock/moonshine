@@ -89,11 +89,11 @@ function MtkMediaElement (settings) {
     });
     
     this.Virtual ("OnBufferingProgressChanged", function () {
-    
+        this.RaiseEvent ("BufferingProgressChanged");
     });
     
     this.Virtual ("OnDownloadProgressChanged", function () {
-    
+        this.RaiseEvent ("DownloadProgressChanged");    
     });
     
     this.__defineGetter__ ("IsLive", function () this.NaturalDuration == null);
