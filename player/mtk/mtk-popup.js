@@ -25,6 +25,7 @@ function MtkPopup (settings) {
     this.keep_centered = false;
     
     this.Screen.AddEventListener ("ScreenSizeChanged", delegate (this, this.OnSizeAllocate ()));
+    this.Screen.AddEventListener ("FullScreenChanged", delegate (this, this.OnSizeAllocate ()));
     
     this.Map = function () {
         if (this.is_mapped) {
@@ -129,6 +130,17 @@ function MtkPopup (settings) {
         
         this.VisibilityAnimation.To = 1;
         this.VisibilityStoryboard.Begin ();
+    };
+    
+    this.toggle_in = true;
+    this.ToggleFade = function () {
+        if (this.toggle_in) {
+            this.FadeIn ();
+            this.toggle_in = false;
+        } else {
+            this.FadeOut ();
+            this.toggle_in = true;
+        }
     };
     
     this.AfterConstructed ();
