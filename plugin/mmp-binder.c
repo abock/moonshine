@@ -4,8 +4,8 @@
 #include "mmp-script.h"
 #include "mmp-resources.h"
 
-#define MLMP_XAML_LOAD_FUNCTION "__MoonMediaPlayerOnLoad"
-#define MLMP_XAML_DOM_ID        "__MoonMediaPlayerXaml"
+#define MLMP_XAML_LOAD_FUNCTION "__MoonshineBindInstance"
+#define MLMP_XAML_DOM_ID        "__MoonshineEmptyFakeXamlTrickery"
 
 typedef enum {
 	XAML_LOAD_ERROR = 0,
@@ -44,7 +44,7 @@ mmp_binder_load_player_xaml (MoonlightPluginInstance *plugin)
 	if (mmp_script_document_create_element (npp, &document, "script", &script_element)) {
 		if (mmp_script_element_set_property_string (npp, &script_element, "id", MLMP_XAML_DOM_ID) &&
 			mmp_script_element_set_property_string (npp, &script_element, "type", "text/xaml") &&
-			mmp_script_document_create_text_node (npp, &document, MLMP_RESOURCE_PLAYER_XAML, &xaml_node)) {
+			mmp_script_document_create_text_node (npp, &document, "<Canvas/>", &xaml_node)) {
 			
 			if (mmp_script_element_append_child (npp, &script_element, &xaml_node)) {
 				if (mmp_script_element_get_property_object (npp, &document, "body", &body)) {
@@ -78,8 +78,10 @@ mmp_binder_bind (MoonlightPluginInstance *plugin)
 		return;
 	} else if (status == XAML_LOAD_SUCCESS) {
 		// Only load the JS once, when the XAML is actually added to the DOM
-		mmp_script_evaluate (plugin->moz_instance, MLMP_RESOURCE_PLAYER_JS);
-		mmp_script_evaluate (plugin->moz_instance, MLMP_RESOURCE_WMP_CONTROLS_JS);
+		gint i = 0;
+		for (; MLMP_RESOURCES_ALL[i]; i++) {
+			mmp_script_evaluate (plugin->moz_instance, MLMP_RESOURCES_ALL[i]);
+		}
 	}
 }
 
