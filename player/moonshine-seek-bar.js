@@ -25,6 +25,10 @@ function MoonshineSeekBar (media_element) {
             this.SliderEnabled = this.media_element.CanSeek;
         }));
         
+        this.media_element.AddEventListener ("CurrentStateChanged", delegate (this, function () {
+            this.SliderEnabled = this.media_element.CanSeek;
+        }));
+        
         this.media_element.AddEventListener ("Idle", delegate (this, function () {
             this.SliderEnabled = false;
             this.Value = 0;
