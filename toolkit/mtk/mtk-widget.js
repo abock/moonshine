@@ -1,13 +1,13 @@
 function MtkWidget (settings) {
     MtkObject.call (this);
 
-    var xaml_host = settings instanceof Object ? settings.XamlHost : null;
+    var screen = settings instanceof Object ? settings.Screen : null;
 
     //
     // Properties
     //
 
-    this.Control = xaml_host || MtkContext.XamlHost;
+    this.Screen = screen || MtkContext.DefaultScreen;
     this.Xaml = null;
     this.Settings = {};
     this.InitSettings = settings;
@@ -27,12 +27,16 @@ function MtkWidget (settings) {
         }
     };
 
-    this.InitFromXaml = function (xaml) this.Xaml = this.Control.Content.createFromXaml (xaml);
-    this.CreateXaml = function (xaml) this.Control.Content.createFromXaml (xaml);
+    this.InitFromXaml = function (xaml) this.Xaml = this.Screen.Content.createFromXaml (xaml);
+    this.CreateXaml = function (xaml) this.Screen.Content.createFromXaml (xaml);
     this.XamlFind = function (name) this.Xaml.FindName (this.Name + name);
 
     this.ForeachXamlChild = function (element, includeParent, func) {
-        var elem = typeof element == "string" ? this.XamlFind (element) : element;
+        var elem = typeof element == "string" ? this.XamlFind (element) : (element || this.Xaml);
+        if (elem == null) {
+            return;
+        }
+        
         if (includeParent) {
             func.call (this, elem, -1);
         }
@@ -43,7 +47,10 @@ function MtkWidget (settings) {
         }
 
         for (var i = 0, n = children.Count; i < n; i++) {
-            func.call (this, children.GetItem (i), i);
+            var child = children.GetItem (i);
+            if (child != null) {
+                func.call (this, child, i);
+            }
         }
     };
 
@@ -133,11 +140,16 @@ function MtkWidget (settings) {
 
     this._allocation = { Width: 0, Height: 0, Left: 0, Top: 0 };
     this.Virtual ("OnSizeAllocationRequest", function () this._allocation);
-        
+
     this.__defineGetter__ ("SizeRequest", function () this.OnSizeRequest ());
     this.__defineGetter__ ("Allocation", function () this.OnSizeAllocationRequest ());
     this.__defineGetter__ ("ActualWidth", function () Math.round (this.Xaml.ActualWidth || this.Xaml.Width));
     this.__defineGetter__ ("ActualHeight", function () Math.round (this.Xaml.ActualHeight || this.Xaml.Height));
+    
+    this.__defineGetter__ ("Visible", function () this.Xaml.Visibility == "Visible");
+    
+    this.Virtual ("Show", function () this.Xaml.Visibility = "Visible");
+    this.Virtual ("Hide", function () this.Xaml.Visibility = "Collapsed");
    
     //
     // Post Object Construction Invocation/Property Setting
