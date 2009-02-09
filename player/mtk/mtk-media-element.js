@@ -36,7 +36,7 @@ function MtkMediaElement (settings) {
     this.Virtual ("OnIdle", function () this.RaiseEvent ("Idle"));
     
     this.Virtual ("OnCurrentStateChanged", function () {
-        MtkConsole.Log ("Media Element State Change: " + this.CurrentState);
+        this.Debug ("Media State Change: " + this.CurrentState);
         
         switch (this.CurrentState) {
             case "Playing":
@@ -46,7 +46,8 @@ function MtkMediaElement (settings) {
             case "Stopped":
                 clearInterval (this.play_timeout);
                 this.play_timeout = null;
-                
+                break;
+            case "Closed":
                 if (this.CurrentState == "Stopped") {
                     this.Xaml.Source = null;
                     if (!this.AllowReplay) {
@@ -63,10 +64,19 @@ function MtkMediaElement (settings) {
         var live = this.IsLive;
         var pos = this.Position;
         var dur = this.NaturalDuration;
-        this.RaiseEvent ("PlayTick", pos, dur, live ? 0 : pos.Seconds / dur.Seconds, live);
+        
+        var percent = live || !dur || !pos ? 0 : pos.Seconds / dur.Seconds;
+        if (isNaN (percent) || percent < 0 || percent > 1) {
+            percent = 0;
+        }
+        
+        this.RaiseEvent ("PlayTick", pos, dur, percent, live);
     });
     
-    this.Virtual ("OnMediaOpened", function () this.RaiseEvent ("MediaOpened"));
+    this.Virtual ("OnMediaOpened", function () {
+        this.Debug ("Media Opened");
+        this.RaiseEvent ("MediaOpened");
+    });
     
     this.Virtual ("OnMediaEnded", function () {
         this.OnIdle ();
@@ -119,6 +129,11 @@ function MtkMediaElement (settings) {
         return Math.floor (seconds / 60) + ":" + 
             (seconds % 60 < 10 ? "0" : "") +
             Math.floor (seconds % 60);
+    };
+    
+    this.Debug = function (msg) {
+         MtkConsole.Log (msg + " [ IsLive: " + this.IsLive + 
+            ", CanSeek: " + this.CanSeek + ", CanPause: " + this.CanPause + " ]");
     };
     
     this.AfterConstructed ();
