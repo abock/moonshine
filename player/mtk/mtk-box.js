@@ -41,7 +41,7 @@ function MtkBox (settings) {
             request[this.VariableDimension] += sr[this.VariableDimension];
         }, this);
         request[this.StaticDimension] += 2 * this[this.StaticPadding];
-        request[this.VariableDimension] += 2 * this[this.VariablePadding] + visible_child_count * this.Spacing;
+        request[this.VariableDimension] += 2 * this[this.VariablePadding] + (visible_child_count - 1) * this.Spacing;
         return request;
     });
 
