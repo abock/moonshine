@@ -37,7 +37,7 @@ function MoonshineVolumeBar (media_element) {
         MtkColor.SetOpacity (MtkStyle.Colors.button_fg.normal, 0xf0)
     ]);
     
-    for (i = 1; i < 3; i++) {
+    for (var i = 1; i < 3; i++) {
         this.Icon.Xaml.Children.GetItem (i).Fill = fill;
     }
     

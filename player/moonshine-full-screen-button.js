@@ -31,7 +31,7 @@ function MoonshineFullScreenButton () {
             MtkColor.SetOpacity (MtkStyle.Colors.button_fg.normal, 0xf0)
         ]);
         
-        for (i = 0; i < 2; i++) {
+        for (var i = 0; i < 2; i++) {
             this.Icon.Xaml.Children.GetItem (i).Fill = fill;
         }
         
