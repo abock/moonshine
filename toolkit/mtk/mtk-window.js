@@ -3,33 +3,24 @@ function MtkWindow (settings) {
 
     MtkStyle.Reload ();
 
-    this.Xaml = this.Control.Content.Root;
+    this.Xaml = this.Screen.Xaml;
     this.Realize ();
 
     this.Override ("OnSizeAllocationRequest", function () {
         var self = this;
         return { 
-            Width: self.Control.Content.ActualWidth, 
-            Height: self.Control.Content.ActualHeight,
+            Width: self.Screen.Width, 
+            Height: self.Screen.Height,
             Top: 0,
             Left: 0
         };
     });
 
-    this.Virtual ("SetFullScreen", function (fs) this.Control.Content.FullScreen = fs);
-    this.Virtual ("GetFullScreen", function () this.Control.Content.FullScreen);
-    this.Virtual ("OnFullScreenChange", function () this.QueueResize ());
-    this.Virtual ("OnToggleFullScreen", function () {
-        this.SetFullScreen (!this.GetFullScreen ());
-        this.RaiseEvent ("ToggleFullScreen", this.GetFullScreen ());
-    });
-
-    this.ToggleFullScreen = function () this.OnToggleFullScreen ();
-
-    this.Control.Content.OnResize = delegate (this, this.QueueResize);
-    this.Control.Content.OnFullScreenChange = delegate (this, this.OnFullScreenChange);
     this.MapProperties (["Background"]);
 
+    this.Screen.AddEventListener ("ScreenSizeChanged", delegate (this, function () this.QueueResize ()));
+    this.Screen.AddEventListener ("FullScreenChanged", delegate (this, function () this.QueueResize ()));
+    
     this.AfterConstructed ();
 }
 
