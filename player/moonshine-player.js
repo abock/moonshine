@@ -1,7 +1,6 @@
 function __MoonshineBindInstance (control) {
     MtkScreenBinder.BindScreen (control);
-    var player = new MoonshinePlayer;
-    player.Source = "T-90S_3.wmv";
+    new MoonshinePlayer;
 }
 
 function MoonshinePlayer (control) {

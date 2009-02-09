@@ -1,16 +1,3 @@
-/*
- * wmp-controls.js: Implements the WMP Controls Object against SL MediaElement
- *                  http://msdn.microsoft.com/en-us/library/bb262209(VS.85).aspx
- *
- * Contact:
- *   Moonlight List (moonlight-list@lists.ximian.com)
- *
- * Copyright 2008 Novell, Inc. (http://www.novell.com)
- *
- * See the LICENSE file included with the distribution for details.
- *
- */
- 
 function __MoonEmbeddedWmpControls (moonPlayer) {
     this.moon_player = moonPlayer;
     this.video_element = this.moon_player.xaml.video_element;
