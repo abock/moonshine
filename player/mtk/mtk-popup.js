@@ -33,8 +33,8 @@ function MtkPopup (settings) {
     this.is_mapped = false;
     this.keep_centered = false;
     
-    this.Screen.AddEventListener ("ScreenSizeChanged", delegate (this, this.OnSizeAllocate ()));
-    this.Screen.AddEventListener ("FullScreenChanged", delegate (this, this.OnSizeAllocate ()));
+    this.Screen.AddEventListener ("ScreenSizeChanged", delegate (this, this.OnSizeAllocate));
+    this.Screen.AddEventListener ("FullScreenChanged", delegate (this, this.OnSizeAllocate));
     
     this.Map = function () {
         if (this.is_mapped) {
