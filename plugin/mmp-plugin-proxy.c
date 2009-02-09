@@ -268,7 +268,7 @@ NP_GetValue (gpointer future, NPPVariable variable, gpointer value)
 			*((gchar **)value) = (gchar *)"Windows Media Player Plug-in 10 (compatible; Moonshine Media Player)";
 			return NPERR_NO_ERROR;
 		case NPPVpluginDescriptionString:
-			*((gchar **)value) = (gchar *)"A media player powered by <a href=\"http://go-mono.com/moonlight\">Moonlight</a>, largely "
+			*((gchar **)value) = (gchar *)"A media player powered by Moonlight, largely "
 				"compatible with the Windows Media Player ActiveX control.";
 			return NPERR_NO_ERROR;
 		default: {
