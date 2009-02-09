@@ -1,8 +1,3 @@
-function __MoonshineBindInstance (control) {
-    MtkScreenBinder.BindScreen (control);
-    new MoonshinePlayer;
-}
-
 function MoonshinePlayer (control) {
     MtkWindow.call (this);
 
@@ -129,11 +124,42 @@ function MoonshinePlayer (control) {
     //
     
     this.__defineGetter__ ("Source", function () this.MediaElement.Source);
-    this.__defineSetter__ ("Source", function (x) this.MediaElement.Source = x);
+    this.__defineSetter__ ("Source", function (x) {
+        MtkConsole.Log ("Loading source: " + x);
+        this.MediaElement.Source = x;
+    });
     
     this.__defineGetter__ ("Volume", function () this.MediaElement.Volume);
     this.__defineSetter__ ("Volume", function (x) 
         this.Controls.VolumeBar.Slider.Value = MtkColor.Clamp (x, 0, 1));
+    
+    this.__defineGetter__ ("ControlsVisible", function () this.Controls.Visible);
+    this.__defineSetter__ ("ControlsVisible", function (x) this.Controls.Visible = x);
+    
+    this.__defineGetter__ ("AutoPlay", function () this.MediaElement.AutoPlay);
+    this.__defineSetter__ ("AutoPlay", function (x) this.MediaElement.AutoPlay = x);
+    
+    this.__defineGetter__ ("LoopPlayback", function () this.MediaElement.LoopPlayback);
+    this.__defineSetter__ ("LoopPlayback", function (x) this.MediaElement.LoopPlayback = x);
+    
+    this.__defineGetter__ ("CanSeek", function () this.MediaElement.CanSeek);
+    
+    this.__defineGetter__ ("IsLive", function () this.MediaElement.IsLive);
+    
+    this.__defineGetter__ ("Position", function ()
+        this.MediaElement.Position && !this.IsLive ? this.MediaElement.Position.Seconds : 0);
+    this.__defineSetter__ ("Position", function (x) {
+        if (this.CanSeek && !this.IsLive && !isNaN (x)) {
+            this.MediaElement.Position = "0:0:" + x;
+        }
+    });
+    
+    this.__defineGetter__ ("Duration", function () 
+        this.MediaElement.NaturalDuration ? this.MediaElement.NaturalDuration.Seconds : 0);
+    
+    this.__defineGetter__ ("PositionString", function () this.MediaElement.FormatSeconds (this.Position));
+    
+    this.__defineGetter__ ("DurationString", function () this.MediaElement.FormatSeconds (this.DurationString));
     
     this.Play = function () this.MediaElement.Play ();
     this.Pause = function () this.MediaElement.Pause ();

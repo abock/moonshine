@@ -1,37 +1,37 @@
 <html>
 <head>
-<script type="text/javascript" src="mtk/mtk-box.js"></script>
-<script type="text/javascript" src="mtk/mtk-button.js"></script>
-<script type="text/javascript" src="mtk/mtk-console.js"></script>
-<script type="text/javascript" src="mtk/mtk-container.js"></script>
-<script type="text/javascript" src="mtk/mtk-label.js"></script>
-<script type="text/javascript" src="mtk/mtk-media-element.js"></script>
-<script type="text/javascript" src="mtk/mtk-object.js"></script>
-<script type="text/javascript" src="mtk/mtk-slider.js"></script>
-<script type="text/javascript" src="mtk/mtk-color.js"></script>
-<script type="text/javascript" src="mtk/mtk-style.js"></script>
-<script type="text/javascript" src="mtk/mtk-toolbar.js"></script>
-<script type="text/javascript" src="mtk/mtk-widget.js"></script>
-<script type="text/javascript" src="mtk/mtk-window.js"></script>
-<script type="text/javascript" src="mtk/mtk-xaml.js"></script>
-<script type="text/javascript" src="mtk/mtk-popup.js"></script>
-<script type="text/javascript" src="mtk/mtk-screen.js"></script>
-<script type="text/javascript" src="moonshine-player.js"></script>
-<script type="text/javascript" src="moonshine-full-screen-button.js"></script>
-<script type="text/javascript" src="moonshine-play-pause-button.js"></script>
-<script type="text/javascript" src="moonshine-volume-bar.js"></script>
-<script type="text/javascript" src="moonshine-seek-bar.js"></script>
+<script type="text/javascript" src="../mtk/mtk-box.js"></script>
+<script type="text/javascript" src="../mtk/mtk-button.js"></script>
+<script type="text/javascript" src="../mtk/mtk-console.js"></script>
+<script type="text/javascript" src="../mtk/mtk-container.js"></script>
+<script type="text/javascript" src="../mtk/mtk-label.js"></script>
+<script type="text/javascript" src="../mtk/mtk-media-element.js"></script>
+<script type="text/javascript" src="../mtk/mtk-object.js"></script>
+<script type="text/javascript" src="../mtk/mtk-slider.js"></script>
+<script type="text/javascript" src="../mtk/mtk-color.js"></script>
+<script type="text/javascript" src="../mtk/mtk-style.js"></script>
+<script type="text/javascript" src="../mtk/mtk-toolbar.js"></script>
+<script type="text/javascript" src="../mtk/mtk-widget.js"></script>
+<script type="text/javascript" src="../mtk/mtk-window.js"></script>
+<script type="text/javascript" src="../mtk/mtk-xaml.js"></script>
+<script type="text/javascript" src="../mtk/mtk-popup.js"></script>
+<script type="text/javascript" src="../mtk/mtk-screen.js"></script>
+<script type="text/javascript" src="../moonshine-player.js"></script>
+<script type="text/javascript" src="../moonshine-full-screen-button.js"></script>
+<script type="text/javascript" src="../moonshine-play-pause-button.js"></script>
+<script type="text/javascript" src="../moonshine-volume-bar.js"></script>
+<script type="text/javascript" src="../moonshine-seek-bar.js"></script>
 </head>
 <body>
 <script type="text/xaml" id="xaml">
 <Canvas xmlns="http://schemas.microsoft.com/client/2007"/>
 </script>
 <object type="application/x-silverlight" id="canvas" style="width:100%; height: 200px">
-	<param name="onload" value="__MoonshineBindInstance" />
+	<param name="onload" value="__MoonshineWmpPluginBindInstance" />
 	<param name="source" value="#xaml" />
 </object>
 <object type="application/x-silverlight" width="400" height="300" id="canvas">
-	<param name="onload" value="__MoonshineBindInstance" />
+	<param name="onload" value="__MoonshineWmpPluginBindInstance" />
 	<param name="source" value="#xaml" />
 </object>
 </body>

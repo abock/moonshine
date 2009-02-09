@@ -4,7 +4,7 @@
 #include "mmp-script.h"
 #include "mmp-resources.h"
 
-#define MLMP_XAML_LOAD_FUNCTION "__MoonshineBindInstance"
+#define MLMP_XAML_LOAD_FUNCTION "__MoonshineWmpPluginBindInstance"
 #define MLMP_XAML_DOM_ID        "__MoonshineEmptyFakeXamlTrickery"
 
 typedef enum {

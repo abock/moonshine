@@ -115,5 +115,11 @@ function MtkMediaElement (settings) {
         this.Xaml.Source = x;
     });
     
+    this.FormatSeconds = function (seconds) {
+        return Math.floor (seconds / 60) + ":" + 
+            (seconds % 60 < 10 ? "0" : "") +
+            Math.floor (seconds % 60);
+    };
+    
     this.AfterConstructed ();
 }

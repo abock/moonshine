@@ -1,23 +1,22 @@
-function __MoonEmbeddedWmpControls (moonPlayer) {
-    this.moon_player = moonPlayer;
-    this.video_element = this.moon_player.xaml.video_element;
+function MoonshinePluginPlayerWmpControls (moonshine_player) {
+    this.MoonshinePlayer = moonshine_player;
 }
 
-__MoonEmbeddedWmpControls.prototype = {
+MoonshinePluginPlayerWmpControls.prototype = {
 
     // Pauses the playing of the media item.
     pause: function () {
-        this.video_element.Pause ();
+        this.MoonshinePlayer.Pause ();
     },
 
     // Causes the media item to start playing.
     play: function () {
-        this.video_element.Play ();
+        this.MoonshinePlayer.Play ();
     },
 
     // Stops the playing of the media item.
     stop: function () {
-        this.video_element.Stop ();
+        this.MoonshinePlayer.Stop ();
     },
     
     // Causes the current media item to start playing, or resumes play of a paused item.
@@ -79,15 +78,11 @@ __MoonEmbeddedWmpControls.prototype = {
     },
     
     // Specifies or retrieves the current position in the media item in seconds from the beginning.
-    get currentPosition () { return this.video_element.Position.Seconds; },
-    set currentPosition (p) { 
-        if (this.video_element.CanSeek && !isNaN (p)) {
-            this.video_element.Position = "0:0:" + p; 
-        }
-    },
+    get currentPosition () { return this.MoonshinePlayer.Position; },
+    set currentPosition (p) { this.MoonshinePlayer.Position = p; },
     
     // Retrieves the current position in the media item as a String.
-    get currentPositionString () { return this.moon_player._FormatSeconds (this.currentPosition); },
+    get currentPositionString () { return this.MoonshinePlayer.PositionString; },
     
     // Specifies or retrieves the current position in the current media item using a time code format. 
     // This property currently supports SMPTE time code.
