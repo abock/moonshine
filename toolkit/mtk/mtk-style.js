@@ -135,19 +135,33 @@ var MtkStyle = {
         if (inset) {
             colors.reverse ();
         }
-
-        var brush = widget.CreateXaml ("<LinearGradientBrush/>");
-        brush.StartPoint = "0,0";
-        brush.EndPoint = "0,1";
-
-        for (var i = 0, n = Math.min (offsets.length, colors.length); i < n; i++) {
-            var stop = widget.CreateXaml ("<GradientStop/>");
-            stop.Color = MtkStyle.GetColor (style, colors[i]);
-            stop.Offset = offsets[i];
-            brush.GradientStops.Add (stop);
+        
+        for (var i = 0; i < colors.length; i++) {
+            colors[i] = MtkStyle.GetColor (style, colors[i]);
         }
-
+        
+        return MtkStyle.CreateLinearGradient (widget, offsets, colors);
+    },
+    
+    CreateLinearGradient: function (widget, offsets, colors, start_point, end_point) {
+        var brush = widget.CreateXaml ("<LinearGradientBrush/>");
+        brush.StartPoint = start_point || "0,0";
+        brush.EndPoint = end_point || "0,1";
+        
+        for (var i = 0, n = Math.min (offsets.length, colors.length); i < n; i++) {
+            brush.GradientStops.Add (MtkStyle.CreateGradientStop (widget, offsets[i], 
+                typeof colors[i] != "string" ? MtkColor.ToString (colors[i]) : colors[i]
+            ));
+        }
+                
         return brush;
+    },
+    
+    CreateGradientStop: function (widget, offset, color) {
+        var stop = widget.CreateXaml ("<GradientStop/>");
+        stop.Offset = offset;
+        stop.Color = color;
+        return stop; 
     }
 };
 

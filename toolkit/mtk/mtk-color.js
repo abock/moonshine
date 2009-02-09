@@ -145,10 +145,11 @@ var MtkColor = {
             a = a.charAt (0);
         }
 
-        var color = "#" + r + g + b;
+        var color = "#";
         if (a != "ff" && a != "f") {
             color += a;
         }
+        color += r + g + b;
 
         return color;
     },
@@ -156,6 +157,10 @@ var MtkColor = {
     //
     // Shading/Value Adjustment
     //
+    
+    SetOpacity: function (c, a) {
+        return { r: c.r, g: c.g, b: c.b, a: a };
+    },
     
     Clamp: function (x, lo, hi) (x > hi) ? hi : (x < lo ? lo : x),
 
@@ -171,6 +176,10 @@ var MtkColor = {
     },
 
     Shade: function (color, k) {
+        if (k == 1.0) {
+            return color;
+        }
+        
         var alpha = (typeof color.a == "number") ? color.a : 0xff;
         var hls = MtkColor.RgbToHls (color.r, color.g, color.b);
         var rgb = MtkColor.HlsToRgb (hls[0], hls[1] * k, hls[2] * k);
