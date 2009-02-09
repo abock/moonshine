@@ -30,6 +30,7 @@ xulrunner/chrome/content/player/
 xulrunner/chrome/locale/en-US/version.dtd
 xulrunner/extensions/
 xulrunner/updates/
+xulrunner/defaults/preferences/debug.js
 
 # Extra
 *.swp
