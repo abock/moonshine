@@ -1,5 +1,5 @@
 EXTRA_DIST = \
-	$(wildcard *.js) \
-	$(wildcard *.xaml)
+	$(wildcard mtk/*.js) \
+	$(wildcard *.js)
 
 MAINTAINERCLEANFILES = Makefile.in

@@ -20,6 +20,9 @@ out_define="_$(echo $out |
 	tr '[:lower:]' '[:upper:]' | 
 	sed 's,[-.],_,g;s,[^A-Z_],,g')"
 
+all_name=$1; shift
+all_array=""
+
 [[ -z $out ]] && 
 	bail "You must specify an output file first"
 
@@ -33,15 +36,6 @@ while (($# > 0)); do
 	[[ $inputs -eq 0 ]] && {
 		(echo "/* "
 			echo " * $out: auto-generated embedded resources "
-			echo " * "
-			echo " * This file was created with the command: "
-			echo " * "
-			echo " *   $ $0 $out \ "
-			for ((i=1; i<$#; i+=2)); do
-				argset=" *         $(eval "echo \$$i \$$(($i+1))")"
-				[[ $i -lt $(($#-1)) ]] && argset="$argset \\"
-				echo "$argset"
-			done
 			echo " */ "
 			echo
 			echo "#ifndef $out_define"
@@ -50,6 +44,7 @@ while (($# > 0)); do
 	}
 
 	((inputs++))
+	all_array="$all_array $var"
 
 	(echo "/* Embedded Resource $inputs ($input) */"
 		table=$(hexdump -e '"    " 16/1 "0x%02x, " "\n"' $input | sed -r 's/, 0x[ ,]+.*/, 0x00/')
@@ -58,12 +53,19 @@ while (($# > 0)); do
         [[ ${table:$((${#table}-1))} = "," ]] && echo "    0x00"
 		echo "};"
 		echo) >> $out
-	
+		
 	shift; shift
 done
 
 [[ $inputs -eq 0 ]] && 
 	bail "You must specify at least one variable/input file pair"
 
+echo "static const char const * $all_name [] = {" >> $out
+for var in $all_array; do
+	echo "    ${var}," >> $out
+done
+echo "    NULL" >> $out
+echo "};" >> $out
+echo >> $out
 echo "#endif /* $out_define */" >> $out
 

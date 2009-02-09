@@ -1,9 +1,9 @@
 RESOURCE_OUT_FILE = mmp-resources.h
 RESOURCE_VAR_PREFIX = MLMP_RESOURCE_
+RESOURCE_ALL_VAR_NAME = MLMP_RESOURCES_ALL
 RESOURCES = \
-	$(top_srcdir)/player/player.xaml \
-	$(top_srcdir)/player/player.js \
-	$(top_srcdir)/player/wmp-controls.js
+	$(wildcard $(top_srcdir)/player/*.js) \
+	$(wildcard $(top_srcdir)/player/mtk/*.js)
 
 RESOURCES_BUILD = $(foreach res, $(RESOURCES), \
 	`echo $(RESOURCE_VAR_PREFIX)$(notdir $(res)) \
@@ -12,7 +12,7 @@ RESOURCES_BUILD = $(foreach res, $(RESOURCES), \
 	$(res))
 
 $(RESOURCE_OUT_FILE): $(srcdir)/generate-resource $(RESOURCES)
-	$(SHELL) $< $@ $(RESOURCES_BUILD)
+	$(SHELL) $< $@ $(RESOURCE_ALL_VAR_NAME) $(RESOURCES_BUILD)
 
 mpplugindir=$(BROWSER_PLUGIN_DIR)
 mpplugin_LTLIBRARIES = libmoonmp-plugin.la
