@@ -10,7 +10,7 @@ var MtkContext = {
                 "mtk-console.js",   "mtk-style.js", "mtk-object.js", "mtk-widget.js",
                 "mtk-container.js", "mtk-box.js",   "mtk-window.js", "mtk-xaml.js",
                 "mtk-button.js",    "mtk-label.js", "mtk-slider.js", "mtk-media-element.js",
-                "mtk-toolbar.js",   "mtk-color.js"
+                "mtk-toolbar.js",   "mtk-popup.js", "mtk-color.js"
             );
         }*/
     },
@@ -36,10 +36,18 @@ var MtkContext = {
         }
     },
     
-    XamlHost: null,
+    Screens: {},
+    DefaultScreen: null,
 
-    SilverlightOnLoad: function (control) {
-        this.XamlHost = control.GetHost (); 
+    BindScreen: function (control) {
+        var host = control.GetHost ();
+        if (this.Screens[host]) {
+            throw "Silverlight control already bound to an MtkScreen";
+        }
+        this.Screens[host] = new MtkScreen (host);
+        if (!this.DefaultScreen) {
+            this.DefaultScreen = this.Screens[host];
+        }
     },
 
     IsWidget: function (o) o && o instanceof Object && o.IsMtkWidget
