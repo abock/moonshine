@@ -74,11 +74,6 @@
     </menu>
   </menubar>
   <vbox style="background: black" flex="1">
-    <html:div id="about-panel">
-      <html:h1>Moonshine v&moonshine.version;</html:h1>
-      <html:p>&moonshine.aboutMessage;</html:p>
-      <button label="Close" oncommand="window.player.OnCloseAbout ()"/>
-    </html:div>
     <html:div id="uninstalled">
       <html:h1>&moonshine.uninstalledTitle;</html:h1>
       <html:p>&moonshine.uninstalledMessage;</html:p>

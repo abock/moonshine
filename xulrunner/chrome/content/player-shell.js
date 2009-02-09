@@ -19,7 +19,6 @@ StandaloneMoonPlayer.prototype = {
     player: null,
     command_line: null,
     player_element: null,
-    about_element: null,
 
     Initialize: function () {
         if (window.player) {
@@ -33,7 +32,6 @@ StandaloneMoonPlayer.prototype = {
         
         this.content = document.getElementById ("moon-media-standalone-player");
         this.player_element = document.getElementById ("moon-embedded-player");
-        this.about_element = document.getElementById ("about-panel");
 
         this.ConfigureWindow ();
         this.CheckForMoonlight ();
@@ -90,11 +88,7 @@ StandaloneMoonPlayer.prototype = {
     },
 
     OnAbout: function () {
-        this.about_element.style.display = "block";
-    },
-
-    OnCloseAbout: function () {
-        this.about_element.style.display = "none";
+        this.player.About ();
     }
 }
 
