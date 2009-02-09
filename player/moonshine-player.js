@@ -14,6 +14,7 @@ function MoonshinePlayer () {
             /* Down   */ case 17: this.Volume -= 0.05; break;
             /* Left   */ case 14: this.Position -= args.Ctrl ? 60 : 15; break;
             /* Right  */ case 16: this.Position += args.Ctrl ? 60 : 15; break;
+            /* A      */ case 30: this.AboutPopup.ToggleFade (); break;
         }
         
         this.ShowControls ();
@@ -24,6 +25,7 @@ function MoonshinePlayer () {
     
         this.ErrorPopup = new MoonshineErrorPopup ();
         this.BufferingPopup = new MoonshineBufferingPopup ();
+        this.AboutPopup = new MoonshineAboutPopup ();
     
         this.MediaElement = new MtkMediaElement;
         this.Container = new MtkVBox;
@@ -60,6 +62,12 @@ function MoonshinePlayer () {
             this.BufferingPopup.Progress = this.MediaElement.BufferingProgress;
         }));
     };
+    
+    this.__defineGetter__ ("CenteredOffset", function (y) {
+        this.ErrorPopup.CenteredOffsetY = y;
+        this.BufferingPopup.CenteredOffsetY = y;
+        this.AboutPopup.CenteredOffsetY = y;
+    });
     
     //
     // Control Bar
@@ -188,6 +196,8 @@ function MoonshinePlayer () {
     this.Stop = function () this.MediaElement.Stop ();
     this.TogglePlaying = function () this.MediaElement.TogglePlaying ();
     
+    this.About = function () this.AboutPopup.ToggleFade ();
+    
     //
     // Show->Road
     //
@@ -307,5 +317,40 @@ function MoonshineErrorPopup () {
     this.Add (this.Box);
     this.Box.PackStart (this.Header);
     this.Box.PackStart (this.Message);
+}
+
+function MoonshineAboutPopup () {
+    MoonshinePopup.call (this);
+    
+    this.Box = new MtkVBox;
+    this.Box.Spacing = 8;
+    
+    this.HeaderSize = MtkStyle.Font.Size + 8;
+    this.TextSize = MtkStyle.Font.Size + 4;
+    
+    this.Message = new MtkXaml ('<TextBlock Width="300" TextWrapping="Wrap" FontFamily="Trebuchet MS, ' + MtkStyle.Font.Family + '"> \
+        <Run FontSize="' + this.HeaderSize + '" Foreground="#3465a4" FontWeight="Bold" Text="Moonshine" />  \
+        <Run FontSize="' + this.HeaderSize + '" Foreground="#4e9a06" FontWeight="Bold" Text="v0.1" />  \
+        <LineBreak FontSize="50"/> \
+        <Run FontSize="' + this.TextSize + '" Foreground="#eee"> \
+            Windows Media support for Linux, powered by \
+            Moonlight and Firefox. \
+        </Run> \
+        <LineBreak/> \
+        <Run FontSize="' + (this.TextSize - 3) + '" Foreground="#888" Text="Written by Aaron Bockover" /> \
+        <LineBreak/> \
+        <Run FontSize="' + (this.TextSize - 4) + '" Foreground="#666" Text="Copyright 2009 Novell." /> \
+    </TextBlock>');
+    
+    this.CloseBox = new MtkHBox;
+    this.CloseButton = new MtkButton (new MtkLabel ("Close"));
+    this.CloseButton.AddEventListener ("Activated", delegate (this, function () this.ToggleFade ()));
+    this.CloseButton.RestOpacity = 0.8;
+    this.CloseBox.PackStart (new MtkXaml ("<Canvas/>"), true);
+    this.CloseBox.PackStart (this.CloseButton);
+    
+    this.Add (this.Box);
+    this.Box.PackStart (this.Message);
+    this.Box.PackStart (this.CloseBox);
 }
 
