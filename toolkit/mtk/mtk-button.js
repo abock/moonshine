@@ -137,6 +137,10 @@ function MtkButton (settings) {
         this.$OnSizeAllocate$ ();
 
         var style = this.XamlFind ("Style");
+        if (!style) {
+            return;
+        }
+        
         var fill = style.Children.GetItem (0);
         var inner_stroke = style.Children.GetItem (1);
 

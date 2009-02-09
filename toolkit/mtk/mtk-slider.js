@@ -50,6 +50,9 @@ function MtkSlider (settings) {
             this.RaiseEvent ("DragEnd");
         }
     });
+    
+    this.Virtual ("OnMouseDown", function (x, y) this.RaiseEvent ("MouseDown", x, y));
+    this.Virtual ("OnMouseUp", function (x, y) this.RaiseEvent ("MouseUp", x, y));
 
     this.InitFromXaml ('<Canvas> \
         <Canvas Name="' + this.Name + 'Trough"> \
@@ -80,8 +83,25 @@ function MtkSlider (settings) {
         this.$OnRealize$ ();
         if (!this.IsRealized) {
             return;
-        }        
+        }
+        
+        var trough = this.XamlFind ("Trough");
 
+        trough.AddEventListener ("mouseleftbuttondown", delegate (this, function (o, args) {
+            if (this.SliderEnabled) {
+                var pos = args.GetPosition (o)
+                this.OnMouseDown (pos.X, pos.Y);
+            }
+        }));
+        
+        trough.AddEventListener ("mouseleftbuttonup", delegate (this, function (o, args) {
+            if (this.SliderEnabled) {
+                var pos = args.GetPosition (o);
+                this.Value = pos.X / o.Width;
+                this.OnMouseUp (pos.X, pos.Y);
+            }
+        }));
+        
         var slider = this.XamlFind ("Slider");
         
         slider.AddEventListener ("mouseleave", delegate (this, function (o, args) {
