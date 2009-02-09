@@ -1,5 +1,9 @@
 function MtkLabel (settings) {
-    MtkXaml.call (this, "<TextBlock/>", settings);
+   MtkXaml.call (this, "<TextBlock/>", settings);
+   
+   this.CustomSize = false;
+   this.CustomForeground = false;
+   this.CustomFamily = false;
    
    this.MapProperties ([ 
         [ "Text", "QueueResize" ], 
@@ -18,9 +22,9 @@ function MtkLabel (settings) {
     }
     
     this.Override ("OnStyleSet", function () {
-        this.FontFamily = MtkStyle.Font.Family;
-        this.FontSize = MtkStyle.Font.Size;
-        this.Foreground = MtkStyle.GetColor ("window_fg"); 
+        if (!this.CustomFamily) this.FontFamily = MtkStyle.Font.Family;
+        if (!this.CustomSize) this.FontSize = MtkStyle.Font.Size;
+        if (!this.CustomForeground) this.Foreground = MtkStyle.GetColor ("window_fg"); 
     });
 
     // Override default XAlign = 0.5
