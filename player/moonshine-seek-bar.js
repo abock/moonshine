@@ -48,6 +48,10 @@ function MoonshineSeekBar (media_element) {
     });
     
     this.Override ("OnDragEnd", function () {
+        if (!this.IsDragging) {
+            return;
+        }
+        
         this.$OnDragEnd$ ();
         clearInterval (this.live_seek_timeout);
         this.live_seek_timeout = null;
