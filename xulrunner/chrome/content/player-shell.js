@@ -64,7 +64,7 @@ StandaloneMoonPlayer.prototype = {
             // Necessary to overcome a race with the window resizing; Mozilla does not 
             // actually touch the window until the next idle, so its size will be incorrect
             // without pushing a callback into the idle queue
-            setTimeout (delegate (this, function () this.RaiseEvent ("FullScreenChanged")), 1);
+            setTimeout (delegate (this, function () this.RaiseEvent ("FullScreenChanged")), 100);
         });
     },
     
