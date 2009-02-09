@@ -1,6 +1,6 @@
-function MoonshinePlayer (control) {
+function MoonshinePlayer () {
     MtkWindow.call (this);
-
+    
     //
     // Window
     //
