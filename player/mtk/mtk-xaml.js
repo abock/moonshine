@@ -8,11 +8,13 @@ function MtkXaml (xaml, settings) {
     this.YAlign = 0.5;
     this.XPad = 0;
     this.YPad = 0;
+    this.WidthRequest = 0;
+    this.HeightRequest = 0;
     
     this.Override ("OnSizeRequest", function () {
         var request = {};
-        request.Width = this.ActualWidth + 2 * this.XPad;
-        request.Height = this.ActualHeight + 2 * this.YPad;
+        request.Width = (this.WidthRequest > 0 ? this.WidthRequest : this.ActualWidth) + 2 * this.XPad;
+        request.Height = (this.HeightRequest > 0 ? this.HeightRequest : this.ActualHeight) + 2 * this.YPad;
         return request;
     });
 
