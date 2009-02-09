@@ -1,7 +1,6 @@
 function MtkPopup (settings) {
     MtkContainer.call (this, settings);
-    
-    this.InitFromXaml ('<Canvas></Canvas>');
+    this.InitFromXaml ('<Canvas/>');
     
     this.centered_offset_x = 0;
     this.centered_offset_y = 0;
@@ -25,21 +24,13 @@ function MtkPopup (settings) {
     this.is_mapped = false;
     this.keep_centered = false;
     
-    this.Screen.AddEventListener ("ScreenSizeChanged", delegate (this, function () {
-        this.QueueResize ();
-        if (this.keep_centered) {
-            this.PositionCenter ();
-        }
-    }));
+    this.Screen.AddEventListener ("ScreenSizeChanged", delegate (this, this.OnSizeAllocate ()));
     
-    this.Override ("Show", function () {
-        this.VisibilityStoryboard.Stop ();
-        this.Xaml.Opacity = 1;
-    
+    this.Map = function () {
         if (this.is_mapped) {
-            return;
+            return false;;
         }
-        
+            
         if (!this.IsRealized) {
             this.Realize ();
         }
@@ -47,6 +38,14 @@ function MtkPopup (settings) {
         this.is_mapped = true;
         this.Screen.Xaml.Children.Add (this.Xaml);
         this.OnSizeAllocate ();
+        return true;
+    };
+    
+    this.Override ("Show", function () {
+        this.VisibilityStoryboard.Stop ();
+        this.Xaml.Opacity = 1;
+
+        this.Map ();
         this.$Show$ ();
     });
     
@@ -61,14 +60,6 @@ function MtkPopup (settings) {
         this.is_mapped = false;
         this.Screen.Xaml.Children.Remove (this.Xaml);
         this.$Hide$ ();
-    });
-    
-    this.Override ("OnStyleSet", function () {
-        this.background_fill = MtkStyle.CreateLinearGradient (this,
-            [0, 1], ["#7000", "#b000"]
-        );
-        
-        this.background_stroke = "#e000";
     });
     
     this.HeightRequest = 0;
@@ -93,25 +84,12 @@ function MtkPopup (settings) {
         
         this.SizeAllocateChildren ();
         
-        
-        /*this.ForeachXamlChild (null, true, function (elem, index) {
-            if (index > 0) {
-                return;
-            }
-            
-            MtkConsole.Log (elem.toString () + ", " + index);
-            
-            elem.Width = this.Allocation.Width;
-            elem.Height = this.Allocation.Height;
-            if (index < 0) {
-                elem["Canvas.Left"] = this.Allocation.Left;
-                elem["Canvas.Top"] = this.Allocation.Top;
-            } else {
-                elem.Fill = this.background_fill;
-                elem.Stroke = this.background_stroke;
-                elem.StrokeThickness = 2;
-            }
-        });*/
+        if (this.keep_centered) {
+            this.Xaml["Canvas.Left"] = this.Allocation.Left = 
+                Math.round ((this.Screen.Width - this.Allocation.Width - this.CenteredOffsetX) / 2);
+            this.Xaml["Canvas.Top"] = this.Allocation.Top = 
+                Math.round ((this.Screen.Height - this.Allocation.Height - this.CenteredOffsetY) / 2);
+        }
     });
     
     this.Virtual ("Position", function (x, y) {
@@ -121,15 +99,8 @@ function MtkPopup (settings) {
     });
     
     this.Virtual ("PositionCenter", function () {
-        MtkConsole.ObjDump (this.Screen.Width);
-    
         this.keep_centered = true;
-        this.Xaml["Canvas.Left"] = this.Allocation.Left = 
-            Math.round ((this.Screen.Width - this.Allocation.Width - this.CenteredOffsetX) / 2);
-        this.Xaml["Canvas.Top"] = this.Allocation.Top = 
-            Math.round ((this.Screen.Height - this.Allocation.Height - this.CenteredOffsetY) / 2);
-            
-        MtkConsole.ObjDump (this.Allocation);
+        this.OnSizeAllocate ();
     });
     
     //
@@ -152,6 +123,10 @@ function MtkPopup (settings) {
     };
     
     this.FadeIn = function () {
+        if (this.Map ()) {
+            this.Xaml.Opacity = 0;
+        }
+        
         this.VisibilityAnimation.To = 1;
         this.VisibilityStoryboard.Begin ();
     };
