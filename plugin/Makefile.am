@@ -38,15 +38,23 @@ libmoonmp_plugin_la_LIBADD = $(GLIB_LIBS)
 
 $(libmoonmp_plugin_la_SOURCES): $(RESOURCE_OUT_FILE)
 
-TEST_URI = http://www.c-span.org/Watch/C-SPAN_wm.aspx
+FIREFOX = firefox -P dev -no-remote
 
 test-plugin: all 
 	mkdir -p ~/.mozilla/plugins
 	rm -f ~/.mozilla/plugins/libmoonmp-plugin.so
 	cp .libs/libmoonmp-plugin.so ~/.mozilla/plugins
 
-run: test-plugin
-	firefox -P dev -no-remote $(TEST_URI)
+run: hbo
+
+wmp: test-plugin
+	$(FIREFOX) http://banshee-project.org/~abock/WMV/wmv-wmp.html
+
+hbo: test-plugin
+	$(FIREFOX) http://www.hbo.com/scripts/video/vidplayer.html?movie=/av/biglove/season3/b_love_min3pmdnt_1+section=biglove+num=1227749959016+title=Big%20Love:%20Three%20Past%20Midnight:%20Bill%20And%20Barb+tunein=Sundays%20at%209pm
+
+cspan: test-plugin
+	$(FIREFOX) http://www.c-span.org/Watch/C-SPAN_wm.aspx
 
 gdb: test-plugin
 	gdb $(libdir)/firefox/firefox -ex "run -P dev -no-remote $(TEST_URI)"
