@@ -180,6 +180,9 @@ function MoonshineControlBar (media_element) {
     this.Spacing = 12;
     this.Padding = 2;
 
+    this.FlexBar = new MtkXaml ("<Canvas/>");
+    this.FlexBar.Visible = false;
+    
     this.PlayPauseButton = new MoonshinePlayPauseButton (media_element);
     this.SeekBar = new MoonshineSeekBar (media_element);
     this.VolumeBar = new MoonshineVolumeBar (media_element);
@@ -188,7 +191,15 @@ function MoonshineControlBar (media_element) {
     this.PackStart (this.PlayPauseButton);
     this.PackStart (this.SeekBar, true);
     this.PackStart (this.VolumeBar);
+    this.PackStart (this.FlexBar, true);
     this.PackStart (this.FullScreenButton);
+    
+    media_element.AddEventListener ("MediaOpened", delegate (this, function () {
+        this.PlayPauseButton.Visible = media_element.CanPause;
+        this.SeekBar.Visible = media_element.CanSeek;
+        this.FlexBar.Visible = !this.SeekBar.Visible;
+        this.VolumeBar.XPad = this.FlexBar.Visible ? 4 : 0;
+    }));
     
     this.AfterConstructed ();
 }
