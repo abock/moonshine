@@ -14,11 +14,14 @@ launcherdir = $(bindir)
 launcher_SCRIPTS = moonshine
 
 PLAYER_TARGETS = $(foreach res, \
-	$(wildcard $(top_srcdir)/player/*.js) \
-	$(wildcard $(top_srcdir)/player/*.xaml), \
+	$(wildcard $(top_srcdir)/player/*.js), \
 		$(addprefix chrome/content/player/,$(notdir $(res))))
-	
-all: $(PLAYER_TARGETS) $(OUT_FILES) $(VERSION_DTD_OUT)
+
+MTK_TARGETS = $(foreach res, \
+	$(wildcard $(top_srcdir)/player/mtk/*.js), \
+		$(addprefix chrome/content/player/mtk/,$(notdir $(res))))
+
+all: $(PLAYER_TARGETS) $(MTK_TARGETS) $(OUT_FILES) $(VERSION_DTD_OUT)
 
 moonshine: moonshine.in
 	sed -e " \
@@ -54,7 +57,7 @@ chrome/content/player/%: $(top_srcdir)/player/%
 	mkdir -p $(dir $@)
 	cp -a $< $@
 
-XULAPP_FILES = `find $(srcdir)/chrome $(srcdir)/defaults application.ini -type f`
+XULAPP_FILES = `find $(srcdir)/chrome $(srcdir)/defaults application.ini -type f | grep -v debug.js`
 
 install-data-local:
 	for file in $(XULAPP_FILES); do \
