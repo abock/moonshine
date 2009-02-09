@@ -1,3 +1,5 @@
+function delegate (target, callback) function () callback.apply (target, arguments);
+
 function MtkObject () {
 
     //

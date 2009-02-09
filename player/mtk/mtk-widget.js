@@ -1,13 +1,13 @@
 function MtkWidget (settings) {
     MtkObject.call (this);
 
-    var screen = settings instanceof Object ? settings.Screen : null;
-
     //
     // Properties
     //
 
-    this.Screen = screen || MtkContext.DefaultScreen;
+    this.ScreenGeneration = MtkScreenBinder.CurrentGeneration;
+    this.__defineGetter__ ("Screen", function () MtkScreenBinder.GetScreenForGeneration (this.ScreenGeneration));
+    
     this.Xaml = null;
     this.Settings = {};
     this.InitSettings = settings;
@@ -185,5 +185,9 @@ function MtkWidget (settings) {
 
         delete this["AfterConstructed"];
     }
+};
+
+var MtkWidgetUtils = {
+    IsWidget: function (o) o && o instanceof Object && o.IsMtkWidget
 };
 

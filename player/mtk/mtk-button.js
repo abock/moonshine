@@ -3,7 +3,7 @@ function MtkButton (settings) {
     // We accept a widget here which we will .Add 
     // later, so save it and call the base ctor 
     var init_child = null;
-    if (MtkContext.IsWidget (settings)) {
+    if (MtkWidgetUtils.IsWidget (settings)) {
         MtkContainer.call (this);
         init_child = settings;
     } else {

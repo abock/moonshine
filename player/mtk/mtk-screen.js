@@ -24,3 +24,19 @@ function MtkScreen (control) {
 
     this.ToggleFullScreen = function () this.OnToggleFullScreen ();
 }
+
+var MtkScreenBinder = {
+
+    ConnectedScreens: [],
+    get CurrentGeneration () { return this.ConnectedScreens.length },
+
+    BindScreen: function (control) {
+        this.ConnectedScreens.push (new MtkScreen (control.GetHost ()));
+        return this.ConnectedScreens.length;
+    },
+    
+    GetScreenForGeneration: function (generation) {
+        return this.ConnectedScreens[generation - 1];
+    }
+};
+
