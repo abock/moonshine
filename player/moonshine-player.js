@@ -7,10 +7,13 @@ function MoonshinePlayer () {
     
     this.Xaml.AddEventListener ("keydown", delegate (this, function (o, args) {
         switch (args.Key) {
-            /* F, F11 */ case 35: case 66: this.Screen.SetFullScreen (true); break;
+            /* F, F11 */ case 35: case 66: this.Screen.ToggleFullScreen (); break;
+            /* Spc,Etr*/ case 9:  case 3: this.TogglePlaying (); break;
+            /* Esc    */ case 8:  this.Screen.SetFullScreen (false); break;
             /* Up     */ case 15: this.Volume += 0.05; break;
             /* Down   */ case 17: this.Volume -= 0.05; break;
-            /* Space  */ case 9:  this.TogglePlaying (); break;
+            /* Left   */ case 14: this.Position -= args.Ctrl ? 60 : 15; break;
+            /* Right  */ case 16: this.Position += args.Ctrl ? 60 : 15; break;
         }
         
         this.ShowControls ();
@@ -18,6 +21,9 @@ function MoonshinePlayer () {
     
     this.BuildWindow = function () {
         this.Background = "black";
+    
+        this.ErrorPopup = new MoonshineErrorPopup ();
+        this.BufferingPopup = new MoonshineBufferingPopup ();
     
         this.MediaElement = new MtkMediaElement;
         this.Container = new MtkVBox;
@@ -36,6 +42,26 @@ function MoonshinePlayer () {
                 this.ShowControls ();
                 this.RemoveHideControlsTimeout (); // keep the controls alive until the user moves
             }
+            
+            if (state == "Error") {
+                this.ErrorPopup.FadeIn ();
+            } else {
+                this.ErrorPopup.FadeOut ();
+            }
+            
+            if (state == "Buffering") {
+                this.BufferingPopup.FadeIn ();
+            } else {
+                this.BufferingPopup.FadeOut ();
+            }
+        }));
+        
+        this.MediaElement.AddEventListener ("MediaError", delegate (this, function () {
+            this.ErrorPopup.FadeIn ();
+        }));
+        
+        this.MediaElement.AddEventListener ("BufferingProgressChanged", delegate (this, function () {
+            this.BufferingPopup.Progress = this.MediaElement.BufferingProgress;
         }));
     };
     
@@ -202,5 +228,88 @@ function MoonshineControlBar (media_element) {
     }));
     
     this.AfterConstructed ();
+}
+
+function MoonshinePopup () {
+    MtkPopup.call (this);
+    
+    this.Padding = 20;
+    
+    this.Xaml.Children.Add (this.CreateXaml ('<Rectangle Name="' + this.Name + 'Background"/>'));
+    this.PositionCenter ();
+        
+    this.Override ("OnStyleSet", function () {
+        this.background_fill = MtkStyle.CreateLinearGradient (this,
+            [0, 1], ["#d111", "#e000"]
+        );
+        
+        this.background_stroke = "#4fff";
+    });
+    
+    this.Override ("OnRealize", function () {
+        this.$OnRealize$ ();
+        if (!this.IsRealized) {
+            return;
+        }
+    });
+        
+    this.Override ("OnSizeAllocate", function () {
+        if (!this.IsRealized) {
+            return;
+        }
+        
+        this.$OnSizeAllocate$ ();
+        
+        var elem = this.XamlFind ("Background");
+        if (!elem) {
+            return;
+        }
+        
+        elem.Width = this.Allocation.Width;
+        elem.Height = this.Allocation.Height;
+        elem.Fill = this.background_fill;
+        elem.Stroke = this.background_stroke;
+        elem.StrokeThickness = 1;
+        elem.RadiusX = this.XPad / 2;
+        elem.RadiusY = this.YPad / 2;
+    });
+}
+
+function MoonshineBufferingPopup () {
+    MoonshinePopup.call (this);
+    
+    this.Label = new MtkLabel ("Buffering...");
+    this.Label.CustomForeground = true;
+    this.Label.FontWeight = "Bold";
+    this.Label.Xaml.Foreground = "#ddd";
+    
+    this.__defineSetter__ ("Progress", function (x) {
+        this.Label.Text = "Buffering: " + Math.round (x * 100).toString () + "%";
+    });
+    
+    this.Add (this.Label);
+}
+
+
+function MoonshineErrorPopup () {
+    MoonshinePopup.call (this);
+    
+    this.Box = new MtkVBox;
+    this.Box.Spacing = 5;
+    
+    this.Header = new MtkLabel ("Error");
+    this.Header.CustomForeground = true;
+    this.Header.CustomSize = true;
+    this.Header.FontSize = MtkStyle.Font.Size + 3;
+    this.Header.FontWeight = "Bold";
+    this.Header.Foreground = "#c00";
+    
+    this.Message = new MtkLabel ("The requested media could not be played.");
+    this.Message.CustomForeground = true;
+    this.Message.Foreground = "#ddd";
+    
+    this.Add (this.Box);
+    this.Box.PackStart (this.Header);
+    this.Box.PackStart (this.Message);
 }
 
