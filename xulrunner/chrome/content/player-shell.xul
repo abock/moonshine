@@ -19,7 +19,7 @@
     <!ENTITY % versionDTD SYSTEM "chrome://moonshine/locale/version.dtd">
     %versionDTD;
 ]>
-<window id="moon-media-standalone-player"
+<window id="moonshine-window"
   xmlns:html="http://www.w3.org/1999/xhtml"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <!-- // -->
