@@ -56,10 +56,6 @@ function MoonshinePlayer () {
             }
         }));
         
-        this.MediaElement.AddEventListener ("MediaError", delegate (this, function () {
-            this.ErrorPopup.FadeIn ();
-        }));
-        
         this.MediaElement.AddEventListener ("BufferingProgressChanged", delegate (this, function () {
             this.BufferingPopup.Progress = this.MediaElement.BufferingProgress;
         }));
