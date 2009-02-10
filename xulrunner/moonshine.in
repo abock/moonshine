@@ -4,20 +4,35 @@ XULRUNNER=$(readlink -e $(which xulrunner))
 BROWSER_PLUGIN_DIR=@BROWSER_PLUGIN_DIR@
 LIBDIR=${XULRUNNER%%/xulrunner*}
 
+FF_PROFILES_PATH="$HOME/.mozilla/firefox"
+FF_DEFAULT_PROFILE_PATH="$FF_PROFILES_PATH/$(awk '
+	{
+		if ($0 ~ /^\[Profile/) {
+			if (path && default) default_path=path;
+			path=""; default=0;
+		} 
+		else if ($0 ~ /^Default=1$/) default=1
+		else if ($0 ~ /^Path=/) path=$0
+	}
+	END { 
+		if (path && !default_path) default_path=path
+		if (default_path) {
+			sub (/^Path=/, "", default_path)
+			print default_path
+		}
+	}
+' < "$FF_PROFILES_PATH/profiles.ini" 2>/dev/null)"
+
+MOONLIGHT_XPI_PATH="$FF_DEFAULT_PROFILE_PATH/extensions/moonlight@novell.com/plugins"
+if [ ! -d "$MOONLIGHT_XPI_PATH" ]; then
+	MOONLIGHT_XPI_PATH=""
+fi
+
 if [ ! -d $BROWSER_PLUGIN_DIR ]; then
 	BROWSER_PLUGIN_DIR=$LIBDIR/browser-plugins
 fi
 
-if [ -z "$MOZ_PLUGIN_PATH" ]; then
-	export MOZ_PLUGIN_PATH=$BROWSER_PLUGIN_DIR
-else
-	# make sure that BROWSER_PLUGIN_DIR is in MOZ_PLUGIN_PATH
-	echo "$MOZ_PLUGIN_PATH" | grep "$BROWSER_PLUGIN_DIR" 2>&1 >/dev/null
-	_retval=$?
-	if [ ${_retval} -ne 0 ]; then
-		export MOZ_PLUGIN_PATH=$MOZ_PLUGIN_PATH:$BROWSER_PLUGIN_DIR
-	fi
-fi
+export MOZ_PLUGIN_PATH="${MOONLIGHT_PLUGIN_PATH+$MOONLIGHT_PLUGIN_PATH:}${MOONLIGHT_XPI_PATH+$MOONLIGHT_XPI_PATH:}${BROWSER_PLUGIN_DIR+$BROWSER_PLUGIN_DIR}"
 
 echo "xulrunner: $XULRUNNER"
 echo "libdir:    $LIBDIR"
