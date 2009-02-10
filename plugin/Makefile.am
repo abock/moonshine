@@ -15,7 +15,7 @@ $(RESOURCE_OUT_FILE): $(srcdir)/generate-resource $(RESOURCES)
 	$(SHELL) $< $@ $(RESOURCE_ALL_VAR_NAME) $(RESOURCES_BUILD)
 
 mpplugindir=$(BROWSER_PLUGIN_DIR)
-mpplugin_LTLIBRARIES = libmoonmp-plugin.la
+mpplugin_LTLIBRARIES = libmoonshine-plugin.la
 
 INCLUDES = \
 	$(MOZILLA_CFLAGS) \
@@ -24,26 +24,26 @@ INCLUDES = \
 	-Wall \
 	-ggdb3
 
-libmoonmp_plugin_la_SOURCES = \
+libmoonshine_plugin_la_SOURCES = \
 	$(srcdir)/mmp-plugin-proxy.c \
 	$(srcdir)/mmp-plugin.c \
 	$(srcdir)/mmp-binder.c \
 	$(srcdir)/mmp-script.c
 
-libmoonmp_plugin_la_LDFLAGS = \
+libmoonshine_plugin_la_LDFLAGS = \
 	-avoid-version \
 	-module
 
-libmoonmp_plugin_la_LIBADD = $(GLIB_LIBS)
+libmoonshine_plugin_la_LIBADD = $(GLIB_LIBS)
 
-$(libmoonmp_plugin_la_SOURCES): $(RESOURCE_OUT_FILE)
+$(libmoonshine_plugin_la_SOURCES): $(RESOURCE_OUT_FILE)
 
 FIREFOX = firefox -P dev -no-remote
 
 test-plugin: all 
 	mkdir -p ~/.mozilla/plugins
-	rm -f ~/.mozilla/plugins/libmoonmp-plugin.so
-	cp .libs/libmoonmp-plugin.so ~/.mozilla/plugins
+	rm -f ~/.mozilla/plugins/libmoonshine-plugin.so
+	cp .libs/libmoonshine-plugin.so ~/.mozilla/plugins
 
 run: hbo
 
@@ -60,7 +60,7 @@ gdb: test-plugin
 	gdb $(libdir)/firefox/firefox -ex "run -P dev -no-remote $(TEST_URI)"
 
 EXTRA_DIST = \
-	$(libmoonmp_plugin_la_SOURCES) \
+	$(libmoonshine_plugin_la_SOURCES) \
 	generate-resource \
     mmp-binder.h \
 	mmp-plugin.h \
