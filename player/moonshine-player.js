@@ -372,6 +372,8 @@ function MoonshineAboutPopup (host) {
                 this.ToggleFade ();
                 this.p = 0;
             }
+        } else {
+            this.p = 0;
         }
     }));
 }
