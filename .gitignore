@@ -39,3 +39,8 @@ xulrunner/defaults/preferences/debug.js
 # Dist
 *.tar.bz2
 *.tar.gz
+
+# XPI
+.xpinstall
+install.rdf
+*.xpi
