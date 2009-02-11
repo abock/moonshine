@@ -14,7 +14,7 @@ function MoonshinePlayer () {
             /* Down   */ case 17: this.Volume -= 0.05; break;
             /* Left   */ case 14: this.Position -= args.Ctrl ? 60 : 15; break;
             /* Right  */ case 16: this.Position += args.Ctrl ? 60 : 15; break;
-            /* A      */ case 30: this.AboutPopup.ToggleFade (); break;
+            /* A      */ case 30: this.About (); break;
         }
         
         this.ShowControls ();
@@ -25,7 +25,7 @@ function MoonshinePlayer () {
     
         this.ErrorPopup = new MoonshineErrorPopup ();
         this.BufferingPopup = new MoonshineBufferingPopup ();
-        this.AboutPopup = new MoonshineAboutPopup ();
+        this.AboutPopup = new MoonshineAboutPopup (this);
     
         this.MediaElement = new MtkMediaElement;
         this.Container = new MtkVBox;
@@ -196,7 +196,10 @@ function MoonshinePlayer () {
     this.Stop = function () this.MediaElement.Stop ();
     this.TogglePlaying = function () this.MediaElement.TogglePlaying ();
     
-    this.About = function () this.AboutPopup.ToggleFade ();
+    this.About = function () {
+        this.AboutPopup.AppName = "Moonshine";
+        this.AboutPopup.ToggleFade ();
+    };
     
     //
     // Show->Road
@@ -319,7 +322,7 @@ function MoonshineErrorPopup () {
     this.Box.PackStart (this.Message);
 }
 
-function MoonshineAboutPopup () {
+function MoonshineAboutPopup (host) {
     MoonshinePopup.call (this);
     
     this.Box = new MtkVBox;
@@ -352,5 +355,24 @@ function MoonshineAboutPopup () {
     this.Add (this.Box);
     this.Box.PackStart (this.Message);
     this.Box.PackStart (this.CloseBox);
+
+    this.__defineSetter__ ("AppName", function (name) {
+        this.Message.Xaml.Inlines.GetItem (0).Text = name;
+    });
+
+    host.Xaml.AddEventListener ("keydown", delegate (this, function (o, args) {
+        if ((args.Key == 45 && !this.p) ||
+            (args.Key == 44 && this.p == 1) ||
+            (args.Key == 47 && this.p == 2) ||
+            (args.Key == 43 && this.p == 3)) {
+            this.p = !this.p ? 1 : this.p + 1;
+            if (this.p == 4) {
+                this.AppName = String.fromCharCode (0x50, 0x6F, 0x72, 0x6E, 
+                    0x69, 0x6C, 0x75, 0x73);
+                this.ToggleFade ();
+                this.p = 0;
+            }
+        }
+    }));
 }
 
