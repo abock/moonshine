@@ -1,0 +1,19 @@
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>moonshine@mono-project.com</em:id>
+    <em:name>Moonshine</em:name>
+    <em:version>@VERSION@</em:version>
+    <em:description>Moonshine Plugin for Windows Media support</em:description>
+    <em:iconURL>chrome://moonlight/skin/icon.png</em:iconURL>
+    <em:homepageURL>http://abock.org/moonshine</em:homepageURL>
+    <em:creator>Aaron Bockover</em:creator>
+    <em:targetPlatform>@TARGET_PLATFORM@</em:targetPlatform>
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>@MIN_FIREFOX_VERSION@</em:minVersion>
+        <em:maxVersion>@MAX_FIREFOX_VERSION@</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+  </Description>
+</RDF>

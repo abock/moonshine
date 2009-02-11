@@ -1,0 +1,49 @@
+#!/bin/bash
+
+function build_for_host () {
+	source $1
+	local_tarball="$2"
+	tarball="$(basename "$local_tarball")"
+	srcdir="${tarball%.tar.bz2}"
+
+	PROFILE_DESC="$TARGET_OS / $TARGET_ARCH on $HOSTUSER@$HOSTNAME:$BUILD_ROOT"
+
+	function bail () {
+		echo "Failed to build $tarball for $PROFILE_DESC"
+		exit $1
+	}
+
+	[[ -z $TARGET_OS || \
+		-z $TARGET_ARCH || \
+		-z $HOSTUSER || \
+		-z $HOSTNAME || \
+		-z $BUILD_ROOT ]] && { echo "Invalid profile: $1"; bail 1; }
+
+	echo "Building for $PROFILE_DESC"
+
+	RCMD="ssh $HOSTUSER@$HOSTNAME "
+	RPATH="$HOSTUSER@$HOSTNAME:\"$BUILD_ROOT\""
+	$RCMD rm -rf "$BUILD_ROOT" || bail $?
+	$RCMD mkdir "$BUILD_ROOT" || bail $?
+	scp "$local_tarball" "$RPATH" || bail $?
+
+	BUILD="(pushd \"$BUILD_ROOT\" &&"
+	BUILD="$BUILD tar jxvf \"$tarball\" &&"
+	BUILD="$BUILD pushd \"$srcdir\" &&"
+	BUILD="$BUILD ./configure --prefix=\"$BUILD_ROOT\" --enable-xpi-build &&"
+	BUILD="$BUILD make)"
+	
+	$RCMD "$BUILD" || bail $?
+	
+	OUTDIR="$TARGET_OS-$TARGET_ARCH"
+	rm -rf "$OUTDIR" || bail $?
+	mkdir "$OUTDIR" || bail $?
+	scp "$RPATH/$srcdir/plugin/xpi/moonshine.xpi" "$OUTDIR" || bail $?
+}
+
+[[ -e $1 ]] || { echo "Must specify tarball path"; exit 1; }
+
+for profile in *.build-host; do
+	(build_for_host $profile $1) || exit $?
+done
+

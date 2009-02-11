@@ -1,0 +1,5 @@
+TARGET_OS=Linux
+TARGET_ARCH=x86_64
+HOSTNAME=localhost
+HOSTUSER=aaron
+BUILD_ROOT=/tmp/moonshine-xpi-build

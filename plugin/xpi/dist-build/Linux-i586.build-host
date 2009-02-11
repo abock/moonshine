@@ -1,0 +1,5 @@
+TARGET_OS=Linux
+TARGET_ARCH=i586
+HOSTNAME=164.99.121.99
+HOSTUSER=aaron
+BUILD_ROOT=/tmp/moonshine-xpi-build
