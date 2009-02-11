@@ -35,13 +35,15 @@ function build_for_host () {
 	
 	$RCMD "$BUILD" || bail $?
 	
-	OUTDIR="$TARGET_OS-$TARGET_ARCH"
+	OUTDIR="xpi/$TARGET_OS-$TARGET_ARCH"
 	rm -rf "$OUTDIR" || bail $?
-	mkdir "$OUTDIR" || bail $?
+	mkdir -p "$OUTDIR" || bail $?
 	scp "$RPATH/$srcdir/plugin/xpi/moonshine.xpi" "$OUTDIR" || bail $?
 }
 
 [[ -e $1 ]] || { echo "Must specify tarball path"; exit 1; }
+
+rm -rf xpi
 
 for profile in *.build-host; do
 	(build_for_host $profile $1) || exit $?
