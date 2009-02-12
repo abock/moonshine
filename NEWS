@@ -1,4 +1,10 @@
-2009-02-09: Inaugural Moonshine Release
+2009-02-12: 0.2 Release
+
+  - Fix major bug where Moonshine's NPP_StreamAsFile prevented
+    Moonlight from installing the WM codec after downloading from
+    Microsoft when running in plugin mode
+
+2009-02-09: 0.1 Inaugural Moonshine Release
 
   - Firefox plugin for WMP embedded compatibility
   - Chromeless Firefox shell for local playback, but very basic
