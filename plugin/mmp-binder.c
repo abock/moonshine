@@ -160,6 +160,20 @@ mmp_binder_npp_destroy (NPP instance, NPSavedData **save)
 	return MMP_HANDLE ()->moon_npp_destroy (instance, save);
 }
 
+// This is the NPStream::notifyData type that Moonlight uses internally!
+
+typedef enum {
+	STREAM_NOTIFY_NONE = 0,
+	STREAM_NOTIFY_SOURCE = 1,
+	STREAM_NOTIFY_DOWNLOADER = 2,
+	STREAM_NOTIFY_REQUEST = 3
+} StreamNotifyFlags;
+
+typedef struct {
+	StreamNotifyFlags type;
+	gpointer pdata;
+} StreamNotify;
+
 void
 mmp_binder_npp_stream_as_file (NPP instance, NPStream *stream, const gchar *fname)
 {
@@ -172,5 +186,9 @@ mmp_binder_npp_stream_as_file (NPP instance, NPStream *stream, const gchar *fnam
 	//    <embed src="..." />
 	//    <object data="..." />
 	//
+
+	if (stream && stream->notifyData && ((StreamNotify *)stream->notifyData)->type == STREAM_NOTIFY_DOWNLOADER) {
+		MMP_HANDLE ()->moon_npp_stream_as_file (instance, stream, fname);
+	}
 }
 
