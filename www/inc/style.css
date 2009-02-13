@@ -18,14 +18,16 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
 
 #main_container,.widthcontainer { max-width: 1004px; padding: 0 10px; margin: auto; }
 
-.twocolumn { width: 48%; float: left; }
+.twocolumn { width: 46%; margin-right: 2em; float: left; }
   .splashimage { width: 480px; }
-#splash { min-height: 768px; overflow: hidden; background-color: black; }
+#splash { min-height: 768px; overflow: hidden; 
+          background: black url(../images/splash-bg1.png) no-repeat center bottom; }
   #splash .widthcontainer { position: relative; }
   #logo { position: absolute; text-indent: -300em; 
           width: 412px; height: 388px; top: 30px; left: 30px; 
           background: url('../images/logo.png') no-repeat top left;
           }
-   .tagline { margin-top: 450px; color: #ddd; text-align: center; font-weight: normal; width: 450px; padding: 20px;}
+  #easymultimedia { margin-top: 180px; }
+   .tagline { margin-top: 435px; color: #ddd; text-align: center; font-weight: bold; width: 450px; padding: 20px;}
 
 .screenshots { clear: both; }

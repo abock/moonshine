@@ -23,7 +23,7 @@
       </div>
     </div>
     
-    <div class="twocolumn">
+    <div class="twocolumn" id="easymultimedia">
       <h2>Easy Multimedia</h2>
       <p>
       Moonshine leverages the Windows Media capabilities from <a href="http://silverlight.net/">Silverlight</a>,
@@ -50,7 +50,53 @@
   </div>
 
 <div id="main_container">  
-  <p style="margin-top: 2em">After you've installed Moonshine, try <a href="http://c-span.com/Watch/C-SPAN_wm.aspx">testing it out at C-SPAN</a>.</p>
+  <div class="twocolumn">
+    <h2>Why?</h2>
+
+    <p>
+    While Flash is now the typical format for delivering streaming video
+    over the web these days, lots of content still exists that requires
+    an additional browser plugin to view the media. Historically, this
+    content has not been well supported on Linux. Moonshine aims to fill
+    this gap by leveraging the Moonlight plugin, otherwise known as 
+    <em>Silverlight for Linux</em>.
+    </p>
+  </div>
+  
+  <div class="twocolumn">
+    <h2>How?</h2>
+
+    <p>
+    Moonshine is a browser plugin that proxies the Moonlight plugin, 
+    claiming support for Windows Media content. When Firefox comes across
+    content advertised as Windows Media, it loads the Moonshine plugin
+    which in turn loads Moonlight.
+    </p>
+
+    <p>
+    Moonshine then loads its media player application, written in Silverlight,
+    into the proxied Moonlight plugin, which is able to play back the 
+    Windows Media content.
+    </p>
+
+    <p>
+    The desktop player is Firefox with the standard web chrome replaced with 
+    controls to drive the media experience.
+    </p>
+  </div>
+
+  <br clear="both" />
+  
+  <h2>What about the Codec?</h2>
+
+  <p>
+  Windows Media support is included in Moonlight, and is provided directly
+  by Microsoft as part of their commitment to Silverlight compatibility
+  on all platforms. Moonshine simply leverages this support by loading
+  a Silverlight media player application into the browser for Moonlight
+  to run.
+
+  </p>
 
   <h2>Install the Desktop Player</h2>
 
@@ -65,47 +111,7 @@
   <li><a href="releases/moonshine-0.2.tar.bz2">Moonshine v0.2 Source Tarball</a></li>
   </ul>
 
-  <h2>Why?</h2>
 
-  <p>
-  While Flash is now the typical format for delivering streaming video
-  over the web these days, lots of content still exists that requires
-  an additional browser plugin to view the media. Historically, this
-  content has not been well supported on Linux. Moonshine aims to fill
-  this gap by leveraging the Moonlight plugin, otherwise known as 
-  <em>Silverlight for Linux</em>.
-  </p>
-
-  <h2>How?</h2>
-
-  <p>
-  Moonshine is a browser plugin that proxies the Moonlight plugin, 
-  claiming support for Windows Media content. When Firefox comes across
-  content advertised as Windows Media, it loads the Moonshine plugin
-  which in turn loads Moonlight.
-  </p>
-
-  <p>
-  Moonshine then loads its media player application, written in Silverlight,
-  into the proxied Moonlight plugin, which is able to play back the 
-  Windows Media content.
-  </p>
-
-  <p>
-  The desktop player is Firefox with the standard web chrome replaced with 
-  controls to drive the media experience.
-  </p>
-
-  <h2>What about the Codec?</h2>
-
-  <p>
-  Windows Media support is included in Moonlight, and is provided directly
-  by Microsoft as part of their commitment to Silverlight compatibility
-  on all platforms. Moonshine simply leverages this support by loading
-  a Silverlight media player application into the browser for Moonlight
-  to run.
-
-  </p>
 
   <h2>Source Code</h2>
 
