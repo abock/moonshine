@@ -106,8 +106,8 @@ NPError mmp_binder_npp_new (NPMIMEType pluginType, NPP instance, gushort mode,
 	mp_debug ("NPP_New");
 
 	// +2 to ensure space for onload and source
-	param_names = g_new0 (gchar *, argc + 2);
-	param_values = g_new0 (gchar *, argc + 2);
+	param_names = g_new0 (gchar *, argc + 3);
+	param_values = g_new0 (gchar *, argc + 3);
 
 	// We only preserve and proxy id, width, and height
 	for (i = 0; i < argc; i++) {
@@ -125,6 +125,9 @@ NPError mmp_binder_npp_new (NPMIMEType pluginType, NPP instance, gushort mode,
 
 	param_names[param_count] = g_strdup ("onload");
 	param_values[param_count++] = g_strdup (MLMP_XAML_LOAD_FUNCTION);
+
+	param_names[param_count] = g_strdup ("__mediaElementEmitEndedOnError");
+	param_values[param_count++] = g_strdup ("true");
 	
 	// Create an NPP wrapper and send the NPP_New to Moonlight
 	plugin = mmp_plugin_new (instance);
