@@ -6,7 +6,7 @@ theme_icons = \
 	apps,moonshine-24.png \
 	apps,moonshine-32.png \
 	apps,moonshine-48.png \
-	apps,moonshine-128.png
+	apps,moonshine-256.png
 
 install_icon_exec = $(SHELL) $(srcdir)/icon-theme-installer \
 	-t "$(theme)" \
