@@ -44,7 +44,8 @@ function MoonshineFullScreenButton () {
             this.Icon.Xaml.Children.GetItem (i).Fill = fill;
         }
         
-        this.Screen.AddEventListener ("ToggleFullScreen", delegate (this, function (o, fs) {
+        this.Screen.AddEventListener ("FullScreenChanged", delegate (this, function () {
+            var fs = this.Screen.GetFullScreen ();
             this.Icon.Xaml.Children.GetItem (0).Opacity = fs ? 0 : 1;
             this.Icon.Xaml.Children.GetItem (1).Opacity = fs ? 1 : 0;
         }));
