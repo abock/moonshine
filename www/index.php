@@ -16,13 +16,13 @@
   <li><p><em>Do it all without worrying about where to get the codec</em></p></li>
 </ul>
 
+<h2>Easy Multimedia</h2>
 <p>
 Moonshine leverages the Windows Media capabilities from <a href="http://silverlight.net/">Silverlight</a>,
 provided by the <a href="http://go-mono.com/moonlight">Moonlight</a> browser plugin on Linux, 
 and the <a href="http://www.firefox.com/">Firefox</a> web 
 browser framework to enable the playback of embedded Windows 
 Media content on the web and local files on a user's desktop.
-
 </p>
 
 <h2>Install the Browser Plugin</h2>
@@ -33,10 +33,9 @@ Before installing Moonshine, please <a href="http://go-mono.com/moonlight/">inst
 <div id="install-host">
 <p>Moonshine requires Firefox 3.0 or newer and JavaScript to be enabled in your browser. If you are
 seeing this message, it is likely that Moonshine will not run properly.</p>
-</ul>
+
 </div>
 
-<br class="clear" />
 
 <p style="margin-top: 2em">After you've installed Moonshine, try <a href="http://c-span.com/Watch/C-SPAN_wm.aspx">testing it out at C-SPAN</a>.</p>
 
