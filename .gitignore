@@ -35,6 +35,7 @@ xulrunner/defaults/preferences/debug.js
 # Extra
 *.swp
 *.wmv
+*.diff
 
 # Dist
 *.tar.bz2
