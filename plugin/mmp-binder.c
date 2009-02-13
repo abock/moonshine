@@ -188,7 +188,22 @@ mmp_binder_npp_stream_as_file (NPP instance, NPStream *stream, const gchar *fnam
 	//
 
 	if (stream && stream->notifyData && ((StreamNotify *)stream->notifyData)->type == STREAM_NOTIFY_DOWNLOADER) {
+		gchar *basename = g_path_get_basename (stream->url);
+
 		MMP_HANDLE ()->moon_npp_stream_as_file (instance, stream, fname);
+
+		if (g_str_has_prefix (basename, "silverlight-media-pack") && g_str_has_suffix (basename, ".so")) {
+			NPObject *object = NULL;
+			NPVariant result;
+			NPIdentifier method = NPN_GetStringIdentifier ("ReloadMediaSource");
+
+			if (NPN_GetValue (instance, NPNVPluginElementNPObject, &object) == NPERR_NO_ERROR &&
+				NPN_Invoke (instance, object, method, NULL, 0, &result) == NPERR_NO_ERROR) {
+				mp_debug ("Silverlight Media Pack downloaded, reloading media");
+			}
+		}
+
+		g_free (basename);
 	}
 }
 
