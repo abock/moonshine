@@ -3,10 +3,11 @@
 */
 
 body {
-  font-family: "Droid Sans", Sans-Serif;
-  size: 12pt;
+  font-family: "Droid Sans", Verdana, Sans-Serif;
+  font-size: 13px;
   color: white;
   background-color: #32303c;
+  padding: 0; margin: 0;
 }
 
 a { color: #f57900; }
@@ -14,3 +15,17 @@ a { color: #f57900; }
   a:visited { color: #e56900; }
   
 h1,h2,h3,h4,h5 { color: #729fcf; }
+
+#main_container,.widthcontainer { max-width: 1024px; margin: auto; }
+
+.twocolumn { width: 48%; float: left; }
+  .splashimage { width: 480px; }
+#splash { min-height: 768px; background-color: black; }
+  #splash .widthcontainer { position: relative; }
+  #logo { position: absolute; text-indent: -300em; 
+          width: 412px; height: 388px; top: 30px; left: 30px; 
+          background: url('../images/logo.png') no-repeat top left;
+          }
+   .tagline { margin-top: 450px; color: #ddd; text-align: center; font-weight: normal; width: 450px; padding: 20px;}
+
+.screenshots { clear: both; }
