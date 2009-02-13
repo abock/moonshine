@@ -1,0 +1,16 @@
+/* Moonshine default screen stylesheet 
+   (c) 2009 Jakub 'jimmac' Steiner <jimmac*gmail*com>
+*/
+
+body {
+  font-family: "Droid Sans", Sans-Serif;
+  size: 12pt;
+  color: white;
+  background-color: #32303c;
+}
+
+a { color: #f57900; }
+  a:hover { color: #ff9940;}
+  a:visited { color: #e56900; }
+  
+h1,h2,h3,h4,h5 { color: #729fcf; }

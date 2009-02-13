@@ -5,6 +5,7 @@ Makefile.in
 .libs
 *.la
 *.lo
+*~
 
 # Autotools/Configure
 config.*
