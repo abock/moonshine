@@ -16,11 +16,11 @@ a { color: #f57900; }
   
 h1,h2,h3,h4,h5 { color: #729fcf; }
 
-#main_container,.widthcontainer { max-width: 1024px; margin: auto; }
+#main_container,.widthcontainer { max-width: 1004px; padding: 0 10px; margin: auto; }
 
 .twocolumn { width: 48%; float: left; }
   .splashimage { width: 480px; }
-#splash { min-height: 768px; background-color: black; }
+#splash { min-height: 768px; overflow: hidden; background-color: black; }
   #splash .widthcontainer { position: relative; }
   #logo { position: absolute; text-indent: -300em; 
           width: 412px; height: 388px; top: 30px; left: 30px; 
