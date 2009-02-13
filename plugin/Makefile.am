@@ -47,10 +47,13 @@ test-plugin: all
 	rm -f ~/.mozilla/plugins/libmoonshine-plugin.so
 	cp .libs/libmoonshine-plugin.so ~/.mozilla/plugins
 
-run: hbo
+run: si
 
 wmp: test-plugin
 	$(FIREFOX) http://banshee-project.org/~abock/WMV/wmv-wmp.html
+
+si: test-plugin
+	$(FIREFOX) http://sportsillustrated.cnn.com/features/2008_swimsuit/video/melissa-baker.html
 
 hbo: test-plugin
 	$(FIREFOX) http://www.hbo.com/scripts/video/vidplayer.html?movie=/av/biglove/season3/b_love_min3pmdnt_1+section=biglove+num=1227749959016+title=Big%20Love:%20Three%20Past%20Midnight:%20Bill%20And%20Barb+tunein=Sundays%20at%209pm
