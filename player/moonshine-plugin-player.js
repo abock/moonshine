@@ -17,6 +17,12 @@ function MoonshinePluginPlayer (control) {
     this.MoonshinePlayer = new MoonshinePlayer;
     this.WmpControl = control.GetHost ();
 
+    this.WmpControl.ReloadMediaSource = delegate (this, function () {
+        var source = this.MoonshinePlayer.Source;
+        this.MoonshinePlayer.Source = null;
+        this.MoonshinePlayer.Source = source;
+    });
+
     // properties we wish to override for setting media location
     this.MediaSourceProperties = [ "src", "source", "filename", "url" ];
     
