@@ -21,7 +21,8 @@ li { list-style-image: url(../images/bullet.png); margin-bottom: 1em; }
 code { color: #fff; padding: .3em; background: #000; border: 2px solid #666; 
        -moz-border-radius: 4px; border-radius: 4px; -webkit-border-radius: 4px; }
 
-h1,h2,h3,h4,h5 { color: #729fcf; }
+h1,h2,h3,h4,h5 { color: #729fcf; margin-top: 3em; }
+  h1:first-child,h2:first-child { margin-top: 0; }
 
 #main_container,.widthcontainer { max-width: 964px; padding: 0 30px; margin: auto; }
 
@@ -31,7 +32,7 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
           background: black url(../images/splash-bg1.png) no-repeat center bottom; }
   #splash .widthcontainer { position: relative; min-width: 878px; }
   #logo { position: absolute; text-indent: -300em; 
-          width: 412px; height: 388px; top: 30px; left: 30px; 
+          width: 412px; height: 388px; top: 55px; left: 30px; margin-top: 0;
           background: url('../images/logo.png') no-repeat top left; z-index: 2;
           }
   #lightcone { position: absolute; z-index: 1; background: url(../images/cone.png) no-repeat 0 0;
