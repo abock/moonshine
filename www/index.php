@@ -38,7 +38,7 @@
       </p>
 
 
-      <h2>With Moonshine you can:</h2>
+      <h2 id="youcan">With Moonshine you can:</h2>
 
       <ul class="intro-list">
         <li><p>View embedded Windows Media content in Firefox</p></li>
