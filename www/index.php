@@ -20,11 +20,11 @@
         Before installing Moonshine, please <a href="http://go-mono.com/moonlight/">install Moonlight</a>.</p>
 
         <div id="install-host">
-        <p>Moonshine requires Firefox 3.0 or newer and JavaScript to be enabled in your browser. If you are
-        seeing this message, it is likely that Moonshine will not run properly.</p>
+          <p>Moonshine requires Firefox 3.0 or newer and JavaScript to be enabled in your browser. If you are
+          seeing this message, it is likely that Moonshine will not run properly.</p>
         </div>
       </div><!--install-buttons-->
-    </div>
+    </div><!--splashimage-->
     
     <div class="twocolumn" id="easymultimedia">
       <h2>Easy Multimedia</h2>

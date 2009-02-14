@@ -11,7 +11,7 @@ body {
 }
 
 a { color: #f57900; }
-  a:hover { color: #ff9940;}
+  a:hover { color: #fff;}
   a:visited { color: #e56900; }
   
 h1,h2,h3,h4,h5 { color: #729fcf; }
@@ -36,7 +36,7 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
     .install-button:hover { background-position: left center; }
     .install-button:active { background-position: left bottom; }
     #button32 { background-image: url(../images/32bit-button.png); background-repeat: no-repeat; top: 42; left: 55px; }
-    #button64 { background-image: url(../images/64bit-button.png); background-repeat: no-repeat; top: 42; right: 55px; }
+    #button64 { background-image: url(../images/64bit-button.png); background-repeat: no-repeat; top: 42; left: 170px; }
     
     #install-host { background-color: red; border: 1px solid yellow; padding: 2px 2em; 
                     border-radius: 3px;
