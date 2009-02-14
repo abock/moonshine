@@ -84,6 +84,7 @@
     <h2>How?</h2>
 
     <p>
+    <img class="icon" alt="" src="images/plugin.png" />
     Moonshine is a browser plugin that proxies the Moonlight plugin, 
     claiming support for Windows Media content. When Firefox comes across
     content advertised as Windows Media, it loads the Moonshine plugin
