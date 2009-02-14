@@ -29,7 +29,7 @@ h1,h2,h3,h4,h5 { color: #729fcf; margin-top: 3em; font-family: Nirvana, Sans-Ser
 .twocolumn { width: 43%; margin-right: 2em; float: left; }
   .splashimage { }
 #splash { min-height: 700px; overflow: hidden; 
-          background: black url(../images/splash-bg1.png) no-repeat center bottom; }
+          background: black url(../images/splash-bg1.jpg) no-repeat center bottom; }
   #splash .widthcontainer { position: relative; min-width: 878px; }
   #logo { position: absolute; text-indent: -300em; 
           width: 360px; height: 339px; top: 93px; left: 39px; margin-top: 0;
