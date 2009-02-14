@@ -16,6 +16,8 @@ a { color: #f57900; }
 
 img { border: 0 }
 
+li { list-style-image: url(../images/bullet.png); margin-bottom: 1em; }
+
 h1,h2,h3,h4,h5 { color: #729fcf; }
 
 #main_container,.widthcontainer { max-width: 964px; padding: 0 30px; margin: auto; }
@@ -53,7 +55,7 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
 .clear { clear: both; }
 
 .footer { color: #999; font-size: 90%; margin: 6em auto 10em auto ; width: 964px; padding: 0 30px; }
-  .logos { float: left; margin-right: 20px;}
+  .logos { float: left; margin-right: 10px; padding-right: 6px; border-right: 1px dotted #666; }
     .logos a { display: block; width: 48px; height: 48px; float: left; margin-right: 4px; background-position: 0 bottom; text-indent: -100em; }
     .logos a:hover { background-position: 0 top }
     #mono-logo { background-image: url(../images/mono-logo.png); background-repeat: no-repeat; outline: none; }
