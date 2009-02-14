@@ -24,7 +24,7 @@ code { color: #fff; padding: .3em; background: #000; border: 2px solid #666;
 h1,h2,h3,h4,h5 { color: #729fcf; margin-top: 3em; font-family: Nirvana, Sans-Serif; }
   h1:first-child,h2:first-child { margin-top: 0; }
 
-#main_container,.widthcontainer { max-width: 964px; padding: 0 30px; margin: auto; }
+#main_container,.widthcontainer { max-width: 864px; padding: 0 30px; margin: auto; }
 
 .twocolumn { width: 43%; margin-right: 2em; float: left; }
   .splashimage { }
@@ -59,16 +59,16 @@ h1,h2,h3,h4,h5 { color: #729fcf; margin-top: 3em; font-family: Nirvana, Sans-Ser
 
 .screenshots { height: 335px; z-index: 3; margin-top: -40px; padding: 50px; 
                background: url(../images/filmstrip.png) repeat-x 0 0; }
-  .screenshots>div { width: 964px; padding: 0 30px; margin: 0 auto; }
+  .screenshots>div { width: 864px; padding: 0 30px; margin: 0 auto; }
   .screenshots>div>div { float: left; padding: 18px; 
                          -moz-border-radius: 8px; border-radius: 8px; -webkit-border-radius: 8px;
-                         background-color: rgba(0,0,0,.2); margin-right: 20px; }
+                         background-color: rgba(0,0,0,.2); margin-right: 10px; }
   .screenshots>div>div:hover { background-color: rgba(100%,100%,100%,.2); }
   .screenshots a { display: block; border: 1px solid #fff; }
 
 .clear { clear: both; }
 
-.footer { color: #999; font-size: 90%; margin: 6em auto 10em auto ; width: 964px; padding: 0 30px; }
+.footer { color: #999; font-size: 90%; margin: 6em auto 10em auto ; width: 864px; padding: 0 30px; }
   .logos { float: left; margin-right: 10px; padding-right: 6px; border-right: 1px dotted #666; }
     .logos a { display: block; width: 48px; height: 48px; float: left; margin-right: 4px; background-position: 0 bottom; text-indent: -100em; }
     .logos a:hover { background-position: 0 top }
