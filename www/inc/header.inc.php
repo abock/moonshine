@@ -9,7 +9,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="inc/jquery.color.js"></script>
     <script type="text/javascript" src="inc/fancybox/jquery.fancybox.js"></script>
-    <script type="text/javascript" src="inc/fancybox/jquery.pngFix.js"></script>
+    <script type="text/javascript" src="inc/fancybox/jquery.pngFix.pack.js"></script>
     <script type="text/javascript" src="inc/moonshine.js"></script>
   </head>
   <body>
