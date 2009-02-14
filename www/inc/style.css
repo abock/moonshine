@@ -56,7 +56,15 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
     ul.intro-list { width: 18em; line-height: 200%; }
     #youcan { margin-top: 3em; }
 
-.screenshots { height: 335px; z-index: 3; margin-top: -40px; background: url(../images/filmstrip.png) repeat-x 0 0; }
+.screenshots { height: 335px; z-index: 3; margin-top: -40px; padding: 50px; 
+               background: url(../images/filmstrip.png) repeat-x 0 0; }
+  .screenshots>div { width: 964px; padding: 0 30px; margin: 0 auto; }
+  .screenshots>div>div { float: left; padding: 18px; 
+                         -moz-border-radius: 8px; border-radius: 8px; -webkit-border-radius: 8px;
+                         background-color: rgba(0,0,0,.2); margin-right: 20px; }
+  .screenshots>div>div:hover { background-color: rgba(100%,100%,100%,.2); }
+  .screenshots a { display: block; border: 1px solid #fff; }
+
 .clear { clear: both; }
 
 .footer { color: #999; font-size: 90%; margin: 6em auto 10em auto ; width: 964px; padding: 0 30px; }

@@ -51,6 +51,13 @@
 </div><!--splash-->
 
 <div class="screenshots clear">
+  <div>
+    <h2>Screenshots</h2>
+    <div><a href="images/screenshot-install.png"><img alt="*" src="images/thumbnail-install.png" /></a></div>
+    <div><a href="images/screenshot-install.png"><img alt="*" src="images/thumbnail-install.png" /></a></div>
+    <div><a href="images/screenshot-install.png"><img alt="*" src="images/thumbnail-install.png" /></a></div>
+    <div><a href="images/screenshot-install.png"><img alt="*" src="images/thumbnail-install.png" /></a></div>    
+  </div>
 </div>
 
 <div id="main_container">  
