@@ -13,7 +13,9 @@ body {
 a { color: #f57900; }
   a:hover { color: #fff;}
   a:visited { color: #e56900; }
-  
+
+img { border: 0 }
+
 h1,h2,h3,h4,h5 { color: #729fcf; }
 
 #main_container,.widthcontainer { max-width: 964px; padding: 0 30px; margin: auto; }
@@ -50,3 +52,9 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
 .screenshots { height: 335px; z-index: 3; margin-top: -40px; background: url(../images/filmstrip.png) repeat-x 0 0; }
 .clear { clear: both; }
 
+.footer { color: #999; font-size: 90%; margin: 6em auto 10em auto ; width: 964px; padding: 0 30px; }
+  .logos { float: left; margin-right: 20px;}
+    .logos a { display: block; width: 48px; height: 48px; float: left; margin-right: 4px; background-position: 0 bottom; text-indent: -100em; }
+    .logos a:hover { background-position: 0 top }
+    #mono-logo { background-image: url(../images/mono-logo.png); background-repeat: no-repeat; outline: none; }
+    #moonlight-logo { background-image: url(../images/moonlight-logo.png); background-repeat: no-repeat; outline: none; }
