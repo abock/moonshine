@@ -11,6 +11,7 @@
     <h1 id="logo"><?php print $page_title; ?></h1>
     <div class="twocolumn splashimage">
       <h3 class="tagline">Windows Media playback through Moonlight and Firefox for Linux</h3>
+      <div id="lightcone"></div>
 
       <h2>Install the Browser Plugin:</h2>
 

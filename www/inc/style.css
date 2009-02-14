@@ -25,8 +25,10 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
   #splash .widthcontainer { position: relative; }
   #logo { position: absolute; text-indent: -300em; 
           width: 412px; height: 388px; top: 30px; left: 30px; 
-          background: url('../images/logo.png') no-repeat top left;
+          background: url('../images/logo.png') no-repeat top left; z-index: 2;
           }
+  #lightcone { position: absolute; z-index: 1; background: url(../images/cone.png) no-repeat 0 0;
+               width: 880px; height: 172px; top: 290px; left: -80px; }
   #easymultimedia { margin-top: 180px; }
    .tagline { margin-top: 435px; color: #ddd; text-align: center; font-weight: bold; width: 450px; padding: 20px;}
 
