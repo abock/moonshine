@@ -10,7 +10,6 @@ $(document).ready(function () {
 
   $('a').colorHover(500,'#f57900','#ffffff');
   $(".screenshots a").fancybox();
-  $(".screenshots>div>div").rgbaHover(1000,'rgba(0,0,0,.2)','rgba(100,100,100,.2)');
 });
 
 (function($){
@@ -30,11 +29,4 @@ $(document).ready(function () {
     });
   }
   
-    $.fn.rgbaHover = function (animtime,fromColor,toColor) { //link hovers color
-    $(this).hover(function () {
-      return $(this).css('background-color',fromColor).stop().animate({'background-color': toColor},animtime);
-    }, function () {
-      return $(this).stop().animate({'background-color': fromColor},animtime);
-    });
-  }
 }) (jQuery);
