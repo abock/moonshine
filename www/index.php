@@ -46,7 +46,7 @@
   </div><!--widthcontainer-->
 </div><!--splash-->
 
-  <div class="screenshots">
+  <div class="screenshots clear">
   </div>
 
 <div id="main_container">  
@@ -85,7 +85,7 @@
     </p>
   </div>
 
-  <br clear="both" />
+  <br class="clear" />
   
   <h2>What about the Codec?</h2>
 

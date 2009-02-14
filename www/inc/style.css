@@ -6,7 +6,7 @@ body {
   font-family: "Droid Sans", Verdana, Sans-Serif;
   font-size: 13px;
   color: white;
-  background-color: #32303c;
+  background: #32303c url(../images/texture.png) repeat 0 0;
   padding: 0; margin: 0;
 }
 
@@ -16,9 +16,9 @@ a { color: #f57900; }
   
 h1,h2,h3,h4,h5 { color: #729fcf; }
 
-#main_container,.widthcontainer { max-width: 1004px; padding: 0 10px; margin: auto; }
+#main_container,.widthcontainer { max-width: 964px; padding: 0 30px; margin: auto; }
 
-.twocolumn { width: 46%; margin-right: 2em; float: left; }
+.twocolumn { width: 43%; margin-right: 2em; float: left; }
   .splashimage { width: 480px; }
 #splash { min-height: 768px; overflow: hidden; 
           background: black url(../images/splash-bg1.png) no-repeat center bottom; }
@@ -30,4 +30,4 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
   #easymultimedia { margin-top: 180px; }
    .tagline { margin-top: 435px; color: #ddd; text-align: center; font-weight: bold; width: 450px; padding: 20px;}
 
-.screenshots { clear: both; }
+.clear { clear: both; }
