@@ -19,10 +19,10 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
 #main_container,.widthcontainer { max-width: 964px; padding: 0 30px; margin: auto; }
 
 .twocolumn { width: 43%; margin-right: 2em; float: left; }
-  .splashimage { width: 480px; }
+  .splashimage { }
 #splash { min-height: 768px; overflow: hidden; 
           background: black url(../images/splash-bg1.png) no-repeat center bottom; }
-  #splash .widthcontainer { position: relative; }
+  #splash .widthcontainer { position: relative; min-width: 878px; }
   #logo { position: absolute; text-indent: -300em; 
           width: 412px; height: 388px; top: 30px; left: 30px; 
           background: url('../images/logo.png') no-repeat top left; z-index: 2;
@@ -30,6 +30,6 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
   #lightcone { position: absolute; z-index: 1; background: url(../images/cone.png) no-repeat 0 0;
                width: 880px; height: 172px; top: 290px; left: -80px; }
   #easymultimedia { margin-top: 180px; }
-   .tagline { margin-top: 435px; color: #ddd; text-align: center; font-weight: bold; width: 450px; padding: 20px;}
+   .tagline { margin-top: 435px; color: #ddd; text-align: center; font-weight: bold; width: 400px; padding: 20px;}
 
 .clear { clear: both; }
