@@ -72,7 +72,9 @@
     While Flash is now the typical format for delivering streaming video
     over the web these days, lots of content still exists that requires
     an additional browser plugin to view the media. Historically, this
-    content has not been well supported on Linux. Moonshine aims to fill
+    content has not been well supported on Linux.</p>
+    <p>
+    Moonshine aims to fill
     this gap by leveraging the Moonlight plugin, otherwise known as 
     <em>Silverlight for Linux</em>.
     </p>
@@ -113,16 +115,17 @@
 
   </p>
 
+
   <h2>Install the Desktop Player</h2>
 
-  <p>In addition to the Browser Plugin above for viewing content on the web, Moonshine 
+  <p class="twocolumn">In addition to the Browser Plugin above for viewing content on the web, Moonshine 
   offers a Firefox-based Desktop Player to allow you to play Windows Media content on your local computer.</p>
 
-  <p>Currently this must be installed from source. The source code also builds the browser plugin, so
+  <p class="twocolumn">Currently this must be installed from source. The source code also builds the browser plugin, so
   if you build Moonshine from source, you do not need to install the plugin through Firefox using
   the above download links.</p>
 
-  <ul>
+  <ul class="clear">
   <li><a href="releases/moonshine-0.2.tar.bz2">Moonshine v0.2 Source Tarball</a></li>
   </ul>
 
@@ -145,14 +148,15 @@
   </ul>
 
   <ul>
-  <li><p>Moonshine was developed by <a href="http://abock.org/">Aaron Bockover</a>, and would not be 
+  <li>Moonshine was developed by <a href="http://abock.org/">Aaron Bockover</a>, and would not be 
   possible without all the hard effort from the awesome guys on the Novell 
-  <a href="http://go-mono.com/moonlight">Moonlight</a> team.</p></li>
+  <a href="http://go-mono.com/moonlight">Moonlight</a> team.</li>
 
-  <li><p><a href="http://tirania.org/blog">Miguel de Icaza</a> insists on calling Moonshine &quot;Pornilus,&quot;
+  <li><a href="http://tirania.org/blog">Miguel de Icaza</a> insists on calling Moonshine &quot;Pornilus,&quot;
   a homage to an ancient Roman senator and patron of the arts from the 3rd century. 
-  He further insists he is <em>awesome</em> because of this historical connection.</p></li>
+  He further insists he is <em>awesome</em> because of this historical connection.</li>
   </ul>
+
   
 </div><!--main_container-->
 
