@@ -9,6 +9,7 @@ $(document).ready(function () {
 
 
   $('a').colorHover(500,'#f57900','#ffffff');
+  $(".screenshots a").fancybox(); 
 });
 
 (function($){
