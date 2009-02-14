@@ -47,6 +47,6 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
                     webkit-border-radius: 3px;
                     -moz-border-radius: 3px; }
 
-
+.screenshots { height: 335px; z-index: 3; margin-top: -40px; background: url(../images/filmstrip.png) repeat-x 0 0; }
 .clear { clear: both; }
 
