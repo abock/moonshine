@@ -28,7 +28,7 @@ h1,h2,h3,h4,h5 { color: #729fcf; margin-top: 3em; }
 
 .twocolumn { width: 43%; margin-right: 2em; float: left; }
   .splashimage { }
-#splash { min-height: 768px; overflow: hidden; 
+#splash { min-height: 700px; overflow: hidden; 
           background: black url(../images/splash-bg1.png) no-repeat center bottom; }
   #splash .widthcontainer { position: relative; min-width: 878px; }
   #logo { position: absolute; text-indent: -300em; 
@@ -74,3 +74,4 @@ h1,h2,h3,h4,h5 { color: #729fcf; margin-top: 3em; }
     .logos a:hover { background-position: 0 top }
     #mono-logo { background-image: url(../images/mono-logo.png); background-repeat: no-repeat; outline: none; }
     #moonlight-logo { background-image: url(../images/moonlight-logo.png); background-repeat: no-repeat; outline: none; }
+    .poweredby { color:#aaa; font-weight: bold; letter-spacing: 1px; margin-bottom: 1em;}
