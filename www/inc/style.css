@@ -19,7 +19,7 @@ img { border: 0 }
 li { list-style-image: url(../images/bullet.png); margin-bottom: 1em; }
 
 code { color: #fff; padding: .3em; background: #000; border: 2px solid #666; 
-       -moz-border-radius: 4px; border-radius: 4px; -webkit-border-radius: 4px; }
+       -moz-border-radius: 4px; border-radius: 4px; -webkit-border-radius: 4px; line-height: 228%; }
 
 h1,h2,h3,h4,h5 { color: #729fcf; margin-top: 3em; font-family: Nirvana, Sans-Serif; }
   h1:first-child,h2:first-child { margin-top: 0; }
