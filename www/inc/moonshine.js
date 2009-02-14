@@ -5,7 +5,7 @@ $(document).ready(function () {
   //prepare the install button
   $("#moonlight-banner, #install-host").remove();
   $("#install-buttons").append("<div id='button32'></div><div id='button64'></div>");
-  $("#button32, #button64").addClass('install-button').alphaHover(1000,'.8');
+  $("#button32, #button64").addClass('install-button').css('opacity','.8').alphaHover(1000,'.8');
 
 
   $('a').colorHover(500,'#f57900','#ffffff');
