@@ -31,5 +31,22 @@ h1,h2,h3,h4,h5 { color: #729fcf; }
                width: 880px; height: 172px; top: 290px; left: -80px; }
   #easymultimedia { margin-top: 180px; }
    .tagline { margin-top: 435px; color: #ddd; text-align: center; font-weight: bold; width: 400px; padding: 20px;}
+  #install-buttons { position: relative; padding: 0 4em; }
+    .install-button { width: 120px; height: 40px; border: 0; position: absolute; cursor: pointer; }
+    .install-button:hover { background-position: left center; }
+    .install-button:active { background-position: left bottom; }
+    #button32 { background-image: url(../images/32bit-button.png); background-repeat: no-repeat; top: 42; left: 55px; }
+    #button64 { background-image: url(../images/64bit-button.png); background-repeat: no-repeat; top: 42; right: 55px; }
+    
+    #install-host { background-color: red; border: 1px solid yellow; padding: 2px 2em; 
+                    border-radius: 3px;
+                    webkit-border-radius: 3px;
+                    -moz-border-radius: 3px; }
+    #moonlight-banner { background-color: yellow; border: 1px solid red; color: black; padding: 2px 2em; 
+                    border-radius: 3px;
+                    webkit-border-radius: 3px;
+                    -moz-border-radius: 3px; }
+
 
 .clear { clear: both; }
+
