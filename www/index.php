@@ -127,7 +127,7 @@
   the above download links.</p>
 
   <ul class="clear">
-  <li><a href="releases/moonshine-0.2.tar.bz2">Moonshine v0.2 Source Tarball</a></li>
+     <li class="download"><a href="releases/moonshine-0.2.tar.bz2">Moonshine v0.2 Source Tarball</a></li>
   </ul>
 
 
