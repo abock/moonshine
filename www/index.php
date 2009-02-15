@@ -67,46 +67,46 @@
 </div>
 
 <div id="main_container">  
-  <div class="twocolumn">
-    <h2>Why?</h2>
+  <div class="columns">
+    <div class="twocolumn">
+      <h2>Why?</h2>
 
-    <p>
-    While Flash is now the typical format for delivering streaming video
-    over the web these days, lots of content still exists that requires
-    an additional browser plugin to view the media. Historically, this
-    content has not been well supported on Linux.</p>
-    <p>
-    Moonshine aims to fill
-    this gap by leveraging the Moonlight plugin, otherwise known as 
-    <em>Silverlight for Linux</em>.
-    </p>
-  </div>
-  
-  <div class="twocolumn">
-    <h2>How?</h2>
+      <p>
+      While Flash is now the typical format for delivering streaming video
+      over the web these days, lots of content still exists that requires
+      an additional browser plugin to view the media. Historically, this
+      content has not been well supported on Linux.</p>
+      <p>
+      Moonshine aims to fill
+      this gap by leveraging the Moonlight plugin, otherwise known as 
+      <em>Silverlight for Linux</em>.
+      </p>
+    </div>
+    
+    <div class="twocolumn">
+      <h2>How?</h2>
 
-    <p>
-    <img class="icon" alt="" src="images/plugin.png" />
-    Moonshine is a browser plugin that proxies the Moonlight plugin, 
-    claiming support for Windows Media content. When Firefox comes across
-    content advertised as Windows Media, it loads the Moonshine plugin
-    which in turn loads Moonlight.
-    </p>
+      <p>
+      <img class="icon" alt="" src="images/plugin.png" />
+      Moonshine is a browser plugin that proxies the Moonlight plugin, 
+      claiming support for Windows Media content. When Firefox comes across
+      content advertised as Windows Media, it loads the Moonshine plugin
+      which in turn loads Moonlight.
+      </p>
 
-    <p>
-    Moonshine then loads its media player application, written in Silverlight,
-    into the proxied Moonlight plugin, which is able to play back the 
-    Windows Media content.
-    </p>
+      <p>
+      Moonshine then loads its media player application, written in Silverlight,
+      into the proxied Moonlight plugin, which is able to play back the 
+      Windows Media content.
+      </p>
 
-    <p>
-    The desktop player is Firefox with the standard web chrome replaced with 
-    controls to drive the media experience.
-    </p>
-  </div>
+      <p>
+      The desktop player is Firefox with the standard web chrome replaced with 
+      controls to drive the media experience.
+      </p>
+    </div><!--twocolumn-->
+  </div><!--columns-->
 
-  <br class="clear" />
-  
   <h2>What about the Codec?</h2>
 
   <p>
