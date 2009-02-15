@@ -10,7 +10,6 @@
     <script type="text/javascript" src="inc/jquery.color.js"></script>
     <script type="text/javascript" src="inc/fancybox/jquery.fancybox.js"></script>
     <script type="text/javascript" src="inc/fancybox/jquery.pngFix.pack.js"></script>
-    <script type="text/javascript" src="inc/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="inc/moonshine.js"></script>
     <!-- custom header font hack using typeface  http://typeface.neocracy.org -->
     <?php if (!eregi("(MSIE)",$_SERVER["HTTP_USER_AGENT"])) { ?>
