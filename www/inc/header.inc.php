@@ -18,3 +18,14 @@
     <?php } ?>
   </head>
   <body>
+  
+  <div class="navigation">
+    <div>
+    <?php if (!eregi("index.php$",$_SERVER['PHP_SELF'])) { ?>
+      <a href="index.php" class="first"><span class="typeface-js">Home</span></a>
+    <?php } ?>
+      <a href="download.php"><span class="typeface-js">Download</span></a>
+      <a href="samples.php"><span class="typeface-js">Samples</span></a>
+      <a href="faq.php"><span class="typeface-js">FAQ</span></a>
+    </div>
+  </div>

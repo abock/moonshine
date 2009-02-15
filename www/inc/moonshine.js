@@ -10,6 +10,7 @@ $(document).ready(function () {
 
   $('a').colorHover(500,'#f57900','#ffffff');
   $(".screenshots a").fancybox();
+  $(".navigation").css("top","-40px").animate({top: '12px'},2000);
 });
 
 (function($){

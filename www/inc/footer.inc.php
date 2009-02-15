@@ -1,4 +1,4 @@
-  <div class="footer">
+  <div class="footer clear">
     <div class="logos">
       <a id="mono-logo" href="http://www.go-mono.org">Mono</a>
       <a id="moonlight-logo" href="http://www.go-mono.org/moonlight">Moonlight</a>
