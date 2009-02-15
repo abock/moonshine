@@ -13,20 +13,10 @@
 
 <div id="main_container">
 
-  <div class="twocolumn">
-    <h2>Source package</h2>
-    <p>Download page</p>
-  </div>
-  
-  <div class="twocolumn">
-    <h2>Linux Distributions</h2>
-
-    <p>FIXME</p>
-  </div>
   
   <h2 class="clear">Install the Desktop Player</h2>
 
-  <div>
+  <div class="columns">
     <p class="twocolumn">In addition to the Browser Plugin above for viewing content on the web, Moonshine 
     offers a Firefox-based Desktop Player to allow you to play Windows Media content on your local computer.</p>
 
