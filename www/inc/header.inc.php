@@ -12,7 +12,9 @@
     <script type="text/javascript" src="inc/fancybox/jquery.pngFix.pack.js"></script>
     <script type="text/javascript" src="inc/moonshine.js"></script>
     <!-- custom header font hack using typeface  http://typeface.neocracy.org -->
-    <script type="text/javascript" src="inc/typeface.js"></script>
-    <script type="text/javascript" src="inc/nirvana_bold.typeface.js"></script>
+    <?php if (!eregi("(MSIE)",$_SERVER["HTTP_USER_AGENT"])) { ?>
+      <script type="text/javascript" src="inc/typeface.js"></script>
+      <script type="text/javascript" src="inc/nirvana_bold.typeface.js"></script>
+    <?php } ?>
   </head>
   <body>
