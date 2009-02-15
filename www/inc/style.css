@@ -52,7 +52,29 @@ h1,h2,h3,h4,h5 { color: #729fcf; margin-top: 3em; font-family: Nirvana, Sans-Ser
    .tagline { margin-top: 435px; color: #ddd; text-align: center; font-weight: bold; width: 400px; padding: 20px 5px;}
   #install-buttons { position: relative; }
     #install-buttons>h2 { text-align: center; }
-    #install-buttons .buttons { width: 240px; overflow: hidden; margin: 10px auto; }
+    #install-buttons .distros { overflow: hidden; margin-bottom: 50px; }
+      ul.tabs { display: block; overflow: hidden; margin: 0; padding: 0; }
+        ul.tabs li { width: 24px; display: block; float: left; text-align: center; padding: 0 4px; -moz-border-radius-topleft: 6px;
+                         -moz-border-radius-topright: 6px; -webkit-border-top-left-radius: 6px; -webkit-top-right-radius: 6px;
+                         overflow: hidden; text-indent: -100em; margin: 0 0 0 2px; 
+                         border: 1px solid rgba(100%,100%,100%,.2); border-bottom: 0;
+                         cursor: pointer;
+                         }
+        ul.tabs li.selected { background-color: #444 !important; border: 1px solid #444; }
+        ul.tabs li:first-child { margin-left: 0; }                
+        .scroller { overflow: hidden; width: 370px; height: 200px; padding: 0; margin: 0;  }
+        .slidepane { width: 2590px; height: 200px; }
+        .slidepane>div { float: left; width: 370px; height: 200px; background-color: #444; }
+        
+        #to_openSUSE { background: url(../images/distro-opensuse.png) no-repeat center center; }
+        #to_Ubuntu { background: url(../images/distro-ubuntu.png) no-repeat center center; } 
+        #to_Foresight { background: url(../images/distro-foresight.png) no-repeat center center; } 
+        #to_Fedora { background: url(../images/distro-fedora.png) no-repeat center center; }        
+        #to_Debian { background: url(../images/distro-debian.png) no-repeat center center; }
+        #to_Mandriva { background: url(../images/distro-mandriva.png) no-repeat center center; }
+        #to_OSX { background: url(../images/distro-osx.png) no-repeat center center; }
+        #to_source { background: url(../images/distro-source.png) no-repeat center center; }
+        #to_xpi { background: url(../images/distro-xpi.png) no-repeat center center; }
 
     #button32 { background-image: url(../images/32bit-button.png); background-repeat: no-repeat; top: 42; left: 55px; }
     #button64 { background-image: url(../images/64bit-button.png); background-repeat: no-repeat; top: 42; left: 170px; }
