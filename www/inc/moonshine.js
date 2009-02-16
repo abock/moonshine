@@ -7,7 +7,7 @@ $(document).ready(function () {
   $("#install-buttons").append("<h2>Install Moonshine:</h2><div id='install-button'></div>");
   //add an emblem of the platform 
   var user_agent = navigator.userAgent.toLowerCase ();
-  console.log(user_agent);
+  //console.log(user_agent);
   var platforms = {'suse':'suse', 
                    'sled':'suse',
                    'mac':'mac', 
