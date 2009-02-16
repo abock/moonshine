@@ -50,7 +50,7 @@ h1,h2,h3,h4,h5 { color: #729fcf; margin-top: 3em; font-family: Nirvana, Sans-Ser
                width: 880px; height: 172px; top: 290px; left: -80px; }
   #easymultimedia { margin: 180px 0 0 32px; }
    .tagline { margin-top: 435px; color: #ddd; text-align: center; font-weight: bold; width: 400px; padding: 20px 5px;}
-  #install-buttons { position: relative; }
+  #install-buttons { position: relative; width: 400px;}
     #install-buttons>h2 { text-align: center; }
     #install-button { width: 240px; height: 80px; cursor: pointer; margin: 0 auto; position: relative;
                       background: url(../images/install-button.png) no-repeat center top; }

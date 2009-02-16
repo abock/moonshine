@@ -4,7 +4,7 @@ $(document).ready(function () {
 
   //prepare the install button
   $("#moonlight-banner, #install-host").remove();
-  $("#install-buttons").append("<h2>Install Moonshine:</h2><div id='install-button'></div>");
+  $("#install-buttons").append("<div id='install-button'></div>");
   //add an emblem of the platform 
   var user_agent = navigator.userAgent.toLowerCase ();
   //console.log(user_agent);
