@@ -16,7 +16,15 @@ $(document).ready(function () {
                    'fedora':'fedora'};
   for (x in platforms) {
       if (user_agent.match(x)) {
-        $('#install-button').append("<div class='" + platforms[x] + " distro'></div>")
+        $('#install-button').append("<div class='" + platforms[x] + " distro'></div>").click(function () {
+          //do shit
+        }).mousedown(function() {
+          //move the emblem along ;)
+          $('#install-button .distro').css('top','25px');
+        }).mouseup(function () {
+          var top = $('#install-button .distro').css('top');
+          $('#install-button .distro').css('top','23px');
+        });
       }
   }
   
