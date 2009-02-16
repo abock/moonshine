@@ -4,8 +4,24 @@ $(document).ready(function () {
 
   //prepare the install button
   $("#moonlight-banner, #install-host").remove();
+  $("#install-buttons").append("<h2>Install Moonshine:</h2><div id='install-button'></div>");
+  //add an emblem if suse  
+  var user_agent = navigator.userAgent.toLowerCase ();
+  console.log(user_agent);
+  var platforms = {'suse':'suse', 
+                   'sled':'suse',
+                   'mac':'mac', 
+                   'ubuntu':'ubuntu', 
+                   'mandriva':'mandriva', 
+                   'fedora':'fedora'};
+  for (x in platforms) {
+    // console.log(platforms[key]);
 
-
+      if (user_agent.match(x)) {
+        $('#install-button').append("<div class='" + platforms[x] + " distro'></div>")
+      }
+  }
+  
   $('a').colorHover(500,'#f57900','#ffffff');
   $(".screenshots a").fancybox();
   $(".navigation").css("top","-40px").animate({top: '12px'},2000);
