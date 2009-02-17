@@ -1,16 +1,12 @@
 <?php
-  //HEADER
   $page_title = "Moonshine";
-  require_once('inc/header.inc.php');
-
+  require_once ('inc/header.inc.php');
 ?>
-
 
 <div id="splash">
   <div class="widthcontainer">
     <div class="twocolumn splashimage">
       <h3 class="tagline">Windows Media playback through Moonlight and Firefox for Linux</h3>
-
 
       <div id="install-buttons">
         <div id="moonlight-banner">
@@ -28,24 +24,21 @@
     
     <div id="lightcone"></div>
     <h1 id="logo"><?php print $page_title; ?></h1>
-    
-    
+
     <div class="twocolumn" id="easymultimedia">
       <h2>Easy Multimedia</h2>
       <p>
-      Moonshine leverages the Windows Media capabilities from <a href="http://silverlight.net/">Silverlight</a>,
-      provided by the <a href="http://go-mono.com/moonlight">Moonlight</a> browser plugin on Linux, 
-      and the <a href="http://www.firefox.com/">Firefox</a> web 
-      browser framework to enable the playback of embedded Windows 
-      Media content on the web and local files on a user's desktop.
+          Moonshine leverages the Windows Media capabilities from <a href="http://silverlight.net/">Silverlight</a>,
+          provided by the <a href="http://go-mono.com/moonlight">Moonlight</a> browser plugin on Linux, 
+          and the <a href="http://www.firefox.com/">Firefox</a> web 
+          browser framework to enable the playback of embedded Windows 
+          Media content on the web and local files on a user's desktop.
       </p>
-
 
       <h2 id="youcan">With Moonshine you can:</h2>
 
       <ul class="intro-list">
         <li><p>View embedded Windows Media content in Firefox</p></li>
-
         <li><p>Play local Windows Media content on your Desktop</p></li>
         <li><p><em>Do it all without worrying about where to get the codec</em></p></li>
       </ul>

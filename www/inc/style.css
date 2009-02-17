@@ -1,103 +1,365 @@
 /* Moonshine default screen stylesheet 
-   (c) 2009 Jakub 'jimmac' Steiner <jimmac*gmail*com>
-*/
+ * (c) 2009 Jakub 'jimmac' Steiner <jimmac*gmail*com>
+ */
 
 body {
-  font-family: "Droid Sans", Verdana, Sans-Serif;
-  font-size: 13px;
-  color: white;
-  background: #32303c url(../images/texture.png) repeat 0 0;
-  padding: 0; margin: 0;
-  line-height: 160%;
+    font-family: "Droid Sans", Verdana, sans-serif;
+    font-size: 13px;
+    color: white;
+    background: #32303c url(../images/texture.png) repeat 0 0;
+    padding: 0; margin: 0;
+    line-height: 160%;
 }
 
-a { color: #f57900; }
-  a:hover { color: #fff;}
-  a:visited { color: #e56900; }
+/* 
+ * Basic Elements/Classes
+ */
+
+a         { color: #f57900; }
+a:hover   { color: #fff;}
+a:visited { color: #e56900; }
 
 img { border: 0 }
 
-li { list-style-image: url(../images/bullet.png); margin-bottom: 1em; }
-  li.download { list-style-image: none; display: block; min-height: 48px;
-                background: url(../images/download.png) no-repeat 0 0; padding: 12px 0 0 56px;}
-code { color: #fff; padding: .3em; background: #000; border: 2px solid #666; 
-       -moz-border-radius: 4px; border-radius: 4px; -webkit-border-radius: 4px; line-height: 228%; }
+ul {
+    list-style: none;
+    padding-left: 1.5em;
+}
 
-h1,h2,h3,h4,h5 { color: #729fcf; margin-top: 3em; font-family: Nirvana, Sans-Serif; }
-  h1:first-child,h2:first-child { margin-top: 0; }
+li { 
+    margin: 0 0 1em 0;
+    padding: 0 0 0 22px;
+    background: url(../images/bullet.png) no-repeat 0 4px;
+}
 
-.navigation { position: absolute; margin: 0; width: 100%; top: 12px; left: 0; z-index: 4; }
-  .navigation span { color: #eeeeff; font-family: Nirvana, Sans-Serif; font-size: 14pt; font-weight: bold; opacity: 0.8 }
-  .navigation span:hover { opacity: 1 } 
-  .navigation>div { overflow: hidden; }
-  .navigation>div a { float: right; margin-right: 12px; text-decoration: none; outline: none; }
-  .navigation>div a.first { float: left; }
+li.download { 
+    list-style-image: none; 
+    display: block; 
+    min-height: 48px;
+    background: url(../images/download.png) no-repeat 0 0; 
+    padding: 12px 0 0 56px;
+}
 
-#main_container,.widthcontainer,.navigation>div { max-width: 864px; padding: 0 30px; margin: auto; }
+code { 
+    color: #fff; 
+    padding: .3em; 
+    background: #000; 
+    border: 2px solid #666; 
+    -moz-border-radius: 4px; 
+    border-radius: 4px; 
+    -webkit-border-radius: 4px; 
+    line-height: 228%; 
+}
 
-.columns { overflow: hidden; }
-  .twocolumn { width: 43%; float: left; }
-  .twocolumn:first-child { margin-right: 2em;  }
-  .splashimage { }
-#splash { min-height: 748px; overflow: hidden; 
-          background: black url(../images/splash-bg1.jpg) no-repeat center bottom; }
-  #splash .widthcontainer { position: relative; min-width: 878px; }
-  #logo { position: absolute; text-indent: -300em; 
-          width: 360px; height: 339px; top: 93px; left: 46px; margin-top: 0;
-          background: url('../images/logo.png') no-repeat top left; z-index: 2;
-          }
-  #lightcone { position: absolute; z-index: 1; background: url(../images/cone.png) no-repeat 0 0;
-               width: 880px; height: 172px; top: 290px; left: -80px; }
-  #easymultimedia { margin: 180px 0 0 32px; }
-   .tagline { margin-top: 435px; color: #ddd; text-align: center; font-weight: bold; width: 400px; padding: 20px 5px;}
-  #install-buttons { position: relative; width: 400px;}
-    #install-buttons>h2 { text-align: center; }
-    #install-button { width: 240px; height: 80px; cursor: pointer; margin: 0 auto; position: relative;
-                      background: url(../images/install-button.png) no-repeat center top; }
-        #install-button:hover { background-position: center center; }
-        #install-button:active { background-position: center bottom; }
-        #install-button .distro { width: 22px; height: 22px; position: absolute; top: 23px; left: 56px; }
-          .suse { background: url(../images/distro-opensuse.png) no-repeat center center; }
-          .mac { background: url(../images/distro-mac.png) no-repeat center center; }
-          .ubuntu { background: url(../images/distro-ubuntu.png) no-repeat center center; }
-          .mandriva { background: url(../images/distro-mandriva.png) no-repeat center center; }
-          .generic { background: url(../images/distro-generic.png) no-repeat center center; }
-          .foresight { background: url(../images/distro-foresight.png) no-repeat center center; }
-          .fedora { background: url(../images/distro-fedora.png) no-repeat center center; }
-          .debian { background: url(../images/distro-debian.png) no-repeat center center; }    
-    #install-host { background-color: red; border: 1px solid yellow; padding: 2px 2em; 
-                    border-radius: 3px;
-                    -webkit-border-radius: 3px;
-                    -moz-border-radius: 3px; margin-bottom: 38px;}
-    #moonlight-banner { background-color: yellow; border: 1px solid red; color: black; padding: 2px 2em; 
-                    border-radius: 3px;
-                    -webkit-border-radius: 3px;
-                    -moz-border-radius: 3px; }
-    ul.intro-list { width: 18em; line-height: 200%; }
-    #youcan { margin-top: 3em; }
+h1, h2, h3, h4, h5 { 
+    color: #729fcf; 
+    margin-top: 3em; 
+    font-family: Nirvana, Myriad, sans-serif; 
+}
 
-.screenshots { position: relative; height: 335px; z-index: 3; margin-top: -40px; padding: 50px 30px 0; 
-               background: url(../images/filmstrip.png) repeat-x 0 0; }
-  .screenshots>div { width: 864px; padding: 0 30px; margin: 0 auto; }
-  .screenshots>div>div { float: left; padding: 15px; 
-                         -moz-border-radius: 8px; border-radius: 8px; -webkit-border-radius: 8px;
-                         background-color: rgba(0,0,0,.2); margin-right: 8px; }
-  .screenshots>div>div:hover { background-color: rgba(100%,100%,100%,.2); }
-  .screenshots a { display: block; border: 1px solid #fff; }
+h1:first-child, 
+h2:first-child { 
+    margin-top: 0; 
+}
 
-.clear { clear: both; }
+/*
+ * Navigation
+ */
 
-.icon {display: block; margin: 2px 10px 0 0; float: left; width: 32px; height: 32px; }
+.navigation { 
+    position: absolute; 
+    margin: 0; 
+    width: 100%; 
+    top: 12px; 
+    left: 0; 
+    z-index: 4; 
+}
 
-.pageheading { position: relative; height: 335px; z-index: 3; margin-top: -40px; padding: 50px 30px 0; 
-             background: url(../images/filmstrip.png) repeat-x 0 0; }
-  .pageheading>div { width: 864px; padding: 0 30px; margin: 0 auto; }
-  .pageheading>div>h1 { margin-top: 200px; }
+.navigation span { 
+    color: #eeeeff; 
+    font-family: Nirvana, Myriad, sans-serif; 
+    font-size: 14pt; 
+    font-weight: bold; 
+    opacity: 0.8;
+}
 
-.footer { color: #999; font-size: 90%; margin: 6em auto 10em auto ; width: 864px; padding: 0 30px; }
-  .logos { float: left; margin-right: 10px; padding-right: 6px; border-right: 1px dotted #666; }
-    .logos a { display: block; width: 48px; height: 48px; float: left; margin-right: 4px; background-position: 0 bottom; text-indent: -100em; }
-    .logos a:hover { background-position: 0 top }
-    #mono-logo { background-image: url(../images/mono-logo.png); background-repeat: no-repeat; outline: none; }
-    #moonlight-logo { background-image: url(../images/moonlight-logo.png); background-repeat: no-repeat; outline: none; }
-    .poweredby { color:#aaa; font-weight: bold; letter-spacing: 1px; margin-bottom: 1em;}
+.navigation span:hover { 
+    opacity: 1; 
+} 
+
+.navigation > div { 
+    overflow: hidden; 
+}
+
+.navigation > div a { 
+    float: right; 
+    margin-right: 12px; 
+    text-decoration: none; 
+    outline: none; 
+}
+
+.navigation > div a.first { 
+    float: left; 
+}
+
+/*
+ * Layout/Columns
+ */
+
+#main_container,
+.widthcontainer,
+.navigation > div { 
+    max-width: 864px; 
+    padding: 0 30px; 
+    margin: auto; 
+}
+
+.columns               { overflow: hidden; }
+.twocolumn             { width: 43%; float: left; }
+.twocolumn:first-child { margin-right: 2em; }
+
+/*
+ * Home/Splash/Intro
+ */
+
+.splashimage { }
+
+#splash { 
+    min-height: 710px; 
+    overflow: hidden; 
+    background: #000 url(../images/splash-bg1.jpg) no-repeat center bottom;
+}
+
+#splash .widthcontainer { 
+    position: relative; 
+    min-width: 878px; 
+}
+
+#logo { 
+    position: absolute; 
+    text-indent: -300em; 
+    width: 360px; 
+    height: 339px; 
+    top: 58px; 
+    left: 46px; 
+    margin-top: 0; 
+    z-index: 2;
+    background: url('../images/logo.png') no-repeat top left;
+}
+
+#lightcone { 
+    position: absolute; 
+    z-index: 1; 
+    background: url(../images/cone.png) no-repeat 0 0;
+    width: 880px; 
+    height: 172px; 
+    top: 255px; 
+    left: -80px; 
+}
+
+#easymultimedia { 
+    margin: 145px 0 0 32px; 
+}
+
+.tagline { 
+    margin-top: 400px; 
+    color: #ddd; 
+    text-align: center; 
+    font-weight: bold; 
+    width: 300px; 
+    padding: 20px 0 20px 55px;
+}
+    
+#install-buttons { 
+    position: relative; 
+    width: 400px;
+}
+
+#install-buttons > h2 { 
+    text-align: center; 
+}
+
+#install-button {
+    width: 240px; 
+    height: 80px; 
+    cursor: pointer; 
+    margin: 0 auto; 
+    position: relative;
+    background: url(../images/install-button.png) no-repeat center top; 
+}
+
+#install-button:hover { 
+    background-position: center center; 
+}
+
+#install-button:active {
+    background-position: center bottom; 
+}
+
+#install-button .distro { 
+    width: 22px; 
+    height: 22px; 
+    position: absolute; 
+    top: 23px; 
+    left: 56px;
+}
+
+.suse      { background: url(../images/distro-opensuse.png) no-repeat center center; }
+.mac       { background: url(../images/distro-mac.png) no-repeat center center; }
+.ubuntu    { background: url(../images/distro-ubuntu.png) no-repeat center center; }
+.mandriva  { background: url(../images/distro-mandriva.png) no-repeat center center; }
+.generic   { background: url(../images/distro-generic.png) no-repeat center center; }
+.foresight { background: url(../images/distro-foresight.png) no-repeat center center; }
+.fedora    { background: url(../images/distro-fedora.png) no-repeat center center; }
+.debian    { background: url(../images/distro-debian.png) no-repeat center center; }
+
+#install-host { 
+    background-color: red; 
+    border: 1px solid yellow; 
+    padding: 2px 2em; 
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px; 
+    margin-bottom: 38px;
+}
+                    
+#moonlight-banner { 
+    background-color: yellow; 
+    border: 1px solid red; 
+    color: black; 
+    padding: 2px 2em; 
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+}
+                    
+ul.intro-list { 
+    width: 18em; 
+    line-height: 150%;
+}
+
+#youcan { 
+    margin-top: 3em; 
+}
+
+/*
+ * Screenshots
+ */
+
+.screenshots {
+    position: relative; 
+    height: 335px; 
+    z-index: 3; 
+    margin-top: -40px; 
+    padding: 50px 30px 0; 
+    background: url(../images/filmstrip.png) repeat-x 0 0;
+}
+
+.screenshots > div { 
+    width: 864px; 
+    padding: 0 30px; 
+    margin: 0 auto; 
+}
+
+.screenshots > div > div { 
+    float: left; 
+    padding: 15px; 
+    -moz-border-radius: 8px; 
+    border-radius: 8px; 
+    -webkit-border-radius: 8px;
+    background-color: rgba(0, 0, 0, .2);
+    margin-right: 8px;
+}
+
+.screenshots > div > div:hover {
+    background-color: rgba(100%, 100%, 100%, .2);
+}
+
+.screenshots a { 
+    display: block; 
+    border: 1px solid #fff; 
+}
+
+/*
+ * Misc Elements
+ */
+
+.clear { 
+    clear: both;
+}
+
+.icon {
+    display: block; 
+    margin: 2px 10px 0 0; 
+    float: left; 
+    width: 32px; 
+    height: 32px; 
+}
+
+/*
+ * Page Heading
+ */
+
+.pageheading { 
+    position: relative; 
+    height: 335px; 
+    z-index: 3; 
+    margin-top: -40px; 
+    padding: 50px 30px 0; 
+    background: url(../images/filmstrip.png) repeat-x 0 0; 
+
+}
+
+.pageheading > div { 
+    width: 864px; 
+    padding: 0 30px; 
+    margin: 0 auto; 
+}
+
+.pageheading > div > h1 { 
+    margin-top: 200px; 
+}
+
+/*
+ * Footer
+ */
+
+.footer { 
+    color: #999; 
+    font-size: 90%; 
+    margin: 6em auto 10em auto; 
+    width: 864px; 
+    padding: 0 30px; 
+}
+
+.logos { 
+    float: left; 
+    margin-right: 10px; 
+    padding-right: 6px; 
+    border-right: 1px dotted #666; 
+}
+
+.logos a { 
+    display: block; 
+    width: 48px; 
+    height: 48px; 
+    float: left; 
+    margin-right: 4px; 
+    background-position: 0 bottom; 
+    text-indent: -100em; 
+}
+
+.logos a:hover { 
+    background-position: 0 top; 
+}
+
+.poweredby { 
+    color:#aaa; 
+    font-weight: bold; 
+    letter-spacing: 1px; 
+    margin-bottom: 1em;
+}
+
+#mono-logo      { background-image: url(../images/mono-logo.png); background-repeat: no-repeat; outline: none; }
+#moonlight-logo { background-image: url(../images/moonlight-logo.png); background-repeat: no-repeat; outline: none; }
+
