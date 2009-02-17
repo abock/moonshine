@@ -1,6 +1,6 @@
 <?php
   //HEADER
-  $page_title = "Moonshine";
+  $page_title = "Moonshine BLAH";
   require_once('inc/header.inc.php');
 
 ?>
