@@ -61,6 +61,9 @@ hbo: test-plugin
 cspan: test-plugin
 	$(FIREFOX) http://www.c-span.org/Watch/C-SPAN_wm.aspx
 
+pl: test-plugin
+	$(FIREFOX) http://tvp.pl/informacje/serwis-info/wideo/13022009-1730
+
 gdb: test-plugin
 	gdb $(libdir)/firefox/firefox -ex "run -P dev -no-remote $(TEST_URI)"
 
