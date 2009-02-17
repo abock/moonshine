@@ -2,6 +2,7 @@
   //HEADER
   $page_title = "Moonshine";
   require_once('inc/header.inc.php');
+
 ?>
 
 
