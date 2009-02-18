@@ -7,7 +7,7 @@
 ?>
 
 <p>Moonshine can be installed for your Linux Distribution or just for Firefox as a plugin. 
-Linux packages include a Firefox launcher that allows the playback of local media files on your desktop.</p>
+Linux packages include a Firefox launcher that allows the playback of local media files on your computer.</p>
 
 <h2>1. Select Your Distribution</h2>
 
@@ -55,21 +55,20 @@ or typing <code>sudo conary update moonshine</code> from a terminal.</p>
 
 <div class="install firefox">
 <h2>2. Install the Firefox Plugin</h2>
-<p>The preferred way to install Moonshine is through packages provided by your Linux Distribution. If packages do not
-yet exist for your distribution, or you only care about the browser plugin (not the desktop player), you may install
-Moonshine as a Firefox Extension.</p>
+
 <p style="margin: 2em 0 0 2em"><a href="#"><img src="images/1click-install-button-ff.png" alt="Install Moonshine for Firefox" title="Install Moonshine for Firefox" /></a></p>
 </div>
   
 <div class="install generic clear">
 <h2>2. Install from Source</h2>
 <div class="columns">
-<p class="twocolumn">In addition to the Browser Plugin above for viewing content on the web, Moonshine 
-offers a Firefox-based Desktop Player to allow you to play Windows Media content on your local computer.</p>
 
-<p class="twocolumn">Currently this must be installed from source. The source code also builds the browser plugin, so
-if you build Moonshine from source, you do not need to install the plugin through Firefox using
-the above download links.</p>
+<p class="twocolumn">The preferred way to install Moonshine is through packages provided by your Linux Distribution. 
+If packages are not available, or you only care about the browser plugin (not the desktop player), 
+you may install Moonshine as a Firefox Extension.</p>
+
+<p class="twocolumn">The source code also builds the browser plugin, so
+if you build Moonshine from source, you do not need to install the Firefox Extension.</p>
 </div>
 
 <ul class="clear">
