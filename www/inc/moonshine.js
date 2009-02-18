@@ -33,7 +33,7 @@ $(document).ready(function () {
   //screenshots
   $(".screenshots a").fancybox();
   //slide in navigation
-  $(".navigation").css("top","-40px").animate({top: '12px'},2000);
+  $(".navigation-animation").css("top","-40px").animate({top: '12px'},2000);
 });
 
 

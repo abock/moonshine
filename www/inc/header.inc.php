@@ -23,7 +23,7 @@
   </head>
   <body>
   
-  <div class="navigation">
+  <div class="navigation<?php if ($is_home) echo " navigation-animation"?>">
     <div>
 <?php if (!$is_home) { ?>
       <a href="index.php" class="first"><span class="typeface-js">Home</span></a>
