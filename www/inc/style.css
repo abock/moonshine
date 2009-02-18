@@ -361,6 +361,7 @@ div.pageheading > div {
  */
  
 .install {
+    display: none;
 }
 
 .opensuse th {

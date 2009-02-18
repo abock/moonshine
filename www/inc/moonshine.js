@@ -50,6 +50,7 @@ $(document).ready (function () {
             $(o).hide ();
         } else {
             button.addClass ("chosen");
+            $(o).css ("opacity", 0).show ().animate ({"opacity": 1}, 1000);
         }
     });
     
