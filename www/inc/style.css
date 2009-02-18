@@ -162,7 +162,7 @@ h4:first-child {
     margin: 145px 0 0 32px; 
 }
 
-.tagline { 
+h3.tagline { 
     margin-top: 400px; 
     color: #ddd; 
     text-align: center; 
