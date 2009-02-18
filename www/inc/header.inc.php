@@ -20,6 +20,14 @@
     <script type="text/javascript" src="inc/typeface.js"></script>
     <script type="text/javascript" src="inc/nirvana_bold.typeface.js"></script>
 <?php } ?>
+    <script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
+    <script type="text/javascript">
+        /*try {
+            var pageTracker = _gat._getTracker ("UA-2679312-3");
+            pageTracker._trackPageview ();
+        } catch (err) {
+        }*/
+    </script>
   </head>
   <body>
   
