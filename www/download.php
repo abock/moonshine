@@ -6,10 +6,12 @@
     require_once ('inc/header.inc.php');
 ?>
 
-<p>Moonshine can be installed for your Linux Distribution or just for Firefox as a plugin. 
-Linux packages include a Firefox launcher that allows the playback of local media files on your computer.</p>
+
 
 <div class="download-widget">
+  <p>Moonshine can be installed for your Linux Distribution or just for Firefox as a plugin. 
+Linux packages include a Firefox launcher that allows the playback of local media files on your computer.</p>
+
   <h2>1. Select Your Distribution</h2>
 
   <div class="distro-list">
