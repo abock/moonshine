@@ -1,3 +1,8 @@
+
+<?php if (!$is_home) { ?>
+  </div><!-- main_container-->
+<?php } ?>
+
   <div class="footer clear">
     <div class="logos">
       <a id="mono-logo" href="http://www.go-mono.org">Mono</a>

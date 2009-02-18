@@ -41,3 +41,7 @@
     </div>
   </div>
 <?php } ?>
+
+<?php if (!$is_home) { ?>
+  <div id="main_container">
+<?php } ?>
