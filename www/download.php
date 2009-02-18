@@ -64,23 +64,26 @@ Moonshine as a Firefox Extension.</p>
 <div class="install generic clear">
 <h2>2. Install from Source</h2>
 <div class="columns">
-
-<p class="twocolumn">The preferred way to install Moonshine is through packages provided by your Linux Distribution. 
-If packages are not available, or you only care about the browser plugin (not the desktop player), 
-you may install Moonshine as a Firefox Extension.</p>
-
-<p class="twocolumn">The source code also builds the browser plugin, so
-if you build Moonshine from source, you do not need to install the Firefox Extension.</p>
+    <div class="twocolumn">
+      <p>The preferred way to install Moonshine is through packages provided by your Linux Distribution. 
+      If packages are not available, or you only care about the browser plugin (not the desktop player), 
+      you may install Moonshine as a Firefox Extension.</p>
+      <ul>
+       <li class="download"><a href="releases/moonshine-0.2.tar.bz2">Moonshine v0.2 Source Tarball</a></li>
+      </ul>
+  </div>
+  <div class="twocolumn">
+    <p>The source code also builds the browser plugin, so
+    if you build Moonshine from source, you do not need to install the Firefox Extension.</p>
+    
+    <ul>
+      <li>Moonshine is developed in GIT: <br/> <code style="white-space: nowrap;">git clone git://github.com/abock/moonshine.git</code></li>
+      <li><a href="http://github.com/abock/moonshine/tree/master">View Source (github)</a></li>
+    </ul>
+  </div>
 </div>
 
-<ul class="clear">
- <li class="download"><a href="releases/moonshine-0.2.tar.bz2">Moonshine v0.2 Source Tarball</a></li>
-</ul>
 
-<ul>
-<li>Moonshine is developed in GIT: <code>git clone git://github.com/abock/moonshine.git</code></li>
-<li><a href="http://github.com/abock/moonshine/tree/master">View Source (github)</a></li>
-</ul>
 
 </div>
 
