@@ -42,12 +42,11 @@ li.download {
 
 code { 
     color: #fff; 
-    padding: .3em; 
-    background: #000; 
-    border: 2px solid #666; 
-    -moz-border-radius: 4px; 
-    border-radius: 4px; 
-    -webkit-border-radius: 4px; 
+    padding: 1px .5em; 
+    background: url(../images/black-50.png);
+    -moz-border-radius: 5px; 
+    border-radius: 5px; 
+    -webkit-border-radius: 5px; 
     line-height: 228%; 
 }
 
@@ -204,14 +203,15 @@ h2:first-child {
     left: 56px;
 }
 
-.suse      { background: url(../images/distro-opensuse.png) no-repeat center center; }
-.mac       { background: url(../images/distro-mac.png) no-repeat center center; }
-.ubuntu    { background: url(../images/distro-ubuntu.png) no-repeat center center; }
-.mandriva  { background: url(../images/distro-mandriva.png) no-repeat center center; }
-.generic   { background: url(../images/distro-generic.png) no-repeat center center; }
-.foresight { background: url(../images/distro-foresight.png) no-repeat center center; }
-.fedora    { background: url(../images/distro-fedora.png) no-repeat center center; }
-.debian    { background: url(../images/distro-debian.png) no-repeat center center; }
+.button-opensuse  { background: url(../images/distro-logos/22x22/opensuse.png) no-repeat center center; }
+.button-osx       { background: url(../images/distro-logos/22x22/osx.png) no-repeat center center; }
+.button-ubuntu    { background: url(../images/distro-logos/22x22/ubuntu.png) no-repeat center center; }
+.button-mandriva  { background: url(../images/distro-logos/22x22/mandriva.png) no-repeat center center; }
+.button-generic   { background: url(../images/distro-logos/22x22/generic.png) no-repeat center center; }
+.button-foresight { background: url(../images/distro-logos/22x22/foresight.png) no-repeat center center; }
+.button-fedora    { background: url(../images/distro-logos/22x22/fedora.png) no-repeat center center; }
+.button-debian    { background: url(../images/distro-logos/22x22/debian.png) no-repeat center center; }
+.button-firefox   { background: url(../images/distro-logos/22x22/firefox.png) no-repeat center center; }
 
 #install-host { 
     background-color: red; 
@@ -355,4 +355,51 @@ div.pageheading > div {
 
 #mono-logo      { background-image: url(../images/mono-logo.png); background-repeat: no-repeat; outline: none; }
 #moonlight-logo { background-image: url(../images/moonlight-logo.png); background-repeat: no-repeat; outline: none; }
+
+/*
+ * Downloads Page
+ */
+ 
+.install {
+}
+
+.opensuse th {
+    text-align: left;
+}
+
+.opensuse th:first-child {
+    padding-right: 80px;
+}
+
+/*
+ * Downloads Distro Buttons
+ */
+ 
+.distro-list div.distro-button {
+    display: block;
+    float: left;
+    cursor: pointer;
+    text-align: center;
+    padding: 4px 14px;
+    margin: 0 .5em 0 0;
+    
+    border: 2px solid transparent;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.distro-list div.distro-button:hover,
+.distro-list div.distro-button.chosen {
+    border-color: #000;
+    background: url(../images/black-50.png);
+}
+
+.distro-list div.distro-button p {
+    margin: 0;
+    padding: 0;
+    font-size: 85%;
+    font-weight: bold;
+}
+
 
