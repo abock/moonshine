@@ -57,7 +57,9 @@ h1, h2, h3, h4, h5 {
 }
 
 h1:first-child, 
-h2:first-child { 
+h2:first-child,
+h3:first-child,
+h4:first-child { 
     margin-top: 0; 
 }
 
@@ -408,4 +410,5 @@ div.pageheading > div {
     font-weight: bold;
 }
 
-
+h4.distro { color: #fff; margin: 0; }
+.installbuttons { text-align: center; }

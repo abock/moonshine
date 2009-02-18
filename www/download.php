@@ -20,23 +20,21 @@ Linux packages include a Firefox launcher that allows the playback of local medi
   <h2>2. Install on openSUSE</h2>
   <div class="columns">
   <div class="twocolumn">
-  <table>
-  <tr>
-    <th>openSUSE 11.1</th>
-    <th>openSUSE 11.0</th>
-  </tr>
-  <tr>
-    <td>
-      <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.1/banshee-1.ymp" ><img src="images/1click-install-button.png" alt="1-Click Install for openSUSE 11.1" title="1-Click Install for openSUSE 11.1" /></a></div>
-      <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.1/" title="openSUSE 11.1 Repository">Repository</a></div>
-    </td>
-    <td>
-      <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.0/banshee-1.ymp" ><img src="images/1click-install-button.png" alt="1-Click Install for openSUSE 11.0" title="1-Click Install for openSUSE 11.0" /></a></div>
-      <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.0/" title="openSUSE 11.0 Repository">Repository</a></div>
-    </td>
-  </tr>
-  </table>
+  
+    <div class="columns installbuttons">
+      <div class="twocolumn">
+        <h4 class="distro">openSUSE 11.1</h4>
+        <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.1/banshee-1.ymp" ><img src="images/1click-install-button.png" alt="1-Click Install for openSUSE 11.1" title="1-Click Install for openSUSE 11.1" /></a></div>
+        <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.1/" title="openSUSE 11.1 Repository">Repository</a></div>
+      </div>
+      <div class="twocolumn">
+        <h4 class="distro">openSUSE 11.0</h4>
+        <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.0/banshee-1.ymp" ><img src="images/1click-install-button.png" alt="1-Click Install for openSUSE 11.0" title="1-Click Install for openSUSE 11.0" /></a></div>
+        <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.0/" title="openSUSE 11.0 Repository">Repository</a></div>
+      </div>
+    </div>
   </div>
+
   <div class="twocolumn">
   <strong>Note:</strong> The 1-click install provides the opportunity to automatically subscribe to the repository. 
   If you prefer to install manually from the command line or YaST, subscribe to the appropriate repository to the left and
