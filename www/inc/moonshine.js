@@ -63,13 +63,8 @@ $(document).ready (function () {
         $("#install-button .distro").css ("top", "23px");
     });
     
-    // link hovers animated
     $("a").colorHover (500, "#f57900", "#ffffff");
-    
-    //screenshots
     $(".screenshots a").fancybox ();
-    
-    //slide in navigation
     $(".navigation-animation").css ("top", "-40px").animate ({top: "12px"}, 2000);
 });
 
