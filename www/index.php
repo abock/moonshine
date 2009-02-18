@@ -1,6 +1,8 @@
 <?php
-  $page_title = "Moonshine";
-  require_once ('inc/header.inc.php');
+    $page_meta = array (
+        "title" => "Moonshine"
+    );
+    require_once ('inc/header.inc.php');
 ?>
 
 <div id="splash">

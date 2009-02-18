@@ -301,23 +301,22 @@ ul.intro-list {
  */
 
 .pageheading { 
-    position: relative; 
-    height: 335px; 
+    position: relative;
     z-index: 3; 
-    margin-top: -40px; 
-    padding: 50px 30px 0; 
-    background: url(../images/filmstrip.png) repeat-x 0 0; 
-
+    padding: 60px 0 30px 0;
+    margin: 0 0 2em 0;
+    background: url(../images/filmstrip.png) repeat-x 0 bottom; 
 }
 
-.pageheading > div { 
-    width: 864px; 
-    padding: 0 30px; 
-    margin: 0 auto; 
+div.pageheading > div {
+    width: 864px;
+    margin: 0 auto;
+    background: url(../images/logo-small.png) no-repeat 0 0;
+    min-height: 64px;
 }
 
-.pageheading > div > h1 { 
-    margin-top: 200px; 
+div.pageheading > div > h1 {
+    padding: 20px 0 0 80px;
 }
 
 /*

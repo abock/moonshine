@@ -1,15 +1,11 @@
 <?php
-  //HEADER
-  $page_title = "Moonshine";
-  require_once('inc/header.inc.php');
-
+    $page_meta = array (
+        "title" => "FAQ",
+        "page-heading" => "Frequently Asked Questions"
+    );
+    
+    require_once ('inc/header.inc.php');
 ?>
-
-<div class="pageheading">
-  <div>
-    <h1>Frequently Asked Questions</h1>
-  </div>
-</div>
 
 <div id="main_container">
   
@@ -31,7 +27,4 @@
   
 </div><!--main_container-->
 
-<?php
-  //FOOTER
-  require_once('inc/footer.inc.php');  
-?> 
+<?php require_once('inc/footer.inc.php'); ?> 
