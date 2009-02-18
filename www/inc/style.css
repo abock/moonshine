@@ -375,6 +375,11 @@ div.pageheading > div {
 /*
  * Downloads Distro Buttons
  */
+
+.download-widget {
+  min-height: 35em;
+  overflow: hidden;
+}
  
 .distro-list div.distro-button {
     display: block;
