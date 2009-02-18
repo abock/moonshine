@@ -412,3 +412,10 @@ div.pageheading > div {
 
 h4.distro { color: #fff; margin: 0; }
 .installbuttons { text-align: center; }
+
+a.oneclick { display: block; width: 120px; height: 30px; background-repeat: none; background-position: center top; 
+             text-indent: -150em; margin: 0 auto; outline: none; }
+a.oneclick.opensuse { background-image: url(../images/1click-install-button.png); }
+a.oneclick.firefox { margin: 0; background-image: url(../images/install-plugin.png); }
+a.oneclick:hover { background-position: center center; }
+a.oneclick:active { background-position: center bottom; }

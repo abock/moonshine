@@ -24,12 +24,12 @@ Linux packages include a Firefox launcher that allows the playback of local medi
     <div class="columns installbuttons">
       <div class="twocolumn">
         <h4 class="distro">openSUSE 11.1</h4>
-        <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.1/banshee-1.ymp" ><img src="images/1click-install-button.png" alt="1-Click Install for openSUSE 11.1" title="1-Click Install for openSUSE 11.1" /></a></div>
+        <div><a class="oneclick opensuse" href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.1/banshee-1.ymp" >1-Click Install for openSUSE 11.1</a></div>
         <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.1/" title="openSUSE 11.1 Repository">Repository</a></div>
       </div>
       <div class="twocolumn">
         <h4 class="distro">openSUSE 11.0</h4>
-        <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.0/banshee-1.ymp" ><img src="images/1click-install-button.png" alt="1-Click Install for openSUSE 11.0" title="1-Click Install for openSUSE 11.0" /></a></div>
+        <div><a class="oneclick opensuse" href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.0/banshee-1.ymp" >1-Click Install for openSUSE 11.0</a></div>
         <div><a href="http://download.opensuse.org/repositories/Banshee/openSUSE_11.0/" title="openSUSE 11.0 Repository">Repository</a></div>
       </div>
     </div>
@@ -57,7 +57,7 @@ Linux packages include a Firefox launcher that allows the playback of local medi
   <p>The preferred way to install Moonshine is through packages provided by your Linux Distribution. If packages do not
   yet exist for your distribution, or you only care about the browser plugin (not the desktop player), you may install
   Moonshine as a Firefox Extension.</p>
-  <p style="margin: 2em 0 0 2em"><a href="#"><img src="images/1click-install-button-ff.png" alt="Install Moonshine for Firefox" title="Install Moonshine for Firefox" /></a></p>
+  <p style="margin: 2em 0 0 2em"><a href="#" class="oneclick firefox">Install Moonshine for Firefox</a></p>
   </div>
     
   <div class="install generic clear">
