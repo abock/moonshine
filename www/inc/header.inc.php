@@ -10,6 +10,7 @@
     <title>Moonshine<?php echo isset ($page_meta["title"]) ? " - " . $page_meta["title"] : "" ?></title>
     <link rel="stylesheet" href="inc/style.css" type="text/css" media="screen" title="default stylesheet" charset="utf-8" />
     <link rel="stylesheet" href="inc/fancybox/fancy.css" type="text/css" media="screen" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <script type="text/javascript" src="inc/jquery.min.js"></script>
     <script type="text/javascript" src="inc/jquery.color.js"></script>
     <script type="text/javascript" src="inc/fancybox/jquery.fancybox.js"></script>

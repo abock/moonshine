@@ -57,7 +57,9 @@ h1, h2, h3, h4, h5 {
 }
 
 h1:first-child, 
-h2:first-child { 
+h2:first-child,
+h3:first-child,
+h4:first-child { 
     margin-top: 0; 
 }
 
@@ -160,7 +162,7 @@ h2:first-child {
     margin: 145px 0 0 32px; 
 }
 
-.tagline { 
+h3.tagline { 
     margin-top: 400px; 
     color: #ddd; 
     text-align: center; 
@@ -375,6 +377,11 @@ div.pageheading > div {
 /*
  * Downloads Distro Buttons
  */
+
+.download-widget {
+  min-height: 35em;
+  overflow: hidden;
+}
  
 .distro-list div.distro-button {
     display: block;
@@ -403,4 +410,12 @@ div.pageheading > div {
     font-weight: bold;
 }
 
+h4.distro { color: #fff; margin: 0; }
+.installbuttons { text-align: center; }
 
+a.oneclick { display: block; width: 120px; height: 30px; background-repeat: none; background-position: center top; 
+             text-indent: -150em; margin: 0 auto; outline: none; }
+a.oneclick.opensuse { background-image: url(../images/1click-install-button.png); }
+a.oneclick.firefox { margin: 0; background-image: url(../images/install-plugin.png); }
+a.oneclick:hover { background-position: center center; }
+a.oneclick:active { background-position: center bottom; }
