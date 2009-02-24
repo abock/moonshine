@@ -51,7 +51,7 @@ function MoonshinePluginPlayer (control) {
         switch (param) {
             case "background":
             case "bgcolor":      this.MoonshinePlayer.Background = value; break;
-            case "showcontrols": this.MoonshinePlayer.ControlsVisible = to_bool (value); break;
+            // case "showcontrols": this.MoonshinePlayer.ControlsVisible = to_bool (value); break;
             case "autostart":    this.MoonshinePlayer.AutoPlay = to_bool (value); break;
             case "loop":         this.MoonshinePlayer.LoopPlayback = to_bool (value); break;     
         }
