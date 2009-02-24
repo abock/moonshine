@@ -64,8 +64,15 @@ cspan: test-plugin
 pl: test-plugin
 	$(FIREFOX) http://tvp.pl/informacje/serwis-info/wideo/13022009-1730
 
+stanford: test-plugin
+	$(FIREFOX) http://ee380.stanford.edu/cgi-bin/videologger.php?target=090107-ee380-300.asx
+
+crap: test-plugin
+	$(FIREFOX) http://banshee-project.org/~abock/stanford.asx
+
 gdb: test-plugin
 	gdb $(libdir)/firefox/firefox -ex "run -P dev -no-remote $(TEST_URI)"
+
 
 EXTRA_DIST = \
 	$(libmoonshine_plugin_la_SOURCES) \
