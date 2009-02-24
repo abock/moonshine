@@ -126,7 +126,7 @@ NPError mmp_binder_npp_new (NPMIMEType pluginType, NPP instance, gushort mode,
 	param_names[param_count] = g_strdup ("onload");
 	param_values[param_count++] = g_strdup (MLMP_XAML_LOAD_FUNCTION);
 
-	param_names[param_count] = g_strdup ("__mediaElementEmitEndedOnError");
+	param_names[param_count] = g_strdup ("moonlight-relaxed-media-mode");
 	param_values[param_count++] = g_strdup ("true");
 	
 	// Create an NPP wrapper and send the NPP_New to Moonlight

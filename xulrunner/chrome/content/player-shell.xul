@@ -97,6 +97,7 @@
     <html:object id="moon-embedded-player" type="application/x-silverlight" flex="1">
       <html:param name="source" value="#fakexaml"/>
       <html:param name="onload" value="MoonshineBindInstance"/>
+      <html:param name="moonlight-relaxed-media-mode" value="true"/>
     </html:object>
   </vbox>
 </vbox>
