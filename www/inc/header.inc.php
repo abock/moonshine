@@ -8,18 +8,18 @@
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <title>Moonshine<?php echo isset ($page_meta["title"]) ? " - " . $page_meta["title"] : "" ?></title>
-    <link rel="stylesheet" href="inc/style.css" type="text/css" media="screen" title="default stylesheet" charset="utf-8" />
-    <link rel="stylesheet" href="inc/fancybox/fancy.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" title="default stylesheet" charset="utf-8" />
+    <link rel="stylesheet" href="/css/fancybox/fancy.css" type="text/css" media="screen" />
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-    <script type="text/javascript" src="inc/jquery.min.js"></script>
-    <script type="text/javascript" src="inc/jquery.color.js"></script>
-    <script type="text/javascript" src="inc/fancybox/jquery.fancybox.js"></script>
-    <script type="text/javascript" src="inc/fancybox/jquery.pngFix.pack.js"></script>
-    <script type="text/javascript" src="inc/moonshine.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.color.js"></script>
+    <script type="text/javascript" src="/js/fancybox/jquery.fancybox.js"></script>
+    <script type="text/javascript" src="/js/fancybox/jquery.pngFix.pack.js"></script>
+    <script type="text/javascript" src="/js/moonshine.js"></script>
 <?php if (!$browser_is_ie) { ?>
     <!-- custom header font hack using typeface  http://typeface.neocracy.org -->
-    <script type="text/javascript" src="inc/typeface.js"></script>
-    <script type="text/javascript" src="inc/nirvana_bold.typeface.js"></script>
+    <script type="text/javascript" src="/js/typeface.js"></script>
+    <script type="text/javascript" src="/js/nirvana_bold.typeface.js"></script>
 <?php } ?>
     <script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
     <script type="text/javascript">
@@ -37,9 +37,9 @@
 <?php if (!$is_home) { ?>
       <a href="index.php" class="first"><span class="typeface-js">Home</span></a>
 <?php } ?>
-      <a href="download.php"><span class="typeface-js">Download</span></a>
-      <a href="samples.php"><span class="typeface-js">Samples</span></a>
       <a href="faq.php"><span class="typeface-js">FAQ</span></a>
+      <a href="samples.php"><span class="typeface-js">Samples</span></a>
+      <a href="download.php"><span class="typeface-js">Download</span></a>
     </div>
   </div>
   
