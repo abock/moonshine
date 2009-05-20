@@ -16,11 +16,10 @@
     <script type="text/javascript" src="/js/fancybox/jquery.fancybox.js"></script>
     <script type="text/javascript" src="/js/fancybox/jquery.pngFix.pack.js"></script>
     <script type="text/javascript" src="/js/moonshine.js"></script>
-<?php if (!$browser_is_ie) { ?>
-    <!-- custom header font hack using typeface  http://typeface.neocracy.org -->
-    <script type="text/javascript" src="/js/typeface.js"></script>
-    <script type="text/javascript" src="/js/nirvana_bold.typeface.js"></script>
-<?php } ?>
+<?php //if (!$browser_is_ie) { ?>
+    <script type="text/javascript" src="/js/cufon-yui.js"></script>
+    <script type="text/javascript" src="/js/RaveIn_500-RaveIn_700.font.js"></script>
+<?php //} ?>
     <script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script>
     <script type="text/javascript">
         /*try {
@@ -35,11 +34,11 @@
   <div class="navigation<?php if ($is_home) echo " navigation-animation"?>">
     <div>
 <?php if (!$is_home) { ?>
-      <a href="index.php" class="first"><span class="typeface-js">Home</span></a>
+      <a href="index.php" class="first"><span>Home</span></a>
 <?php } ?>
-      <a href="faq.php"><span class="typeface-js">FAQ</span></a>
-      <a href="samples.php"><span class="typeface-js">Samples</span></a>
-      <a href="download.php"><span class="typeface-js">Download</span></a>
+      <a href="faq.php"><span>FAQ</span></a>
+      <a href="samples.php"><span>Samples</span></a>
+      <a href="download.php"><span>Download</span></a>
     </div>
   </div>
   

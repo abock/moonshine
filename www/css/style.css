@@ -53,7 +53,7 @@ code {
 h1, h2, h3, h4, h5 { 
     color: #729fcf; 
     margin-top: 3em; 
-    font-family: Nirvana, Myriad, sans-serif; 
+    font-family: RaveIn, Myriad, sans-serif; 
 }
 
 h1:first-child, 
@@ -78,7 +78,7 @@ h4:first-child {
 
 .navigation span { 
     color: #eeeeff; 
-    font-family: Nirvana, Myriad, sans-serif; 
+    font-family: RaveIn, Myriad, sans-serif; 
     font-size: 14pt; 
     font-weight: bold; 
     opacity: 0.8;
