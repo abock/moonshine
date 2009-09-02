@@ -1,5 +1,5 @@
 dnl automake/autoconf setup
-AC_INIT([moonshine], [0.3])
+AC_INIT([moonshine], [0.4])
 AC_CONFIG_SRCDIR(README)
 AC_CANONICAL_SYSTEM
 AC_PREREQ(2.13)
@@ -17,14 +17,20 @@ AC_PROG_LIBTOOL
 PKG_PROG_PKG_CONFIG
 
 dnl Plugin build configuration
-PKG_CHECK_MODULES(MOZILLA, libxul-unstable mozilla-plugin)
+PKG_CHECK_MODULES(MOZILLA, libxul mozilla-plugin)
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.14 gmodule-2.0 >= 2.14)
 AC_SUBST(MOZILLA_CFLAGS)
 AC_SUBST(CFLAGS)
 
+dnl xulrunner-1.9.1 replaced npupp.h with npfunctions.h
+CFLAGS_save="$CFLAGS"
+CFLAGS="$CFLAGS $MOZILLA_CFLAGS"
+AC_CHECK_HEADERS(npfunctions.h)
+CFLAGS="$CFLAGS_SAVE"
+
 dnl xulrunner and XPI configuration
 MIN_FIREFOX_VERSION="3.0"
-MAX_FIREFOX_VERSION="3.1.*"
+MAX_FIREFOX_VERSION="3.5.*"
 MIN_GECKO_VERSION="1.9"
 MAX_GECKO_VERSION="1.9.*"
 AC_SUBST([MIN_FIREFOX_VERSION])

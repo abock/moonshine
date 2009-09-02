@@ -73,7 +73,7 @@ mmp_plugin_proxy_load_module (gchar *prefix)
 	gchar *path = g_module_build_path (prefix, "moonloader");
 	
 	if (g_file_test (path, G_FILE_TEST_EXISTS)) {
-		plugin_host->module = g_module_open (path, G_MODULE_BIND_LOCAL);
+		plugin_host->module = g_module_open (path, G_MODULE_BIND_LOCAL | G_MODULE_BIND_LAZY);
 		
 		if (plugin_host->module != NULL
 			&& mmp_plugin_proxy_load_symbol ("NP_Initialize", (gpointer *)&plugin_host->np_initialize)

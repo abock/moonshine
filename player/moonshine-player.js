@@ -63,7 +63,7 @@ function MoonshinePlayer () {
         }));
     };
     
-    this.__defineGetter__ ("CenteredOffset", function (y) {
+    this.__defineSetter__ ("CenteredOffset", function (y) {
         this.ErrorPopup.CenteredOffsetY = y;
         this.BufferingPopup.CenteredOffsetY = y;
         this.AboutPopup.CenteredOffsetY = y;

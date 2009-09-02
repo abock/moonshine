@@ -12,7 +12,11 @@
 
 #include <glib.h>
 #include <gmodule.h>
+#ifdef HAVE_NPFUNCTIONS_H
+#include <npfunctions.h>
+#else
 #include <npupp.h>
+#endif
 
 #define mp_debug(...) g_debug   ("libmoonmp-plugin: " __VA_ARGS__)
 #define mp_error(...) g_warning ("libmoonmp-plugin: " __VA_ARGS__)
@@ -31,9 +35,15 @@ typedef struct {
 	MoonEntry_NP_Shutdown np_shutdown;
 	MoonEntry_NP_GetValue np_getvalue;
 
+#ifdef HAVE_NPFUNCTIONS_H
+	NPP_NewProcPtr moon_npp_new;
+	NPP_DestroyProcPtr moon_npp_destroy;
+	NPP_StreamAsFileProcPtr moon_npp_stream_as_file;
+#else
 	NPP_NewUPP moon_npp_new;
 	NPP_DestroyUPP moon_npp_destroy;
 	NPP_StreamAsFileUPP moon_npp_stream_as_file;
+#endif
 
 	NPNetscapeFuncs mozilla_funcs;
 } MoonlightPlugin;

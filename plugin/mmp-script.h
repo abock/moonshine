@@ -11,7 +11,11 @@
 #define _MMP_SCRIPT_H
 
 #include <glib.h>
+#ifdef HAVE_NPFUNCTIONS_H
+#include <npfunctions.h>
+#else
 #include <npupp.h>
+#endif
 
 G_BEGIN_DECLS
 

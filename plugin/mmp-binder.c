@@ -7,6 +7,8 @@
 // Copyright 2009 Novell, Inc.
 // 
 
+#include <config.h>
+
 #include <string.h>
 
 #include "mmp-binder.h"
@@ -53,7 +55,7 @@ mmp_binder_load_player_xaml (MoonlightPluginInstance *plugin)
 	if (mmp_script_document_create_element (npp, &document, "script", &script_element)) {
 		if (mmp_script_element_set_property_string (npp, &script_element, "id", MLMP_XAML_DOM_ID) &&
 			mmp_script_element_set_property_string (npp, &script_element, "type", "text/xaml") &&
-			mmp_script_document_create_text_node (npp, &document, "<Canvas/>", &xaml_node)) {
+			mmp_script_document_create_text_node (npp, &document, "<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"/>", &xaml_node)) {
 			
 			if (mmp_script_element_append_child (npp, &script_element, &xaml_node)) {
 				if (mmp_script_element_get_property_object (npp, &document, "body", &body)) {
