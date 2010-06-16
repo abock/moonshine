@@ -70,28 +70,37 @@ static gboolean
 mmp_plugin_proxy_load_module (gchar *prefix)
 {
 	MoonlightPlugin *plugin_host = MMP_HANDLE ();
+
+	// Moonlight's loader is named libmoonloader if it is installed as a
+	// package, and libmoonloaderxpi if it is installed as an XPI
 	gchar *path = g_module_build_path (prefix, "moonloader");
-	
-	if (g_file_test (path, G_FILE_TEST_EXISTS)) {
-		plugin_host->module = g_module_open (path, G_MODULE_BIND_LOCAL | G_MODULE_BIND_LAZY);
-		
-		if (plugin_host->module != NULL
-			&& mmp_plugin_proxy_load_symbol ("NP_Initialize", (gpointer *)&plugin_host->np_initialize)
-			&& mmp_plugin_proxy_load_symbol ("NP_Shutdown", (gpointer *)&plugin_host->np_shutdown)
-			&& mmp_plugin_proxy_load_symbol ("NP_GetValue", (gpointer *)&plugin_host->np_getvalue)) {
-			mp_debug ("Loaded Moonlight plugin: %s", path);
+	if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
+		g_free (path);
+		path = g_module_build_path (prefix, "moonloaderxpi");
+		if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
 			g_free (path);
-			return TRUE;
-		} else if (plugin_host->module != NULL) {
-			if (!g_module_close (plugin_host->module)) {
-				mp_error ("Could not unload library that was loaded but had invalid symbols: %s (%s)",
-					path, g_module_error ());
-			}
-			plugin_host->module = NULL;
+			return FALSE;
 		}
-		
-		mp_error ("Could not load Moonlight plugin: %s (%s)", path, g_module_error ());
 	}
+
+	plugin_host->module = g_module_open (path, G_MODULE_BIND_LOCAL | G_MODULE_BIND_LAZY);
+
+	if (plugin_host->module != NULL
+		&& mmp_plugin_proxy_load_symbol ("NP_Initialize", (gpointer *)&plugin_host->np_initialize)
+		&& mmp_plugin_proxy_load_symbol ("NP_Shutdown", (gpointer *)&plugin_host->np_shutdown)
+		&& mmp_plugin_proxy_load_symbol ("NP_GetValue", (gpointer *)&plugin_host->np_getvalue)) {
+		mp_debug ("Loaded Moonlight plugin: %s", path);
+		g_free (path);
+		return TRUE;
+	} else if (plugin_host->module != NULL) {
+		if (!g_module_close (plugin_host->module)) {
+			mp_error ("Could not unload library that was loaded but had invalid symbols: %s (%s)",
+				path, g_module_error ());
+		}
+		plugin_host->module = NULL;
+	}
+
+	mp_error ("Could not load Moonlight plugin: %s (%s)", path, g_module_error ());
 
 	g_free (path);
 	return FALSE;
