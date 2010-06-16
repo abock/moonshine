@@ -19,6 +19,11 @@ PKG_PROG_PKG_CONFIG
 dnl Plugin build configuration
 PKG_CHECK_MODULES(MOZILLA, libxul mozilla-plugin)
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.14 gmodule-2.0 >= 2.14)
+PKG_CHECK_MODULES(XULRUNNER_192, libxul >= 1.9.2,
+	HAVE_XULRUNNER_192=yes, HAVE_XULRUNNER_192=no)
+if test "$HAVE_XULRUNNER_192" = "yes"; then
+	AC_DEFINE(HAVE_XULRUNNER_192, 1, [xulrunner 1.9.2+ detected])
+fi
 AC_SUBST(MOZILLA_CFLAGS)
 AC_SUBST(CFLAGS)
 
@@ -30,7 +35,7 @@ CFLAGS="$CFLAGS_SAVE"
 
 dnl xulrunner and XPI configuration
 MIN_FIREFOX_VERSION="3.0"
-MAX_FIREFOX_VERSION="3.5.*"
+MAX_FIREFOX_VERSION="3.6.*"
 MIN_GECKO_VERSION="1.9"
 MAX_GECKO_VERSION="1.9.*"
 AC_SUBST([MIN_FIREFOX_VERSION])
@@ -94,6 +99,7 @@ xulrunner/icon-theme-hicolor/Makefile
 cat <<EOF
 ${PACKAGE} ${VERSION}
 Browser Plugin Directory:  $BROWSER_PLUGIN_DIR_EXPANDED
+xulrunner 1.9.2+           $HAVE_XULRUNNER_192
 EOF
 
 if test "x$ENABLE_XPI_BUILD" = "xyes"; then

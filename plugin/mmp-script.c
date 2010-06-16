@@ -148,8 +148,13 @@ mmp_script_evaluate (NPP npp, const gchar *code)
 	g_return_val_if_fail (NPN_GetValue (npp, NPNVWindowNPObject, 
 		&host) == NPERR_NO_ERROR, FALSE);
 
+#ifdef HAVE_XULRUNNER_192
+	string.UTF8Characters = code;
+	string.UTF8Length = strlen (code);
+#else
 	string.utf8characters = code;
 	string.utf8length = strlen (code);
+#endif
 
 	if ((result = NPN_Evaluate (npp, host, &string, &output))) {
 		NPN_ReleaseVariantValue (&output);
