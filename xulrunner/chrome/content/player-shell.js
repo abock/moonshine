@@ -73,6 +73,15 @@ StandaloneMoonPlayer.prototype = {
     
     ConfigureWindow: function () {
         document.title = "Moonshine";
+
+        // MeeGo specific path - always maximize the window on MeeGo
+        var file = Components.classes["@mozilla.org/file/local;1"].
+            createInstance (Components.interfaces.nsILocalFile);
+        file.initWithPath ("/etc/meego-release");
+        if (file.exists ()) {
+            // window.maximize can't be called inside window.load
+            setTimeout (function () window.maximize (), 1);
+        }
     },
 
     LoadSource: function (path) {
