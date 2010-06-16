@@ -170,8 +170,8 @@ mmp_binder_npp_destroy (NPP instance, NPSavedData **save)
 typedef enum {
 	STREAM_NOTIFY_NONE = 0,
 	STREAM_NOTIFY_SOURCE = 1,
-	STREAM_NOTIFY_DOWNLOADER = 2,
-	STREAM_NOTIFY_REQUEST = 3
+	STREAM_NOTIFY_SPLASHSOURCE = 2,
+	STREAM_NOTIFY_DOWNLOADER = 3
 } StreamNotifyFlags;
 
 typedef struct {
