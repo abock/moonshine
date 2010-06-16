@@ -51,7 +51,9 @@ StandaloneMoonPlayer.prototype = {
     MoonlightInitialize: function () {
         this.player = new MoonshinePlayer;
     
-        var file_arg = this.command_line.getArgument (0);
+        var file_arg = this.command_line && this.command_line.length > 0
+            ? this.command_line.getArgument (0)
+            : null;
         if (file_arg && file_arg.length > 0) {
             this.LoadSource (file_arg);
         }
