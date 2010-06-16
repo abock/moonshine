@@ -333,7 +333,7 @@ function MoonshineAboutPopup (host) {
     
     this.Message = new MtkXaml ('<TextBlock Width="300" TextWrapping="Wrap" FontFamily="Trebuchet MS, ' + MtkStyle.Font.Family + '"> \
         <Run FontSize="' + this.HeaderSize + '" Foreground="#3465a4" FontWeight="Bold" Text="Moonshine" />  \
-        <Run FontSize="' + this.HeaderSize + '" Foreground="#4e9a06" FontWeight="Bold" Text="v0.3" />  \
+        <Run FontSize="' + this.HeaderSize + '" Foreground="#4e9a06" FontWeight="Bold" Text="v0.5" />  \
         <LineBreak FontSize="50"/> \
         <Run FontSize="' + this.TextSize + '" Foreground="#eee"> \
             Windows Media support for Linux, powered by \
@@ -342,7 +342,7 @@ function MoonshineAboutPopup (host) {
         <LineBreak/> \
         <Run FontSize="' + (this.TextSize - 3) + '" Foreground="#888" Text="Written by Aaron Bockover" /> \
         <LineBreak/> \
-        <Run FontSize="' + (this.TextSize - 4) + '" Foreground="#666" Text="Copyright 2009 Novell." /> \
+        <Run FontSize="' + (this.TextSize - 4) + '" Foreground="#666" Text="Copyright 2009-2010 Novell." /> \
     </TextBlock>');
     
     this.CloseBox = new MtkHBox;
