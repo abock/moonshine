@@ -174,10 +174,16 @@ mmp_plugin_proxy_load_moonlight ()
 		NULL,
 		NULL,
 		NULL,
+		(gchar *)"/usr/lib/moonlight/plugin",
+		(gchar *)"/usr/lib64/moonlight/plugin",
 		(gchar *)"/usr/lib/moon/plugin",
 		(gchar *)"/usr/lib64/moon/plugin",
+		(gchar *)"/usr/local/lib/moonlight/plugin",
+		(gchar *)"/usr/local/lib64/moonlight/plugin",
 		(gchar *)"/usr/local/lib/moon/plugin",
 		(gchar *)"/usr/local/lib64/moon/plugin",
+		(gchar *)INSTALL_PREFIX "/lib/moonlight/plugin",
+		(gchar *)INSTALL_PREFIX "/lib64/moonlight/plugin",
 		(gchar *)INSTALL_PREFIX "/lib/moon/plugin",
 		(gchar *)INSTALL_PREFIX "/lib64/moon/plugin"
 	};
