@@ -5,7 +5,9 @@ BROWSER_PLUGIN_DIR=@BROWSER_PLUGIN_DIR@
 LIBDIR=${XULRUNNER%%/xulrunner*}
 
 FF_PROFILES_PATH="$HOME/.mozilla/firefox"
-FF_DEFAULT_PROFILE_PATH="$FF_PROFILES_PATH/$(awk '
+FF_PROFILES_FILE="$FF_PROFILES_PATH/profiles.ini"
+if [ -d "$FF_PROFILES_PATH" -a -f "$FF_PROFILES_FILE" ]; then
+	FF_DEFAULT_PROFILE_PATH="$FF_PROFILES_PATH/$(awk '
 	{
 		if ($0 ~ /^\[Profile/) {
 			if (path && default) default_path=path;
@@ -21,11 +23,12 @@ FF_DEFAULT_PROFILE_PATH="$FF_PROFILES_PATH/$(awk '
 			print default_path
 		}
 	}
-' < "$FF_PROFILES_PATH/profiles.ini" 2>/dev/null)"
+	' < "$FF_PROFILES_PATH/profiles.ini" 2>/dev/null)"
+fi
 
 MOONLIGHT_XPI_PATH="$FF_DEFAULT_PROFILE_PATH/extensions/moonlight@novell.com/plugins"
 if [ ! -d "$MOONLIGHT_XPI_PATH" ]; then
-	MOONLIGHT_XPI_PATH=""
+	unset MOONLIGHT_XPI_PATH
 fi
 
 if [ ! -d $BROWSER_PLUGIN_DIR ]; then
