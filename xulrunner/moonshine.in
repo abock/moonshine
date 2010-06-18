@@ -41,5 +41,5 @@ echo "xulrunner: $XULRUNNER"
 echo "libdir:    $LIBDIR"
 echo "plugins:   $MOZ_PLUGIN_PATH"
 
-$XULRUNNER @pkgdatadir@/application.ini "$@"
-
+MOONLIGHT_RELAXED_MEDIA_MODE_GUIDS="{20e7a34f-28f1-4239-aed9-ef2e679449fd}" \
+	$XULRUNNER @pkgdatadir@/application.ini "$@"
