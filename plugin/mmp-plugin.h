@@ -18,8 +18,8 @@
 #include <npupp.h>
 #endif
 
-#define mp_debug(...) g_debug   ("libmoonmp-plugin: " __VA_ARGS__)
-#define mp_error(...) g_warning ("libmoonmp-plugin: " __VA_ARGS__)
+#define mp_debug(...) g_debug   ("libmoonshine-plugin: " __VA_ARGS__)
+#define mp_error(...) g_warning ("libmoonshine-plugin: " __VA_ARGS__)
 
 G_BEGIN_DECLS
 
@@ -52,6 +52,7 @@ MoonlightPlugin *  MMP_HANDLE ();
 
 typedef struct {
 	NPP moz_instance;
+	gchar *ml_rmm_guid;
 	gchar **param_names;
 	gchar **param_values;
 } MoonlightPluginInstance;
@@ -59,6 +60,7 @@ typedef struct {
 MoonlightPluginInstance *  mmp_plugin_find_instance (NPP instance);
 MoonlightPluginInstance *  mmp_plugin_new (NPP instance);
 void                       mmp_plugin_free (MoonlightPluginInstance * plugin_instance);
+void                       mmp_plugin_set_relaxed_media_mode_guid (MoonlightPluginInstance * plugin_instance);
 
 G_END_DECLS
 

@@ -8,10 +8,12 @@
 // 
 
 #include <config.h>
-
 #include <string.h>
+#include <uuid.h>
 
 #include "mmp-plugin.h"
+
+#define ML_RMM_GUIDS_ENV "MOONLIGHT_RELAXED_MEDIA_MODE_GUIDS"
 
 static MoonlightPlugin moonlight_plugin = { 0, };
 static GHashTable *mmp_plugin_instances = NULL;
@@ -48,6 +50,10 @@ mmp_plugin_free (MoonlightPluginInstance *plugin)
 		}
 	}
 
+	if (plugin->ml_rmm_guid != NULL) {
+		g_free (plugin->ml_rmm_guid);
+	}
+
 	g_strfreev (plugin->param_names);
 	g_strfreev (plugin->param_values);
 	g_free (plugin);
@@ -61,6 +67,41 @@ mmp_plugin_find_instance (NPP instance)
 	}
 
 	return NULL;
+}
+
+void
+mmp_plugin_set_relaxed_media_mode_guid (MoonlightPluginInstance *plugin)
+{
+	uuid_t uuid;
+	gchar uuid_s[40];
+	gchar *self_guid;
+	gchar *env_guids;
+	gboolean env_set;
+
+	uuid_generate (uuid);
+	uuid_unparse (uuid, uuid_s);
+
+	self_guid = g_strdup_printf ("{%s}", uuid_s);
+	env_guids = (gchar *)g_getenv (ML_RMM_GUIDS_ENV);
+
+	if (env_guids == NULL) {
+		env_set = g_setenv (ML_RMM_GUIDS_ENV, self_guid, TRUE);
+		g_debug (ML_RMM_GUIDS_ENV "[INITIAL]: %s", self_guid);
+	} else {
+		env_guids = g_strdup_printf ("%s:%s", env_guids, self_guid);
+		env_set = g_setenv (ML_RMM_GUIDS_ENV, env_guids, TRUE);
+		g_debug (ML_RMM_GUIDS_ENV "[ALLOC]: %s", env_guids);
+		g_free (env_guids);
+	}
+
+	if (!env_set) {
+		g_warning ("Could not set environment variable '"
+			ML_RMM_GUIDS_ENV "'; media will not work!");
+	}
+
+	g_debug (ML_RMM_GUIDS_ENV "[CHECK]: %s", g_getenv (ML_RMM_GUIDS_ENV));
+
+	plugin->ml_rmm_guid = self_guid;
 }
 
 // NPN wrapper functions

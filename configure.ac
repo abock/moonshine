@@ -18,7 +18,7 @@ PKG_PROG_PKG_CONFIG
 
 dnl Plugin build configuration
 PKG_CHECK_MODULES(MOZILLA, libxul mozilla-plugin)
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.14 gmodule-2.0 >= 2.14)
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.14 gmodule-2.0 >= 2.14 uuid)
 PKG_CHECK_MODULES(XULRUNNER_192, libxul >= 1.9.2,
 	HAVE_XULRUNNER_192=yes, HAVE_XULRUNNER_192=no)
 if test "$HAVE_XULRUNNER_192" = "yes"; then

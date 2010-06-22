@@ -107,7 +107,11 @@ NPError mmp_binder_npp_new (NPMIMEType pluginType, NPP instance, gushort mode,
 
 	mp_debug ("NPP_New");
 
-	// +2 to ensure space for onload and source
+	// Create an NPP wrapper and prepare the NPP_New proxy call to Moonlight
+	plugin = mmp_plugin_new (instance);
+	mmp_plugin_set_relaxed_media_mode_guid (plugin);
+
+	// +3 to ensure space for onload, source, and RMM GUID
 	param_names = g_new0 (gchar *, argc + 3);
 	param_values = g_new0 (gchar *, argc + 3);
 
@@ -128,11 +132,9 @@ NPError mmp_binder_npp_new (NPMIMEType pluginType, NPP instance, gushort mode,
 	param_names[param_count] = g_strdup ("onload");
 	param_values[param_count++] = g_strdup (MLMP_XAML_LOAD_FUNCTION);
 
-	param_names[param_count] = g_strdup ("moonlight-relaxed-media-mode");
-	param_values[param_count++] = g_strdup ("true");
+	param_names[param_count] = g_strdup ("moonlightRelaxedMediaModeGuid");
+	param_values[param_count++] = g_strdup (plugin->ml_rmm_guid);
 	
-	// Create an NPP wrapper and send the NPP_New to Moonlight
-	plugin = mmp_plugin_new (instance);
 	plugin->param_names = param_names;
 	plugin->param_values = param_values;
 
