@@ -1,5 +1,5 @@
 dnl automake/autoconf setup
-AC_INIT([moonshine], [0.5])
+AC_INIT([moonshine], [0.6])
 AC_CONFIG_SRCDIR(README)
 AC_CANONICAL_SYSTEM
 AC_PREREQ(2.13)
