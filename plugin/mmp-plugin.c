@@ -86,11 +86,9 @@ mmp_plugin_set_relaxed_media_mode_guid (MoonlightPluginInstance *plugin)
 
 	if (env_guids == NULL) {
 		env_set = g_setenv (ML_RMM_GUIDS_ENV, self_guid, TRUE);
-		g_debug (ML_RMM_GUIDS_ENV "[INITIAL]: %s", self_guid);
 	} else {
 		env_guids = g_strdup_printf ("%s:%s", env_guids, self_guid);
 		env_set = g_setenv (ML_RMM_GUIDS_ENV, env_guids, TRUE);
-		g_debug (ML_RMM_GUIDS_ENV "[ALLOC]: %s", env_guids);
 		g_free (env_guids);
 	}
 
@@ -98,8 +96,6 @@ mmp_plugin_set_relaxed_media_mode_guid (MoonlightPluginInstance *plugin)
 		g_warning ("Could not set environment variable '"
 			ML_RMM_GUIDS_ENV "'; media will not work!");
 	}
-
-	g_debug (ML_RMM_GUIDS_ENV "[CHECK]: %s", g_getenv (ML_RMM_GUIDS_ENV));
 
 	plugin->ml_rmm_guid = self_guid;
 }
