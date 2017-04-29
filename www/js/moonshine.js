@@ -1,4 +1,4 @@
-$(document).ready (function () {
+$(document).ready (() => {
 
     var user_agent = navigator.userAgent.toLowerCase ();
     var platforms = {
@@ -31,7 +31,7 @@ $(document).ready (function () {
     
     $("#moonlight-banner, #install-host").remove ();
     $("#install-buttons").append ("<div id=\"install-button\"></div>");
-    $(".install").each (function (i, o) {
+    $(".install").each ((i, o) => {
         var name = $(o).attr('class').split(' ')[1];
         $(".distro-list").append ("<div class=\"distro-button distro-button-"
             + name + "\"><img src=\"images/distro-logos/48x48/" 
@@ -55,11 +55,11 @@ $(document).ready (function () {
         }
     });
     
-    $("#install-button").append ("<div class=\"button-" + platform_id + " distro\"></div>").click (function () {
+    $("#install-button").append ("<div class=\"button-" + platform_id + " distro\"></div>").click (() => {
         window.location = "/download.php";
-    }).mousedown (function () {
+    }).mousedown (() => {
         $("#install-button .distro").css ("top", "25px");
-    }).mouseup (function () {
+    }).mouseup (() => {
         var top = $("#install-button .distro").css ("top");
         $("#install-button .distro").css ("top", "23px");
     });
@@ -69,7 +69,7 @@ $(document).ready (function () {
     $(".navigation-animation").css ("top", "-40px").animate ({top: "12px"}, 2000);
 });
 
-(function ($) {
+(($ => {
     $.fn.colorHover = function (animtime, fromColor, toColor) {
         $(this).hover (function () {
             return $(this).css ("color", fromColor).stop ().animate ({"color": toColor}, animtime);
@@ -85,5 +85,5 @@ $(document).ready (function () {
             return $(this).stop ().animate ({"opacity": fromAlpha}, animtime);
         });
     };
-}) (jQuery);
+})) (jQuery);
 

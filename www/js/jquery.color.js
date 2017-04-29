@@ -8,11 +8,11 @@
  * end with / *END MOD* /
  */
 
-(function(jQuery){
+((jQuery => {
 
 	// We override the animation for all of these color styles
-	jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'color', 'outlineColor'], function(i,attr){
-		jQuery.fx.step[attr] = function(fx){
+	jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'color', 'outlineColor'], (i, attr) => {
+		jQuery.fx.step[attr] = fx => {
 			if ( fx.state == 0 ) {
 				fx.start = getColor( fx.elem, attr );
 				fx.end = getRGB( fx.end );
@@ -54,7 +54,7 @@
 		var result;
 
 		// Check if we're already dealing with an array of colors
-		if ( color && color.constructor == Array && /*BEGIN MOD*/ (color.length == 4 || /*END MOD*/ color.length == 3 /*BEGIN MOD*/ ) /*END MOD*/ )
+		if ( color && color.constructor == Array && /*BEGIN MOD*/ ((color.length == 4 || /*END MOD*/ color.length == 3) /*BEGIN MOD*/ ) /*END MOD*/ )
 			return color;
 
 		// Look for rgb(num,num,num)
@@ -155,4 +155,4 @@
 		yellow:[255,255,0]
 	};
 	
-})(jQuery);
+}))(jQuery);
