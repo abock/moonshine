@@ -11,11 +11,11 @@ var MtkConsole = {
 
     truncate_function_source: true,
 
-    console_driver: function (x) {
+    console_driver(x) {
         dump (x);
     },
 
-    _GetFunctionName: function (func, parent) {
+    _GetFunctionName(func, parent) {
         if (!parent) {
             return func ? func.name || "(anonymous)" : null;
         }
@@ -28,18 +28,18 @@ var MtkConsole = {
         }
     },
 
-    Log: function (str) {
+    Log(str) {
         MtkConsole.WriteLine (str);
     },
 
-    Logf: function (parent, str) {
+    Logf(parent, str) {
         str = str || parent;
         var caller_name = MtkConsole._GetFunctionName (MtkConsole.Logf.caller, 
             arguments.length > 1 ? parent : null);
         MtkConsole.WriteLine (caller_name + ": " + str);
     },
 
-    Logfa: function (parent, args) {
+    Logfa(parent, args) {
         var args_dump = []
         for (var i = 0; i < arguments.length; i++) {
             if (typeof arguments[i] == "object") {
@@ -53,7 +53,7 @@ var MtkConsole = {
         MtkConsole.ObjDump (args_dump);
     },
 
-    Indent: function (indent, mult) {
+    Indent(indent, mult) {
         if (!mult) {
             mult = 2;
         }
@@ -66,11 +66,11 @@ var MtkConsole = {
         return indent_str;
     },
 
-    Write: function (str) {
+    Write(str) {
         MtkConsole.console_driver (str);
     },
 
-    WriteLine: function (str) {
+    WriteLine(str) {
         if (!str) {
             MtkConsole.console_driver ("\n");
         } else {
@@ -78,16 +78,16 @@ var MtkConsole = {
         }
     },
 
-    WriteIndentLine: function (str, indent) {
+    WriteIndentLine(str, indent) {
         var indent_str = MtkConsole.Indent (indent);
         MtkConsole.WriteLine (indent_str + str.toString ());
     },
 
-    WriteIndent: function (str, indent) {
+    WriteIndent(str, indent) {
         MtkConsole.Write (MtkConsole.Indent (indent) + str.toString ());
     },
 
-    ObjectVisibleChildCount: function (o) {
+    ObjectVisibleChildCount(o) {
         if (o instanceof Array) {
             return o.length;
         }
@@ -100,7 +100,7 @@ var MtkConsole = {
         return count;
     },
 
-    _ObjDumpProperty: function (o, prop, invoke_getters, level, i, count, max_prop_len, stack) {
+    _ObjDumpProperty(o, prop, invoke_getters, level, i, count, max_prop_len, stack) {
         var is_getter = !invoke_getters && o.__lookupGetter__ && o.__lookupGetter__ (prop);
         var is_setter = o.__lookupSetter__ && o.__lookupSetter__ (prop);
         var eval_prop = null;
@@ -141,7 +141,7 @@ var MtkConsole = {
         MtkConsole.WriteLine ();
     },
 
-    ObjDump: function (o, invoke_getters, level, stack) {
+    ObjDump(o, invoke_getters, level, stack) {
         if (!invoke_getters) {
             invoke_getters = false;
         }

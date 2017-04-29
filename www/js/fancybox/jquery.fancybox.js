@@ -6,27 +6,29 @@
  * Licensed under the MIT License: http://www.opensource.org/licenses/mit-license.php
  * Requires: jQuery v1.2.1 or later
 */
-(function($) {
-	var opts = {}, 
-		imgPreloader = new Image, imgTypes = ['png', 'jpg', 'jpeg', 'gif'], 
-		loadingTimer, loadingFrame = 1;
+(($ => {
+    var opts = {};
+    var imgPreloader = new Image;
+    var imgTypes = ['png', 'jpg', 'jpeg', 'gif'];
+    var loadingTimer;
+    var loadingFrame = 1;
 
-   $.fn.fancybox = function(settings) {
-		opts.settings = $.extend({}, $.fn.fancybox.defaults, settings);
+    $.fn.fancybox = function(settings) {
+         opts.settings = $.extend({}, $.fn.fancybox.defaults, settings);
 
-		$.fn.fancybox.init();
+         $.fn.fancybox.init();
 
-		return this.each(function() {
-			var $this = $(this);
-			var o = $.metadata ? $.extend({}, opts.settings, $this.metadata()) : opts.settings;
+         return this.each(function() {
+             var $this = $(this);
+             var o = $.metadata ? $.extend({}, opts.settings, $this.metadata()) : opts.settings;
 
-			$this.unbind('click').click(function() {
-				$.fn.fancybox.start(this, o); return false;
-			});
-		});
-	};
+             $this.unbind('click').click(function() {
+                 $.fn.fancybox.start(this, o); return false;
+             });
+         });
+     };
 
-	$.fn.fancybox.start = function(el, o) {
+    $.fn.fancybox.start = function(el, o) {
 		if (opts.animating) return false;
 
 		if (o.overlayShow) {
@@ -60,7 +62,7 @@
 
 		} else {
 			if (!el.rel || el.rel == '') {
-				var item = {url: el.href, title: el.title, o: o};
+				var item = {url: el.href, title: el.title, o};
 
 				if (o.zoomSpeedIn > 0 || o.zoomSpeedOut > 0) {
 					var c = $(el).children("img:first").length ? $(el).children("img:first") : $(el);
@@ -92,7 +94,7 @@
 		$.fn.fancybox.changeItem(opts.itemNum);
 	};
 
-	$.fn.fancybox.changeItem = function(n) {
+    $.fn.fancybox.changeItem = n => {
 		$.fn.fancybox.showLoading();
 
 		opts.itemNum = n;
@@ -115,7 +117,7 @@
 	        $("#fancy_loading").hide();
 
 		} else if (url.match(imgRegExp)) {
-			$(imgPreloader).unbind('load').bind('load', function() {
+			$(imgPreloader).unbind('load').bind('load', () => {
 				$("#fancy_loading").hide();
 
 				opts.itemArray[n].o.frameWidth	= imgPreloader.width;
@@ -130,12 +132,12 @@
 		}
 	};
 
-	$.fn.fancybox.showIframe = function() {
+    $.fn.fancybox.showIframe = () => {
 		$("#fancy_loading").hide();
 		$("#fancy_frame").show();
 	};
 
-	$.fn.fancybox.showItem = function(val) {
+    $.fn.fancybox.showItem = val => {
 		$.fn.fancybox.preloadNeighborImages();
 
 		var viewportPos	= $.fn.fancybox.getViewport();
@@ -152,10 +154,10 @@
 		}
 
 		if (opts.active) {
-			$('#fancy_content').fadeOut("normal", function() {
+			$('#fancy_content').fadeOut("normal", () => {
 				$("#fancy_content").empty();
 				
-				$("#fancy_outer").animate(itemOpts, "normal", function() {
+				$("#fancy_outer").animate(itemOpts, "normal", () => {
 					$("#fancy_content").append($(val)).fadeIn("normal");
 					$.fn.fancybox.updateDetails();
 				});
@@ -183,7 +185,7 @@
 
 				$("#fancy_content").append($(val)).show();
 
-				$("#fancy_outer").animate(itemOpts, opts.itemArray[opts.itemNum].o.zoomSpeedIn, function() {
+				$("#fancy_outer").animate(itemOpts, opts.itemArray[opts.itemNum].o.zoomSpeedIn, () => {
 					opts.animating = false;
 					$.fn.fancybox.updateDetails();
 				});
@@ -196,7 +198,7 @@
 		 }
 	};
 
-	$.fn.fancybox.updateDetails = function() {
+    $.fn.fancybox.updateDetails = () => {
 		$("#fancy_bg,#fancy_close").show();
 
 		if (opts.itemArray[opts.itemNum].title !== undefined && opts.itemArray[opts.itemNum].title !== '') {
@@ -213,7 +215,7 @@
 		if (opts.itemNum != 0) {
 			$("#fancy_nav").append('<a id="fancy_left" href="javascript:;"></a>');
 
-			$('#fancy_left').click(function() {
+			$('#fancy_left').click(() => {
 				$.fn.fancybox.changeItem(opts.itemNum - 1); return false;
 			});
 		}
@@ -221,12 +223,12 @@
 		if (opts.itemNum != (opts.itemArray.length - 1)) {
 			$("#fancy_nav").append('<a id="fancy_right" href="javascript:;"></a>');
 			
-			$('#fancy_right').click(function(){
+			$('#fancy_right').click(() => {
 				$.fn.fancybox.changeItem(opts.itemNum + 1); return false;
 			});
 		}
 
-		$(document).keydown(function(event) {
+		$(document).keydown(event => {
 			if (event.keyCode == 27) {
             	$.fn.fancybox.close();
 
@@ -239,7 +241,7 @@
 		});
 	};
 
-	$.fn.fancybox.preloadNeighborImages = function() {
+    $.fn.fancybox.preloadNeighborImages = () => {
 		if ((opts.itemArray.length - 1) > opts.itemNum) {
 			preloadNextImage = new Image();
 			preloadNextImage.src = opts.itemArray[opts.itemNum + 1].url;
@@ -251,7 +253,7 @@
 		}
 	};
 
-	$.fn.fancybox.close = function() {
+    $.fn.fancybox.close = () => {
 		if (opts.animating) return false;
 
 		$(imgPreloader).unbind('load');
@@ -274,7 +276,7 @@
 
 			opts.animating = true;
 
-			$("#fancy_outer").animate(itemOpts, opts.itemArray[opts.itemNum].o.zoomSpeedOut, function() {
+			$("#fancy_outer").animate(itemOpts, opts.itemArray[opts.itemNum].o.zoomSpeedOut, () => {
 				$("#fancy_content").hide().empty();
 				$("#fancy_overlay,#fancy_bigIframe").remove();
 				opts.animating = false;
@@ -287,7 +289,7 @@
 		}
 	};
 
-	$.fn.fancybox.showLoading = function() {
+    $.fn.fancybox.showLoading = () => {
 		clearInterval(loadingTimer);
 
 		var pos = $.fn.fancybox.getViewport();
@@ -298,7 +300,7 @@
 		loadingTimer = setInterval($.fn.fancybox.animateLoading, 66);
 	};
 
-	$.fn.fancybox.animateLoading = function(el, o) {
+    $.fn.fancybox.animateLoading = (el, o) => {
 		if (!$("#fancy_loading").is(':visible')){
 			clearInterval(loadingTimer);
 			return;
@@ -309,7 +311,7 @@
 		loadingFrame = (loadingFrame + 1) % 12;
 	};
 
-	$.fn.fancybox.init = function() {
+    $.fn.fancybox.init = () => {
 		if (!$('#fancy_wrap').length) {
 			$('<div id="fancy_wrap"><div id="fancy_loading"><div></div></div><div id="fancy_outer"><div id="fancy_inner"><div id="fancy_nav"></div><div id="fancy_close"></div><div id="fancy_content"></div><div id="fancy_title"></div></div></div></div>').appendTo("body");
 			$('<div id="fancy_bg"><div class="fancy_bg fancy_bg_n"></div><div class="fancy_bg fancy_bg_ne"></div><div class="fancy_bg fancy_bg_e"></div><div class="fancy_bg fancy_bg_se"></div><div class="fancy_bg fancy_bg_s"></div><div class="fancy_bg fancy_bg_sw"></div><div class="fancy_bg fancy_bg_w"></div><div class="fancy_bg fancy_bg_nw"></div></div>').prependTo("#fancy_inner");
@@ -326,7 +328,7 @@
     	$("#fancy_close").click($.fn.fancybox.close);
 	};
 
-	$.fn.fancybox.getPosition = function(el) {
+    $.fn.fancybox.getPosition = el => {
 		var pos = el.offset();
 
 		pos.top	+= $.fn.fancybox.num(el, 'paddingTop');
@@ -338,14 +340,13 @@
 		return pos;
 	};
 
-	$.fn.fancybox.num = function (el, prop) {
-		return parseInt($.curCSS(el.jquery?el[0]:el,prop,true))||0;
-	};
+    $.fn.fancybox.num = (el, prop) => parseInt($.curCSS(el.jquery?el[0]:el,prop,true))||0;
 
-	$.fn.fancybox.getPageScroll = function() {
-		var xScroll, yScroll;
+    $.fn.fancybox.getPageScroll = () => {
+        var xScroll;
+        var yScroll;
 
-		if (self.pageYOffset) {
+        if (self.pageYOffset) {
 			yScroll = self.pageYOffset;
 			xScroll = self.pageXOffset;
 		} else if (document.documentElement && document.documentElement.scrollTop) {
@@ -356,22 +357,22 @@
 			xScroll = document.body.scrollLeft;	
 		}
 
-		return [xScroll, yScroll]; 
-	};
+        return [xScroll, yScroll];
+    };
 
-	$.fn.fancybox.getViewport = function() {
+    $.fn.fancybox.getViewport = () => {
 		var scroll = $.fn.fancybox.getPageScroll();
 
 		return [$(window).width(), $(window).height(), scroll[0], scroll[1]];
 	};
 
-	$.fn.fancybox.getMaxSize = function(maxWidth, maxHeight, imageWidth, imageHeight) {
+    $.fn.fancybox.getMaxSize = (maxWidth, maxHeight, imageWidth, imageHeight) => {
 		var r = Math.min(Math.min(maxWidth, imageWidth) / imageWidth, Math.min(maxHeight, imageHeight) / imageHeight);
 
 		return [Math.round(r * imageWidth), Math.round(r * imageHeight)];
 	};
 
-	$.fn.fancybox.defaults = {
+    $.fn.fancybox.defaults = {
 		hideOnContentClick:	false,
 		zoomSpeedIn:		500,
 		zoomSpeedOut:		500,
@@ -381,4 +382,4 @@
 		overlayOpacity:		0.4,
 		itemLoadCallback:	null
 	};
-})(jQuery);
+}))(jQuery);

@@ -10,7 +10,7 @@
 var MoonUtilities = {
     
     _user_home_dir: null,
-    get user_home_dir () {
+    get user_home_dir() {
         if (!MoonUtilities._user_home_dir) {
             var file = Components.classes["@mozilla.org/file/directory_service;1"]
                 .getService (Components.interfaces.nsIProperties)
@@ -21,7 +21,7 @@ var MoonUtilities = {
         return MoonUtilities._user_home_dir;
     },
 
-    PathToURI: function (path) {
+    PathToURI(path) {
         if (/^[A-Za-z0-9]+:\/\//.test (path)) {
             return path;
         }
